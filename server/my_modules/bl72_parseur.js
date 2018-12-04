@@ -5,7 +5,6 @@ var obj  = require('../icr-2016-01-01')
 
 const parse = () => {
   let features = obj.features;
-  let newObj = {};
   features.forEach((feature) => {
     let arrayCoordinates = feature.geometry.coordinates
     arrayCoordinates.forEach((coordinates, i1) => {
@@ -18,7 +17,6 @@ const parse = () => {
           coordinate[0] = latlong.longitude
         })
     })
-
   })
   fs.writeFile('./latlong_icr.json', JSON.stringify(obj, null, 2) , 'utf-8');
 };
