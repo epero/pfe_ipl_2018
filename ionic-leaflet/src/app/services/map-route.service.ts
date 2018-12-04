@@ -22,7 +22,7 @@ export class MapRouteService {
       .post<GeoJsonObject>('http://localhost:3030/api/ors-directions',json)
       .toPromise()
       .then(response => {
-        this.setRoute(response); console.log(response)
+        this.setRoute(response);
       })
       .catch(error=>{console.log(error)})
   }
