@@ -44,7 +44,7 @@ export class HomePage implements OnInit {
             //Colorization of ICR routes
             L.geoJSON(this.geojson, {
                 style: function(feature) {
-                    console.log(feature.properties.icr);
+                    //console.log(feature.properties.icr);
                     switch(feature.properties.icr){
                         case '1':
                             return {color: "#00cc00"};

@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { HomePage } from './home.page';
 
 import { HttpClientModule } from '@angular/common/http';
+import { DirectionFormComponent } from '../direction-form/direction-form.component';
 
 @NgModule({
     imports: [
@@ -21,6 +22,6 @@ import { HttpClientModule } from '@angular/common/http';
             }
         ])
     ],
-    declarations: [HomePage]
+    declarations: [HomePage,DirectionFormComponent]
 })
 export class HomePageModule { }
