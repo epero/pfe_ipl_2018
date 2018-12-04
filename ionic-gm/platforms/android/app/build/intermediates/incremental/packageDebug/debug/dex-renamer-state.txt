@@ -1,4 +1,0 @@
-#Mon Dec 03 12:49:48 CET 2018
-base.0=/Users/emanuelperoni/Desktop/ipl_info_gestion/bloc3_1718/DevWebQS/pfe_ipl_2018/ionic-gm/platforms/android/app/build/intermediates/transforms/dexMerger/debug/0
-path.0=classes.dex
-renamed.0=classes.dex
