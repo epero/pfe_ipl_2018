@@ -10,8 +10,9 @@
     "dev": "cross-env NODE_ENV=development npm run server"
   },
   "dependencies": {
-    "debug": "~2.6.9",
+    "bl72tolatlng": "^1.0.1",
     "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
     "dotenv": "^6.0.0",
     "ejs": "~2.5.7",
     "express": "^4.16.3",

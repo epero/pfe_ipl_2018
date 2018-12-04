@@ -11,6 +11,8 @@ const assetPath = require('./asset_path.js');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
+const bl72_parseur = require('./my_modules/bl72_parseur');
+
 const projectRoot = path.join(__dirname, '../..');
 const serverRoot = path.join(__dirname, '.');
 
@@ -37,6 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '../../dist')));
 
 //TODO chargement graphe en mémoire
+bl72_parseur.parse()
 
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
