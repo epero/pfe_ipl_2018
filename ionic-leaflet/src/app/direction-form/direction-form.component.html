@@ -1,5 +1,9 @@
 <p>
-  A:<input type="text" id="startInput" [(ngModel)]="startpoint" ><br>
-  B:<input type="text" id="endInput" [(ngModel)]="endpoint"><br>
-  <button ion-button color="secondary" id="searchRouteBtn" (click)="onSearchRouteBtnClick()">Search route</button>
+  <ion-item>
+    A:<ion-input placeholder=" starting location" type="text" id="startInput" [(ngModel)]="startpoint"></ion-input><br>
+  </ion-item>
+  <ion-item>
+    B:<ion-input placeholder=" destination" type="text" id="endInput" [(ngModel)]="endpoint"></ion-input><br>
+  </ion-item>
+  <ion-button shape="round" color="primary" fill="outline" id="searchRouteBtn" (click)="onSearchRouteBtnClick()">Search route</ion-button>
 </p>
