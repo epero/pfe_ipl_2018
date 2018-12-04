@@ -1,0 +1,70 @@
+{
+  "type": "FeatureCollection",
+  "totalFeatures": 156,
+  "features": [
+    {
+      "type": "Feature",
+      "id": "icr.20",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              4.379247,
+              50.843373
+            ],
+            [
+              4.379315,
+              50.843513
+            ],
+            [
+              4.379269,
+              50.844194
+            ],
+            [
+              4.379263,
+              50.844291
+            ],
+            [
+              4.379258,
+              50.844371
+            ],
+            [
+              4.379216,
+              50.845007
+            ],
+            [
+              4.379208,
+              50.845127
+            ],
+            [
+              4.379086,
+              50.845153
+            ],
+            [
+              4.378012,
+              50.84538
+            ],
+            [
+              4.377807,
+              50.845424
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "ogc_fid": 158,
+        "icr": "SZ",
+        "part": null,
+        "balises": 0
+      }
+    }
+  ],
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:EPSG::31370"
+    }
+  }
+}

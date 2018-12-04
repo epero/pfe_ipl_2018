@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -12,9 +11,11 @@ const assetPath = require('./asset_path.js');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const orsRouter = require("./routes/ors");
+const directionsRouter = require("./routes/directions");
+
 
 //const bl72_parseur = require('./my_modules/bl72_parseur');
-const geojson_2_graph = require('./my_modules/geojson_2_graph');
+const graph = require('./my_modules/graph');
 
 const projectRoot = path.join(__dirname, '../..');
 const serverRoot = path.join(__dirname, '.');
@@ -43,12 +44,12 @@ app.use(express.static(path.join(__dirname, "../../dist")));
 
 //TODO chargement graphe en mémoire
 //bl72_parseur.parse()
-geojson_2_graph.parse();
-console.log(geojson_2_graph.graph)
+graph.parse();
 
 app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/ors-directions", orsRouter);
+app.use("/api/directions", directionsRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
