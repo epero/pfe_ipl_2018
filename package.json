@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "heroku-prebuild": "cd server",
-    "start": "node src/server/bin/www"
+    "heroku-prebuild": "cd server && npm i",
+    "start": "node server/src/server/bin/www"
     }
   }
