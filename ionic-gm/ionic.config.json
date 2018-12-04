@@ -1,7 +1,0 @@
-{
-  "name": "ionic-gm",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "angular"
-}
