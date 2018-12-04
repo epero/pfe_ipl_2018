@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { and } from '@angular/router/src/utils/collection';
+import { MapRouteService } from '../services/map-route.service';
 
 @Component({
   selector: 'app-direction-form',
@@ -12,13 +13,14 @@ export class DirectionFormComponent implements OnInit {
   endpoint:String;
   url:string; 
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private mapRouteService:MapRouteService) {
     this.url="http://localhost:3030/api/ors-directions"
    }
 
   ngOnInit() {
   }
-  sendCoordinatesToServer(start,end){
+  // DEPLACE VERS MAPROUTESERVICE
+  /*sendCoordinatesToServer(start,end){
     //console.log("sendCoordinatesToServer")
     var json ={"coordinates":"[["+start+"],["+end+"]]"}
       this.httpClient
@@ -26,14 +28,15 @@ export class DirectionFormComponent implements OnInit {
       .toPromise()
       .then(response => {console.log(response)})
       .catch(error=>{console.log(error)})
-  }
+  }*/
 
 
   onSearchRouteBtnClick(){
     //console.log("onSearchRouteBtnClick")
     //send coordinates to backend
+    this.mapRouteService.routeSubject.subscribe(data=>{console.log("direction-form"); console.log(data);})
     if(this.startpoint!==undefined && this.endpoint!==undefined){
-      this.sendCoordinatesToServer(this.startpoint,this.endpoint)
+      this.mapRouteService.sendCoordinatesToServer(this.startpoint,this.endpoint)
     }
   }
 
