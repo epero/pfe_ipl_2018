@@ -18,6 +18,12 @@ export class LeafletMapComponent implements OnInit {
   lng: number;
   error: string;
   faCoffee: IconDefinition;
+  marker: L.Marker;
+  initialLoad: boolean;
+  autocentre: boolean;
+  autoCenterBtnStyle: string;
+  autozoom: boolean;
+  autoZoomBtnStyle: string;
 
   constructor(
     private http: HttpClient,
@@ -25,6 +31,11 @@ export class LeafletMapComponent implements OnInit {
     private plateform: Platform
   ) {
     this.faCoffee = faCoffee;
+    this.initialLoad = true;
+    this.autocentre = true;
+    this.autoCenterBtnStyle = 'solid';
+    this.autozoom = true;
+    this.autoZoomBtnStyle = 'solid';
   }
 
   ngOnInit() {
@@ -144,13 +155,43 @@ export class LeafletMapComponent implements OnInit {
     watch.subscribe(data => {
       this.lat = data.coords.latitude;
       this.lng = data.coords.longitude;
-      L.marker(L.latLng(this.lat, this.lng), {
-        icon: L.divIcon({
-          html: '<fa-icon [icon]="faCoffee"></fa-icon>',
-          iconSize: [20, 20],
-          className: 'myDivIcon'
-        })
-      }).addTo(this.map);
+      const latlng = L.latLng(this.lat, this.lng);
+      this.map['_onResize']();
+      if (this.initialLoad || this.autozoom) {
+        this.map.setView(this.map.getCenter(), 18, { animate: true });
+        this.initialLoad = false;
+      }
+      if (this.autocentre) {
+        this.map.setView(latlng, this.map.getZoom(), { animate: true });
+      }
+      if (this.marker) {
+        this.marker.setLatLng(latlng);
+      } else {
+        this.marker = L.marker(latlng, {
+          icon: L.icon({
+            iconUrl: 'assets/marker/marker-icon.png',
+            shadowUrl: 'assets/marker/marker-shadow.png'
+          })
+        }).addTo(this.map);
+      }
     });
+  }
+
+  onAutoZoomBtnClick() {
+    this.autozoom = !this.autozoom;
+    if (this.autozoom) {
+      this.autoZoomBtnStyle = 'solid';
+    } else {
+      this.autoZoomBtnStyle = 'outline';
+    }
+  }
+
+  onAutoCentreBtnClick() {
+    this.autocentre = !this.autocentre;
+    if (this.autocentre) {
+      this.autoCenterBtnStyle = 'solid';
+    } else {
+      this.autoCenterBtnStyle = 'outline';
+    }
   }
 }
