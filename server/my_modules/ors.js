@@ -22,10 +22,12 @@ let calculate = coordinates => {
       preference: "recommended",
       units: "m",
       language: "fr", //TODO change according to user language
-      format: "json", // TODO change accordingly
+      format: "geojson", // TODO change accordingly
       instructions: "true"
     })
       .then(json => {
+        json.start=JSON.parse(coordinates)[0];
+        json.end=JSON.parse(coordinates)[1];
         resolve(json);
       })
       .catch(err => {
