@@ -1,5 +1,15 @@
-<ul>
-    <li>{{lat}}</li>
-    <li>{{lng}}</li>
-</ul>
+<div class="insidemap">
+    <!--<ion-label>Auto Zoom {{autozoom}}</ion-label>
+        <ion-checkbox slot="start" [(ngModel)]="autozoom" checked></ion-checkbox>-->
+    <ion-button shape="round" fill="{{autoZoomBtnStyle}}" (click)="onAutoZoomBtnClick()">Auto Zoom</ion-button>
+    <ion-button shape="round" fill="{{autoCenterBtnStyle}}" (click)="onAutoCentreBtnClick()">Auto Center</ion-button>
+    <ul>
+        <li>
+            <ion-item>{{lat}}</ion-item>
+        </li>
+        <li>
+            <ion-item>{{lng}}</ion-item>
+        </li>
+    </ul>
+</div>
 <div id="leafletMap"></div>

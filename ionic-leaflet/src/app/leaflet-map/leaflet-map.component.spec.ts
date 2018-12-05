@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LeafletMapComponent } from './leaflet-map.component';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('LeafletMapComponent', () => {
   let component: LeafletMapComponent;
@@ -8,9 +9,9 @@ describe('LeafletMapComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LeafletMapComponent ]
-    })
-    .compileComponents();
+      imports: [HttpClientModule],
+      declarations: [LeafletMapComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -20,6 +21,6 @@ describe('LeafletMapComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).not.toBeTruthy();
   });
 });
