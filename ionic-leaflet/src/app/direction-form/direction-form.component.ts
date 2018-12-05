@@ -19,17 +19,6 @@ export class DirectionFormComponent implements OnInit {
 
   ngOnInit() {
   }
-  // DEPLACE VERS MAPROUTESERVICE
-  /*sendCoordinatesToServer(start,end){
-    //console.log("sendCoordinatesToServer")
-    var json ={"coordinates":"[["+start+"],["+end+"]]"}
-      this.httpClient
-      .post('http://localhost:3030/api/ors-directions',json)
-      .toPromise()
-      .then(response => {console.log(response)})
-      .catch(error=>{console.log(error)})
-  }*/
-
 
   onSearchRouteBtnClick(){
     //console.log("onSearchRouteBtnClick")
