@@ -1,46 +1,65 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { and } from '@angular/router/src/utils/collection';
-import { MapRouteService } from '../services/map-route.service';
+import { Component, OnInit } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { MapRouteService } from "../services/map-route.service";
+
+import { OpenStreetMapProvider } from "leaflet-geosearch";
 
 @Component({
-  selector: 'app-direction-form',
-  templateUrl: './direction-form.component.html',
-  styleUrls: ['./direction-form.component.scss']
+  selector: "app-direction-form",
+  templateUrl: "./direction-form.component.html",
+  styleUrls: ["./direction-form.component.scss"]
 })
 export class DirectionFormComponent implements OnInit {
-  startpoint:String;
-  endpoint:String;
-  url:string; 
+  startAddr: String;
+  endAddr: String;
+  url: string;
+  startAddrList: Array<String>;
+  endAddrList: Array<String>;
+  startCoord: String;
+  endCoord: String;
+  private provider: OpenStreetMapProvider;
 
-  constructor(private httpClient: HttpClient, private mapRouteService:MapRouteService) {
-    this.url="http://localhost:3030/api/ors-directions"
-   }
-
-  ngOnInit() {
+  constructor(
+    private httpClient: HttpClient,
+    private mapRouteService: MapRouteService
+  ) {
+    this.url = "http://localhost:3030/api/ors-directions";
+    this.provider = new OpenStreetMapProvider();
+    this.startAddrList = [];
+    this.endAddrList = [];
   }
-  // DEPLACE VERS MAPROUTESERVICE
-  /*sendCoordinatesToServer(start,end){
-    //console.log("sendCoordinatesToServer")
-    var json ={"coordinates":"[["+start+"],["+end+"]]"}
-      this.httpClient
-      .post('http://localhost:3030/api/ors-directions',json)
-      .toPromise()
-      .then(response => {console.log(response)})
-      .catch(error=>{console.log(error)})
-  }*/
 
+  ngOnInit() {}
 
-  onSearchRouteBtnClick(){
-    //console.log("onSearchRouteBtnClick")
+  onStartAddrChange() {
+    //TODO delay to not DDOS the server on every keystroke.
+    this.provider.search({ query: this.startAddr }).then(result => {
+      this.startAddrList = [];
+      result.forEach(element => {
+        this.startAddrList.push(element);
+      });
+    });
+  }
+
+  onEndAddrChange() {
+    //TODO delay to not DDOS the server on every keystroke.
+    this.provider.search({ query: this.endAddr }).then(result => {
+      this.endAddrList = [];
+      result.forEach(element => {
+        this.endAddrList.push(element);
+      });
+    });
+  }
+
+  onSearchRouteBtnClick() {
     //send coordinates to backend
-    this.mapRouteService.routeSubject.subscribe(data=>{console.log("direction-form"); console.log(data);})
-    if(this.startpoint!==undefined && this.endpoint!==undefined){
-      this.mapRouteService.sendCoordinatesToServer(this.startpoint,this.endpoint)
+    if (this.startAddr !== undefined && this.endAddr !== undefined) {
+      this.mapRouteService.sendCoordinatesToServer(
+        this.startAddrList[0]["x"],
+        this.startAddrList[0]["y"],
+        this.endAddrList[0]["x"],
+        this.endAddrList[0]["y"]
+      );
     }
   }
-
-
-
-  
 }
