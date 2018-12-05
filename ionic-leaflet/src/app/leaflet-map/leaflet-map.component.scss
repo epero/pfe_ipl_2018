@@ -2,3 +2,19 @@
     height: 100%;
     width: 100%;
 }
+
+.insidemap {
+    align-content: flex-end;
+    position: absolute;
+    width: 15%;
+    top: 0;
+    right: 10%;
+    z-index: 1000;
+}
+
+ul {
+    list-style: none;
+    background-color: rgba(255, 255, 255, 0.66);
+    border-radius: 5px 5px 5px 5px;
+    padding: 5px;
+}
