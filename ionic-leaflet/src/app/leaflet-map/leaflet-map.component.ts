@@ -55,11 +55,10 @@ export class LeafletMapComponent implements OnInit {
 
     //Display Brussel's ICR routes
     this.http
-      .get<GeoJsonObject>('assets/latlong_icr.json')
+      .get<GeoJsonObject>('assets/exemple.json')
       .subscribe((json: any) => {
         //console.log(json);
         this.geojson = json;
-
         /*var myStyle = {
                 "color": "#ff7800",
                 "weight": 5,
