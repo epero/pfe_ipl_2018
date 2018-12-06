@@ -1,18 +1,25 @@
-const createError = require("http-errors");
-const express = require("express");
-const path = require("path");
-const fs = require("fs");
-const cookieParser = require("cookie-parser");
-const logger = require("morgan");
-const sassMiddleware = require("node-sass-middleware");
-const assetPath = require("./asset_path.js");
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const sassMiddleware = require('node-sass-middleware');
+const assetPath = require('./asset_path.js');
 
-const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
+
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 const orsRouter = require("./routes/ors");
+const directionsRouter = require("./routes/directions");
 
-const projectRoot = path.join(__dirname, "../..");
-const serverRoot = path.join(__dirname, ".");
+
+//const bl72_parseur = require('./my_modules/bl72_parseur');
+const graph = require('./my_modules/graph');
+const find_intersections = require('./my_modules/find_intersections');
+
+const projectRoot = path.join(__dirname, '../..');
+const serverRoot = path.join(__dirname, '.');
 
 const app = express();
 
@@ -37,6 +44,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "../../dist")));
 
 //TODO chargement graphe en mémoire
+//bl72_parseur.parse()
 app.use(function (req, res, next) {
 
   // Website you wish to allow to connect
@@ -56,9 +64,13 @@ app.use(function (req, res, next) {
   next();
 });
 
+graph.parse();
+//find_intersections.parse();
+
 app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/ors-directions", orsRouter);
+app.use("/api/directions", directionsRouter);
 
 
 
