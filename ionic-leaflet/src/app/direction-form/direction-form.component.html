@@ -1,10 +1,38 @@
 <p>
   <ion-item>
-    A:<ion-input placeholder=" starting location" type="text" id="startInput" [(ngModel)]="startpoint"></ion-input><br>
+    A:<input
+      list="startAddrList"
+      placeholder=" starting location"
+      type="text"
+      id="startInput"
+      [(ngModel)]="startAddr"
+      (ngModelChange)="onStartAddrChange()"
+    />
+    <datalist id="startAddrList">
+      <option *ngFor="let addr of startAddrList">{{ addr.label }}</option>
+    </datalist>
+    <br />
   </ion-item>
   <ion-item>
-    B:<ion-input placeholder=" destination" type="text" id="endInput" [(ngModel)]="endpoint"></ion-input><br>
+    B:<input
+      list="endAddrList"
+      placeholder=" destination"
+      type="text"
+      id="endInput"
+      [(ngModel)]="endAddr"
+      (ngModelChange)="onEndAddrChange()"
+    />
+    <datalist id="endAddrList">
+      <option *ngFor="let addr of endAddrList">{{ addr.label }}</option>
+    </datalist>
+    <br />
   </ion-item>
-  <ion-button shape="round" color="primary" fill="outline" id="searchRouteBtn" (click)="onSearchRouteBtnClick()">Search
-    route</ion-button>
+  <ion-button
+    shape="round"
+    color="primary"
+    fill="outline"
+    id="searchRouteBtn"
+    (click)="onSearchRouteBtnClick()"
+    >Search route</ion-button
+  >
 </p>
