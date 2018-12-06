@@ -8,11 +8,16 @@ router.post("/", function(req, res, next) {
    * req.body.coordinates expected format: [[longitude,latitude], [longitude,latitude]]
    * ex: [[4.353434, 50.850575], [4.450772, 50.849415]]
    */
-  //res.json("helloworld")
+  
+  var json=req.body.coordinates
   ors
-    .calculate(req.body.coordinates)
+    .calculate(json)
     .then(route => {
-      res.json(route);
+      let enhancedRoute={};
+      enhancedRoute.geojson=route;
+      enhancedRoute.start=json[0];
+      enhancedRoute.end=json[1];
+      res.json(enhancedRoute);
     })
     .catch(err => res.status(500).send(err));
 });
