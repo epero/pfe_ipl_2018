@@ -96,6 +96,7 @@ export class LeafletMapComponent implements OnInit {
     var layer = L.geoJSON(this.geojson, {
       style: function(feature) {
         if (feature.properties.icr) {
+          // A changer en feature.properties.name quand le dijkstra sera utilisé
           //properties icr existe
           switch (feature.properties.icr) {
             case '1':
@@ -145,7 +146,7 @@ export class LeafletMapComponent implements OnInit {
     }).addTo(this.map);
     return layer;
   }
-  
+
   printPoint(lat: number, long: number, iconUrl: string): L.Marker {
     const latlng = L.latLng(lat, long);
     var marker = L.marker(latlng, {

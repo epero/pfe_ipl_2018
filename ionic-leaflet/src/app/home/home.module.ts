@@ -11,6 +11,7 @@ import { LeafletMapComponent } from '../leaflet-map/leaflet-map.component';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DirectionFormComponent } from '../direction-form/direction-form.component';
+import { SwipeUpDrawerComponent } from '../swipe-up-drawer/swipe-up-drawer.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,12 @@ import { DirectionFormComponent } from '../direction-form/direction-form.compone
       }
     ])
   ],
-  declarations: [HomePage, LeafletMapComponent, DirectionFormComponent],
+  declarations: [
+    HomePage,
+    LeafletMapComponent,
+    DirectionFormComponent,
+    SwipeUpDrawerComponent
+  ],
   providers: [Geolocation]
 })
 export class HomePageModule {}

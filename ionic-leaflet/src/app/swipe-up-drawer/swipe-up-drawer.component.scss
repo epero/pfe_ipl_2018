@@ -1,0 +1,24 @@
+#swm {
+    -webkit-border-top-left-radius: 30px;
+    -webkit-border-top-right-radius: 30px;
+    -moz-border-radius-topleft: 30px;
+    -moz-border-radius-topright: 30px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    position: fixed;
+    top: 90%;
+    z-index: 100000000;
+    background-color: azure;
+    width: 100%;
+    height: 100%;
+}
+
+.center {
+    text-align: center;
+    padding-top: 10px;
+}
+
+.swicon {
+    width: 25px;
+    height: 25px;
+}
