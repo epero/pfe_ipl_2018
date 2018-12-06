@@ -5,5 +5,5 @@
   "scripts": {
     "heroku-prebuild": "cd server && npm i",
     "start": "node server/src/server/bin/www"
-    }
   }
+}
