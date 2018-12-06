@@ -1,5 +1,7 @@
 //var geojson  = require('../icr-2017-01-01');
-var geojson = require('../latlong_icr');
+//var geojson = require('../latlong_icr');
+//var geojson = require('../icr-test-with-intersections')
+var geojson = require('../icr-2017-01-01_mine')
 //const SortedSet = require("collections/sorted-set");
 //const SSet = require('sorted-set')
 var fs = require('fs');
@@ -94,7 +96,10 @@ const calculate = (coordinates) => {
   let found = true;
 
   while(current !== destination){
-    graph[current].forEach((outRoute) => {
+    //graph[current].forEach((outRoute) => {
+    //console.log("GRAPH : " + graph[current]);
+    for (let i = 0; i < graph[current].length; i++) {
+      let outRoute = graph[current][i]
       let currentDestination = outRoute.longitude + " " + outRoute.latitude
       if(!etiqDef.has(currentDestination)){
         let currentDistance = distances[current] + outRoute.distance;
@@ -110,21 +115,29 @@ const calculate = (coordinates) => {
           arbre.set(currentDestination, current);
         }
       }
-
-    })
+    }
+    //})
 
     if (etiqProv.size===0) {
       found = false;
       break;
     }
-    let sorted = Array.from(etiqProv).sort((a, b) => distances[a] > distances[b]);
+    let sorted = Array.from(etiqProv).sort((a, b) => {
+      if(distances[a] === distances[b])
+        return a -b
+      return distances[a] - distances[b]
+    });
     current = sorted[0];
+    //console.log(distances[sorted[0]] + ", " + distances[sorted[1]], ", " + distances[sorted[2]])
+    //console.log("DISTANCE : "  + distances[sorted[0]])
     etiqProv.delete(current);
     etiqDef.add(current);
-    console.log(current);
+    //console.log(current);
   }
 
   if(found){
+    //console.log("OTHER DISTANCE : " + distances["4.371281 50.826905"])
+    //console.log("DISTANCE : " + distances[current]);
     let shortestPath = []
 
     let currentSource = destination
@@ -143,7 +156,7 @@ const route_to_geojson = (path) => {
   //console.log(path);
   let jsonn = {
       "type": "FeatureCollection",
-      "totalFeatures": 156,
+      //"totalFeatures": 156,
       "features": [
         {
           "type": "Feature",

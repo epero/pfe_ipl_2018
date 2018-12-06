@@ -16,6 +16,7 @@ const directionsRouter = require("./routes/directions");
 
 //const bl72_parseur = require('./my_modules/bl72_parseur');
 const graph = require('./my_modules/graph');
+const find_intersections = require('./my_modules/find_intersections');
 
 const projectRoot = path.join(__dirname, '../..');
 const serverRoot = path.join(__dirname, '.');
@@ -64,6 +65,7 @@ app.use(function (req, res, next) {
 });
 
 graph.parse();
+//find_intersections.parse();
 
 app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
