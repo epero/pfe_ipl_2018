@@ -4,10 +4,10 @@ phases:
   install:
     commands:
       - cd server
-      - npm install
+      - docker build -t server
   build:
     commands:
-      - npm run dev
+      - docker run server
   post_build:
     commands:
       - echo Build completed
