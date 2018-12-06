@@ -145,7 +145,7 @@ export class LeafletMapComponent implements OnInit {
     }).addTo(this.map);
     return layer;
   }
-
+  
   printPoint(lat: number, long: number, iconUrl: string): L.Marker {
     const latlng = L.latLng(lat, long);
     var marker = L.marker(latlng, {
