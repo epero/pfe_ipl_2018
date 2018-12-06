@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const sassMiddleware = require('node-sass-middleware');
 const assetPath = require('./asset_path.js');
 
 
@@ -32,14 +31,6 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(
-  sassMiddleware({
-    src: path.join(serverRoot, "public"),
-    dest: path.join(serverRoot, "public"),
-    indentedSyntax: true, // true = .sass and false = .scss
-    sourceMap: true
-  })
-);
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "../../dist")));
 
