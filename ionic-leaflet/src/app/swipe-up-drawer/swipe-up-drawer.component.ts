@@ -27,11 +27,11 @@ export class SwipeUpDrawerComponent implements OnInit {
   }
 
   onSwipe(event: any) {
-    if (event.overallVelocityY > 1) {
+    if (event.overallVelocityY > 0.7) {
       console.log('down');
       this.el.nativeElement.style.top = '90%';
     }
-    if (event.overallVelocityY < -1) {
+    if (event.overallVelocityY < -0.7) {
       console.log('up');
       this.el.nativeElement.style.top = '0%';
     }
