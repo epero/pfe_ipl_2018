@@ -4,7 +4,7 @@
   "main": "bin/www",
   "private": true,
   "scripts": {
-    "start": "node src/server/bin/www",
+    "start": "node bin/www",
     "clean": "rm -rf dist",
     "server": "nodemon src/server/bin/www",
     "dev": "cross-env NODE_ENV=development npm run server"
