@@ -24,7 +24,9 @@ export class DirectionFormComponent implements OnInit {
     private mapRouteService: MapRouteService
   ) {
     this.url = "http://localhost:3030/api/ors-directions";
-    this.provider = new OpenStreetMapProvider();
+    this.provider = new OpenStreetMapProvider({
+      params: { countrycodes: "be" }
+    });
     this.startAddrList = [];
     this.endAddrList = [];
   }
