@@ -26,15 +26,15 @@ export class LeafletMapComponent implements OnInit {
   autoCenterBtnStyle: string;
   autozoom: boolean;
   autoZoomBtnStyle: string;
-  mapLayer:L.GeoJSON<any>;
-  startpoint:L.Marker;
-  endpoint:L.Marker;
+  mapLayer: L.GeoJSON<any>;
+  startpoint: L.Marker;
+  endpoint: L.Marker;
 
   constructor(
     private http: HttpClient,
     private geoloc: Geolocation,
     private plateform: Platform,
-    private mapRouteService: MapRouteService,
+    private mapRouteService: MapRouteService
   ) {
     this.faCoffee = faCoffee;
     this.initialLoad = true;
@@ -69,35 +69,33 @@ export class LeafletMapComponent implements OnInit {
     }).addTo(this.map);
 
     //Display Brussel's ICR routes --> ICR layer
-      this.http
+    this.http
       .get<GeoJsonObject>('assets/latlong_icr.json')
       .subscribe((json: any) => {
-        this.mapLayer=this.printGeoJson(json);
-      })        
+        this.mapLayer = this.printGeoJson(json);
+      });
 
     // Route layer
-    this.mapRouteService.routeSubject.subscribe(json =>{
+    this.mapRouteService.routeSubject.subscribe(json => {
       this.map.removeLayer(this.mapLayer);
-      this.mapLayer=this.printGeoJson(json);
-      if (this.startpoint!==undefined) this.startpoint.removeFrom(this.map);
-      if (this.endpoint!==undefined) this.endpoint.removeFrom(this.map);
-      this.startpoint=this.printPoint(Number(json.start[1]),Number(json.start[0]),"assets/marker/start.png");
-      this.endpoint=this.printPoint(Number(json.end[1]),Number(json.end[0]),"assets/marker/end.png");
+      this.mapLayer = this.printGeoJson(json);
+      if (this.startpoint !== undefined) this.startpoint.removeFrom(this.map);
+      if (this.endpoint !== undefined) this.endpoint.removeFrom(this.map);
     });
   }
 
-  printGeoJson(jsonCoordinates:GeoJsonObject):L.GeoJSON{
+  printGeoJson(jsonCoordinates: GeoJsonObject): L.GeoJSON {
     this.geojson = jsonCoordinates;
 
     var myStyle = {
-            "color": "#0000FF",
-            "weight": 5,
-            "opacity": 0.65
+      color: '#0000FF',
+      weight: 5,
+      opacity: 0.65
     };
     //Colorization of ICR routes
-    var layer=L.geoJSON(this.geojson, {
+    var layer = L.geoJSON(this.geojson, {
       style: function(feature) {
-        if (feature.properties.icr){
+        if (feature.properties.icr) {
           //properties icr existe
           switch (feature.properties.icr) {
             case '1':
@@ -139,26 +137,26 @@ export class LeafletMapComponent implements OnInit {
             case 'PP':
               return { color: '#D12200' };
           }
-        }else{
+        } else {
           //properties icr nexiste pas
-          return myStyle
+          return myStyle;
         }
       }
     }).addTo(this.map);
-    return layer
+    return layer;
   }
-  
-  printPoint(lat:number,long:number,iconUrl:string):L.Marker{
+
+  printPoint(lat: number, long: number, iconUrl: string): L.Marker {
     const latlng = L.latLng(lat, long);
-    var marker=L.marker(latlng,{
+    var marker = L.marker(latlng, {
       icon: L.icon({
-        iconSize:[28,35],
+        iconSize: [28, 35],
         iconUrl: iconUrl,
         //shadowUrl: 'assets/marker/marker-shadow.png',
-        iconAnchor:[16,32]
+        iconAnchor: [16, 32]
       })
     }).addTo(this.map);
-    return marker
+    return marker;
   }
 
   watchLocation() {
