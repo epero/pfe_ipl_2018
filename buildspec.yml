@@ -1,0 +1,13 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - cd server
+      - npm install
+  build:
+    commands:
+      - npm run dev
+  post_build:
+    commands:
+      - echo Build completed
