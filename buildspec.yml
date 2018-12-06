@@ -4,10 +4,10 @@ phases:
   install:
     commands:
       - cd server
-      - docker build -t server
+      - docker build
   build:
     commands:
-      - docker run server
+      - docker run
   post_build:
     commands:
       - echo Build completed
