@@ -4,6 +4,6 @@
   "private": true,
   "scripts": {
     "heroku-prebuild": "cd server && npm i",
-    "start": "cd server && npm i && npm run dev"
+    "start": "cd server && npm i && npm start"
     }
   }
