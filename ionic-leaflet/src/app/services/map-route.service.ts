@@ -1,24 +1,25 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Subject } from "rxjs";
 import { GeoJsonObject } from "geojson";
+import { EnhancedRoute } from "../shared/models/enhancedRoute";
 
 @Injectable({
   providedIn: "root"
 })
 export class MapRouteService {
-  routeSubject: Subject<GeoJsonObject>;
-  route: GeoJsonObject;
+  routeSubject: Subject<EnhancedRoute>;
+  route: EnhancedRoute;
 
   constructor(private httpClient: HttpClient) {
-    this.routeSubject = new Subject<GeoJsonObject>();
+    this.routeSubject = new Subject<EnhancedRoute>();
   }
 
   sendCoordinatesToServer(startLong, startLat, endLong, endLat) {
     let json = { coordinates: [[startLong, startLat], [endLong, endLat]] };
 
     this.httpClient
-      .post<GeoJsonObject>("http://localhost:3030/api/ors-directions", json)
+      .post<EnhancedRoute>("http://localhost:3030/api/ors-directions", json)
       .toPromise()
       .then(response => {
         this.setRoute(response);
@@ -28,7 +29,7 @@ export class MapRouteService {
       });
   }
 
-  setRoute(route: GeoJsonObject) {
+  setRoute(route: EnhancedRoute) {
     this.route = route;
     this.emitRoute();
   }
