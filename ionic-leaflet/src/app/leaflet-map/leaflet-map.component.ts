@@ -76,7 +76,6 @@ export class LeafletMapComponent implements OnInit {
       });
 
     // Route layer
-<<<<<<< HEAD
     this.mapRouteService.routeSubject.subscribe(enhancedRoutejson =>{
       this.map.removeLayer(this.mapLayer);
       this.mapLayer=this.printGeoJson(enhancedRoutejson.geojson);
@@ -84,13 +83,6 @@ export class LeafletMapComponent implements OnInit {
       if (this.endpoint!==undefined) this.endpoint.removeFrom(this.map);
       this.startpoint=this.printPoint(enhancedRoutejson.start[1],enhancedRoutejson.start[0],"assets/marker/start.png");
       this.endpoint=this.printPoint(enhancedRoutejson.end[1],enhancedRoutejson.end[0],"assets/marker/end.png");
-=======
-    this.mapRouteService.routeSubject.subscribe(json => {
-      this.map.removeLayer(this.mapLayer);
-      this.mapLayer = this.printGeoJson(json);
-      if (this.startpoint !== undefined) this.startpoint.removeFrom(this.map);
-      if (this.endpoint !== undefined) this.endpoint.removeFrom(this.map);
->>>>>>> 6f39faff4e85aaea01fcc914b51e45d903621f3c
     });
   }
 
