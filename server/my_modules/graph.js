@@ -22,11 +22,12 @@ const parse = () => {
           graph[coordinate[0] + " " + coordinate[1]].push({
             "longitude" : arrayCoordinates[i2+1][0],
             "latitude" : arrayCoordinates[i2+1][1],
+            "destination" : `${arrayCoordinates[i2+1][0]} ${arrayCoordinates[i2+1][1]}`,
             "distance" : Math.sqrt( (coordinate[0]-arrayCoordinates[i2+1][0])*(coordinate[0]-arrayCoordinates[i2+1][0]) + (coordinate[1]-arrayCoordinates[i2+1][1])*(coordinate[1]-arrayCoordinates[i2+1][1]) ),
-            "icr": feature.properties.icr,
-            "part": feature.properties.part,
-            "balises" : feature.properties.balises,
-            "id" : feature.id
+            "icr": feature.properties.name,
+            //"part": feature.properties.part,
+            //"balises" : feature.properties.balises,
+            //"id" : feature.id
           })
           if(!graph[arrayCoordinates[i2+1][0] + " " + arrayCoordinates[i2+1][1]]){
             graph[arrayCoordinates[i2+1][0] + " " + arrayCoordinates[i2+1][1]] = []
@@ -34,11 +35,12 @@ const parse = () => {
           graph[arrayCoordinates[i2+1][0] + " " + arrayCoordinates[i2+1][1]].push({
             "longitude" : coordinate[0],
             "latitude" : coordinate[1],
+            "destination" : `${coordinate[0]} ${coordinate[1]}`,
             "distance" : Math.sqrt( (coordinate[0]-arrayCoordinates[i2+1][0])*(coordinate[0]-arrayCoordinates[i2+1][0]) + (coordinate[1]-arrayCoordinates[i2+1][1])*(coordinate[1]-arrayCoordinates[i2+1][1]) ),
-            "icr": feature.properties.icr,
-            "part": feature.properties.part,
-            "balises" : feature.properties.balises,
-            "id" : feature.id
+            "icr": feature.properties.name,
+            //"part": feature.properties.part,
+            //"balises" : feature.properties.balises,
+            //"id" : feature.id
           })
         }
       })
@@ -54,11 +56,12 @@ const parse = () => {
             graph[coordinate[0] + " " + coordinate[1]].push({
               "longitude" : coordinates[i2+1][0],
               "latitude" : coordinates[i2+1][1],
+              "destination" : `${coordinates[i2+1][0]} ${coordinates[i2+1][1]}`,
               "distance" : Math.sqrt( (coordinate[0]-coordinates[i2+1][0])*(coordinate[0]-coordinates[i2+1][0]) + (coordinate[1]-coordinates[i2+1][1])*(coordinate[1]-coordinates[i2+1][1]) ),
-              "icr": feature.properties.icr,
-              "part": feature.properties.part,
-              "balises" : feature.properties.balises,
-              "id" : feature.id
+              "icr": feature.properties.name,
+              //"part": feature.properties.part,
+              //"balises" : feature.properties.balises,
+              //"id" : feature.id
             })
             if(!graph[coordinates[i2+1][0] + " " + coordinates[i2+1][1]]){
               graph[coordinates[i2+1][0] + " " + coordinates[i2+1][1]] = []
@@ -66,11 +69,12 @@ const parse = () => {
             graph[coordinates[i2+1][0] + " " + coordinates[i2+1][1]].push({
               "longitude" : coordinate[0],
               "latitude" : coordinate[1],
+              "destination" : `${coordinate[0]} ${coordinate[1]}`,
               "distance" : Math.sqrt( (coordinate[0]-coordinates[i2+1][0])*(coordinate[0]-coordinates[i2+1][0]) + (coordinate[1]-coordinates[i2+1][1])*(coordinate[1]-coordinates[i2+1][1]) ),
-              "icr": feature.properties.icr,
-              "part": feature.properties.part,
-              "balises" : feature.properties.balises,
-              "id" : feature.id
+              "icr": feature.properties.name,
+              //"part": feature.properties.part,
+              //"balises" : feature.properties.balises,
+              //"id" : feature.id
             })
           }
         })
@@ -154,44 +158,150 @@ const calculate = (coordinates) => {
 
 const route_to_geojson = (path) => {
   //console.log(path);
-  let jsonn = {
-      "type": "FeatureCollection",
-      //"totalFeatures": 156,
-      "features": [
-        {
-          "type": "Feature",
-          "id": "icr.20",
-          "geometry": {
-            "type": "MultiLineString",
-            "coordinates": [[
-            //TODO
-            ]]
-          },
-          "geometry_name": "wkb_geometry",
-          "properties": {
-            "ogc_fid": 158,
-            "icr": "SZ",
-            "part": null,
-            "balises": 0
-          }
-        }
-      ],
-      "crs": {
-        "type": "name",
-        "properties": {
-          "name": "urn:ogc:def:crs:EPSG::31370"
-        }
+  let geoJsonOutput = {
+    "type": "FeatureCollection",
+    //"totalFeatures": 156,
+    "features": [],
+    //"crs": {
+    //  "type": "name",
+    //  "properties": {
+    //    "name": "urn:ogc:def:crs:EPSG::31370"
+    //  }
+    //}
+  }
+
+  /*let feature = {
+    "type": "Feature",
+    //"id": "icr.20",
+    "geometry": {
+      "type": "LineString",
+      "coordinates": []
+    },
+    //"geometry_name": "wkb_geometry",
+    "properties": {
+      //"ogc_fid": 158,
+      //"icr": "SZ",
+      //"part": null,
+      //"balises": 0
+      "name": null
+    }
+  }*/
+
+
+  //path.forEach((route) => {
+  //let possIcr = new Array(path.length-1)
+  let possIcr = new Array(path.length)
+
+  for(let i = 0; i < path.length-1; i++){
+    possIcr[i] = new Set();
+    let route = path[i];
+    let nextRoute = path[i+1];
+    //let nextCoor = [parseFloat(nextRoute.split(' ')[0]), parseFloat(nextRoute.split(' ')[1])]
+
+    //console.log("NEW ROUTE")
+    //let possIcr = [];
+    for(let j = 0; j< graph[route].length; j++){
+      //console.log(nextRoute + " - "+ graph[route][j].destination)
+      if(nextRoute === graph[route][j].destination){
+        possIcr[i].add(graph[route][j].icr)
+        //console.log("Added : " + possIcr[i].size)
       }
     }
 
-    path.forEach((route) => {
-      let taby = [parseFloat(route.split(' ')[0]), parseFloat(route.split(' ')[1])]
-      //console.log(taby)
-      //console.log(jsonn.features[0].geometry.coordinates[0])
-      jsonn.features[0].geometry.coordinates[0].push(taby)
-    });
+    let samePrev = new Set();
+    for (let curIcr of possIcr[i]){
+      if(i>0 && possIcr[i-1].has(curIcr)){
+        samePrev.add(curIcr);
+      }
+    }
+    if(samePrev.size>0){
+      possIcr[i] = samePrev;
+    }
+  }
+  possIcr[path.length-1] = possIcr[path.length-2]
 
-    fs.writeFile('./exemple2017.json', JSON.stringify(jsonn, null, 2) , 'utf-8');
+  let choosenIcr = new Array(path.length)
+
+  for(let i = path.length -1 ; i >= 0; i--){
+    let currPossIcr = possIcr[i];
+    //console.log("SINGLE : " + Array.from(currPossIcr))
+    if(currPossIcr.size === 1){
+      //console.log(i)
+      choosenIcr[i] = Array.from(currPossIcr)[0];
+      console.log("HI : " + choosenIcr[i])
+    }
+    else if ((i < (path.length-2)) && currPossIcr.has(choosenIcr[i+1])){
+      //console.log(i)
+      choosenIcr[i] = choosenIcr[i+1];
+      console.log("HI2 : " + choosenIcr[i+1])
+    }
+    else{
+      //console.log(i)
+      choosenIcr[i] = Array.from(currPossIcr)[0];
+      console.log("HI3 : " + choosenIcr[i])
+    }
+  }
+
+  geoJsonOutput.features.push({
+    "type": "Feature",
+    //"id": "icr.20",
+    "geometry": {
+      "type": "LineString",
+      "coordinates": []
+    },
+    //"geometry_name": "wkb_geometry",
+    "properties": {
+      //"ogc_fid": 158,
+      //"icr": "SZ",
+      //"part": null,
+      //"balises": 0
+      "name": choosenIcr[0]
+    }
+  });
+  let featuresInd = 0;
+  let currentFeature = geoJsonOutput.features[featuresInd];
+  currentFeature.geometry.coordinates.push([parseFloat(path[0].split(' ')[0]), parseFloat(path[0].split(' ')[1])])
+  //currentFeature.properties.name = choosenIcr[0];
+  //console.log(currentFeature);
+
+  //geoJsonOutput.features.push(currentFeature);
+
+  for(let i = 1; i < path.length; i++){
+    let route = path[i];
+    //let nextRoute = path[i+1];
+    let nextCoor = [parseFloat(route.split(' ')[0]), parseFloat(route.split(' ')[1])]
+    if(choosenIcr[i-1] === currentFeature.properties.name){
+      currentFeature.geometry.coordinates.push(nextCoor)
+    }
+    else{
+      //console.log(i);
+      //console.log(choosenIcr[i-1]);
+      //currentFeature = Object.assign({}, feature);
+      geoJsonOutput.features.push({
+        "type": "Feature",
+        //"id": "icr.20",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": []
+        },
+        //"geometry_name": "wkb_geometry",
+        "properties": {
+          //"ogc_fid": 158,
+          //"icr": "SZ",
+          //"part": null,
+          //"balises": 0
+          "name": choosenIcr[i-1]
+        }
+      });
+      featuresInd++;
+      currentFeature = geoJsonOutput.features[featuresInd];
+      //currentFeature.properties.name = choosenIcr[i-1];
+      //console.log(currentFeature);
+      currentFeature.geometry.coordinates.push(nextCoor)
+    }
+  }
+  //console.log(geoJsonOutput.features[0].properties)
+  fs.writeFile('./exemple2017.json', JSON.stringify(geoJsonOutput, null, 2) , 'utf-8');
 
 }
 
