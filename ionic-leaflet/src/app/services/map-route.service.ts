@@ -19,7 +19,7 @@ export class MapRouteService {
     let json = { coordinates: [[startLong, startLat], [endLong, endLat]] };
 
     this.httpClient
-      .post<EnhancedRoute>("http://localhost:3030/api/ors-directions", json)
+      .post<EnhancedRoute>("http://localhost:8081/api/ors-directions", json)
       .toPromise()
       .then(response => {
         this.setRoute(response);
