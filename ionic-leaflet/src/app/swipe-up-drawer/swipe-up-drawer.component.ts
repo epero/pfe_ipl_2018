@@ -11,37 +11,52 @@ export class SwipeUpDrawerComponent implements OnInit {
   event: any;
   windowHeight: number;
   test: any;
+  position: string;
 
   constructor() {}
 
   ngOnInit() {
+    this.position = 'down';
     this.windowHeight = window.innerWidth;
     this.test = new window['Hammer'].Manager(document.getElementById('swm'));
-    console.log(this.test);
-    let swipe = new window['Hammer'].Swipe();
-    console.log(swipe);
-    this.test.add(swipe);
-    this.test.on('swipe', e => {
+    let pan = new window['Hammer'].Pan();
+    let tap = new window['Hammer'].Tap();
+    this.test.add(pan);
+    this.test.add(tap);
+    this.test.on('tap', e => {
+      this.onTap();
+    });
+    this.test.on('panstart', e => {
+      this.position = 'middle';
+    });
+    this.test.on('pan', e => {
+      let y = e.center.y;
+      y = y < 0 ? 0 : y;
+      this.el.nativeElement.style.top = y + 'px';
+    });
+    this.test.on('panend', e => {
       this.onSwipe(e);
     });
   }
 
   onSwipe(event: any) {
     if (event.overallVelocityY > 0.7) {
-      console.log('down');
-      this.el.nativeElement.style.top = '90%';
+      this.el.nativeElement.style.top = '';
+      this.position = 'down';
     }
     if (event.overallVelocityY < -0.7) {
-      console.log('up');
-      this.el.nativeElement.style.top = '0%';
+      this.el.nativeElement.style.top = '';
+      this.position = 'up';
     }
   }
 
-  onClick() {
-    if(this.el.nativeElement.style.top !== '90%') {
-      this.el.nativeElement.style.top = '90%';
+  onTap() {
+    if (this.position !== 'up') {
+      this.el.nativeElement.style.top = '';
+      this.position = 'up';
     } else {
-      this.el.nativeElement.style.top = '0%';
+      this.el.nativeElement.style.top = '';
+      this.position = 'down';
     }
   }
 }

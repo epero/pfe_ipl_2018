@@ -1,6 +1,5 @@
-<div id="swm" #drawer>
-  {{event}}
-  <div class="center" (click)="onClick()" (drag)="onDrag($event)">
+<div id="swm" #drawer [ngClass]="{'up': (position==='up'), 'down': (position==='down') }">
+  <div class="center">
     <ion-icon class="swicon" name="arrow-round-up"></ion-icon>
   </div>
   <app-direction-form></app-direction-form>
