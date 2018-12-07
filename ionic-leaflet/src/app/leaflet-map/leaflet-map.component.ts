@@ -75,14 +75,24 @@ export class LeafletMapComponent implements OnInit {
         this.mapLayer = this.printGeoJson(json);
       });
 
+    
     // Route layer
-    this.mapRouteService.routeSubject.subscribe(enhancedRoutejson =>{
-      this.map.removeLayer(this.mapLayer);
-      this.mapLayer=this.printGeoJson(enhancedRoutejson.geojson);
+    this.mapRouteService.routeSubject.subscribe(geojson =>{
+      if (this.mapLayer!==undefined) this.map.removeLayer(this.mapLayer);
+      this.mapLayer=this.printGeoJson(geojson);
+      
       if (this.startpoint!==undefined) this.startpoint.removeFrom(this.map);
       if (this.endpoint!==undefined) this.endpoint.removeFrom(this.map);
-      this.startpoint=this.printPoint(enhancedRoutejson.start[1],enhancedRoutejson.start[0],"assets/marker/start.png");
-      this.endpoint=this.printPoint(enhancedRoutejson.end[1],enhancedRoutejson.end[0],"assets/marker/end.png");
+     
+      var features=geojson['features'];
+      var coordinatesFirstFeature=features[0]['geometry']['coordinates'];
+      var coordinatesLastFeature=features[features['length']-1]['geometry']['coordinates']
+      var lengthLF=coordinatesLastFeature['length'];
+      
+      this.startpoint=this.printPoint(coordinatesFirstFeature[0][1],coordinatesFirstFeature[0][0], 'assets/marker/start.png');
+      this.endpoint=this.printPoint(coordinatesLastFeature[lengthLF-1][1],coordinatesLastFeature[lengthLF-1][0], 'assets/marker/end.png');
+
+
     });
   }
 
