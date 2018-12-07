@@ -36,4 +36,12 @@ export class SwipeUpDrawerComponent implements OnInit {
       this.el.nativeElement.style.top = '0%';
     }
   }
+
+  onClick() {
+    if(this.el.nativeElement.style.top !== '90%') {
+      this.el.nativeElement.style.top = '90%';
+    } else {
+      this.el.nativeElement.style.top = '0%';
+    }
+  }
 }
