@@ -139,6 +139,8 @@ export class LeafletMapComponent implements OnInit {
               return { color: '#00256B' };
             case 'PP':
               return { color: '#D12200' };
+            default:
+              return myStyle;
           }
         } else {
           //properties icr nexiste pas
@@ -182,7 +184,8 @@ export class LeafletMapComponent implements OnInit {
         this.marker = L.marker(latlng, {
           icon: L.icon({
             iconUrl: 'assets/marker/marker-icon.png',
-            shadowUrl: 'assets/marker/marker-shadow.png'
+            shadowUrl: 'assets/marker/marker-shadow.png',
+            iconAnchor: [16, 32]
           })
         }).addTo(this.map);
       }
