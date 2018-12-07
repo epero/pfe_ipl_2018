@@ -12,12 +12,8 @@ router.post("/", function(req, res, next) {
   var json=req.body.coordinates
   ors
     .calculate(json)
-    .then(route => {
-      let enhancedRoute={};
-      enhancedRoute.geojson=route;
-      enhancedRoute.start=json[0];
-      enhancedRoute.end=json[1];
-      res.json(enhancedRoute);
+    .then(geojson => {
+      res.json(geojson);
     })
     .catch(err => res.status(500).send(err));
 });
