@@ -1,32 +1,43 @@
 <p>
-  <ion-item>
-    A:<input
-      list="startAddrList"
-      placeholder=" starting location"
-      type="text"
-      id="startInput"
-      [(ngModel)]="startAddr"
-      (ngModelChange)="onStartAddrChange()"
-    />
-    <datalist id="startAddrList">
-      <option *ngFor="let addr of startAddrList">{{ addr.label }}</option>
-    </datalist>
-    <br />
-  </ion-item>
-  <ion-item>
-    B:<input
-      list="endAddrList"
-      placeholder=" destination"
-      type="text"
-      id="endInput"
-      [(ngModel)]="endAddr"
-      (ngModelChange)="onEndAddrChange()"
-    />
-    <datalist id="endAddrList">
-      <option *ngFor="let addr of endAddrList">{{ addr.label }}</option>
-    </datalist>
-    <br />
-  </ion-item>
+  <ion-searchbar
+    name="startInput"
+    placeholder="Votre adresse de départ"
+    [(ngModel)]="startInput"
+    [value]="startJSON?.label"
+    (ionChange)="onStartInputChange()"
+    (ionFocus)="onStartInputFocus()"
+    (ionBlur)="onStartInputBlur()"
+    debounce="250"
+  >
+  </ion-searchbar>
+  <ion-list name="startAddrList" ngDefaultControl [(ngModel)]="startAddrList">
+    <ion-item
+      *ngFor="let addr of startAddrList"
+      (click)="onStartAddrItemClick(addr)"
+    >
+      {{ addr.label }}
+    </ion-item>
+  </ion-list>
+
+  <ion-searchbar
+    name="endInput"
+    placeholder="Votre adresse d'arrivée"
+    [(ngModel)]="endInput"
+    [value]="endJSON?.label"
+    (ionChange)="onEndInputChange()"
+    (ionFocus)="onEndInputFocus()"
+    (ionBlur)="onEndInputBlur()"
+    debounce="250"
+  ></ion-searchbar>
+  <ion-list name="endAddrList" ngDefaultControl [(ngModel)]="endAddrList">
+    <ion-item
+      *ngFor="let addr of endAddrList"
+      (click)="onEndAddrItemClick(addr)"
+    >
+      {{ addr.label }}
+    </ion-item>
+  </ion-list>
+
   <ion-button
     shape="round"
     color="primary"
