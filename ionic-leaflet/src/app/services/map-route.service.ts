@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Subject } from "rxjs";
 import { GeoJsonObject } from "geojson";
 
@@ -18,7 +18,7 @@ export class MapRouteService {
     let json = { coordinates: [[startLong, startLat], [endLong, endLat]] };
 
     this.httpClient
-      .post<GeoJsonObject>("http://localhost:3030/api/ors-directions", json)
+      .post<GeoJsonObject>("http://localhost:8081/api/ors-directions", json)
       .toPromise()
       .then(response => {
         this.setRoute(response);

@@ -1,0 +1,13 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - cd server
+      - docker build
+  build:
+    commands:
+      - docker run
+  post_build:
+    commands:
+      - echo Build completed

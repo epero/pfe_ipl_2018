@@ -26,8 +26,6 @@ let calculate = coordinates => {
       instructions: "true"
     })
       .then(json => {
-        json.start=JSON.parse(coordinates)[0];
-        json.end=JSON.parse(coordinates)[1];
         resolve(json);
       })
       .catch(err => {

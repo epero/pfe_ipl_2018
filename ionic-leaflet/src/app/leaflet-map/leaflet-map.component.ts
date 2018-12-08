@@ -75,12 +75,24 @@ export class LeafletMapComponent implements OnInit {
         this.mapLayer = this.printGeoJson(json);
       });
 
+    
     // Route layer
-    this.mapRouteService.routeSubject.subscribe(json => {
-      this.map.removeLayer(this.mapLayer);
-      this.mapLayer = this.printGeoJson(json);
-      if (this.startpoint !== undefined) this.startpoint.removeFrom(this.map);
-      if (this.endpoint !== undefined) this.endpoint.removeFrom(this.map);
+    this.mapRouteService.routeSubject.subscribe(geojson =>{
+      if (this.mapLayer!==undefined) this.map.removeLayer(this.mapLayer);
+      this.mapLayer=this.printGeoJson(geojson);
+      
+      if (this.startpoint!==undefined) this.startpoint.removeFrom(this.map);
+      if (this.endpoint!==undefined) this.endpoint.removeFrom(this.map);
+     
+      var features=geojson['features'];
+      var coordinatesFirstFeature=features[0]['geometry']['coordinates'];
+      var coordinatesLastFeature=features[features['length']-1]['geometry']['coordinates']
+      var lengthLF=coordinatesLastFeature['length'];
+      
+      this.startpoint=this.printPoint(coordinatesFirstFeature[0][1],coordinatesFirstFeature[0][0], 'assets/marker/start.png');
+      this.endpoint=this.printPoint(coordinatesLastFeature[lengthLF-1][1],coordinatesLastFeature[lengthLF-1][0], 'assets/marker/end.png');
+
+
     });
   }
 
@@ -96,6 +108,7 @@ export class LeafletMapComponent implements OnInit {
     var layer = L.geoJSON(this.geojson, {
       style: function(feature) {
         if (feature.properties.icr) {
+          // A changer en feature.properties.name quand le dijkstra sera utilisé
           //properties icr existe
           switch (feature.properties.icr) {
             case '1':
@@ -136,6 +149,8 @@ export class LeafletMapComponent implements OnInit {
               return { color: '#00256B' };
             case 'PP':
               return { color: '#D12200' };
+            default:
+              return myStyle;
           }
         } else {
           //properties icr nexiste pas
@@ -145,7 +160,7 @@ export class LeafletMapComponent implements OnInit {
     }).addTo(this.map);
     return layer;
   }
-  
+
   printPoint(lat: number, long: number, iconUrl: string): L.Marker {
     const latlng = L.latLng(lat, long);
     var marker = L.marker(latlng, {
@@ -179,7 +194,8 @@ export class LeafletMapComponent implements OnInit {
         this.marker = L.marker(latlng, {
           icon: L.icon({
             iconUrl: 'assets/marker/marker-icon.png',
-            shadowUrl: 'assets/marker/marker-shadow.png'
+            shadowUrl: 'assets/marker/marker-shadow.png',
+            iconAnchor: [16, 32]
           })
         }).addTo(this.map);
       }
