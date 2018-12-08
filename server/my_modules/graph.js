@@ -150,13 +150,13 @@ const calculate = (coordinates) => {
       currentSource = arbre.get(currentSource)
     }
     shortestPath.unshift(source)
-    route_to_geojson(shortestPath);
+    path_to_geojson(shortestPath);
   }
 
   console.log("FOUND : " + found);
 }
 
-const route_to_geojson = (path) => {
+const path_to_geojson = (path) => {
   //console.log(path);
   let geoJsonOutput = {
     "type": "FeatureCollection",
@@ -190,7 +190,7 @@ const route_to_geojson = (path) => {
 
   //path.forEach((route) => {
   //let possIcr = new Array(path.length-1)
-  let possIcr = new Array(path.length)
+  let possIcr = new Array(path.length -1)
 
   for(let i = 0; i < path.length-1; i++){
     possIcr[i] = new Set();
@@ -218,27 +218,28 @@ const route_to_geojson = (path) => {
       possIcr[i] = samePrev;
     }
   }
-  possIcr[path.length-1] = possIcr[path.length-2]
+  //HUHHUH??????
+  //possIcr[path.length-1] = possIcr[path.length-2]
 
-  let choosenIcr = new Array(path.length)
+  let choosenIcr = new Array(possIcr.length)
 
-  for(let i = path.length -1 ; i >= 0; i--){
+  for(let i = possIcr.length -1 ; i >= 0; i--){
     let currPossIcr = possIcr[i];
     //console.log("SINGLE : " + Array.from(currPossIcr))
     if(currPossIcr.size === 1){
       //console.log(i)
       choosenIcr[i] = Array.from(currPossIcr)[0];
-      console.log("HI : " + choosenIcr[i])
+      //console.log("HI : " + choosenIcr[i])
     }
-    else if ((i < (path.length-2)) && currPossIcr.has(choosenIcr[i+1])){
+    else if ((i < (possIcr.length-1)) && currPossIcr.has(choosenIcr[i+1])){
       //console.log(i)
       choosenIcr[i] = choosenIcr[i+1];
-      console.log("HI2 : " + choosenIcr[i+1])
+     // console.log("HI2 : " + choosenIcr[i+1])
     }
     else{
       //console.log(i)
       choosenIcr[i] = Array.from(currPossIcr)[0];
-      console.log("HI3 : " + choosenIcr[i])
+      //console.log("HI3 : " + choosenIcr[i])
     }
   }
 
@@ -265,12 +266,12 @@ const route_to_geojson = (path) => {
   //console.log(currentFeature);
 
   //geoJsonOutput.features.push(currentFeature);
-
-  for(let i = 1; i < path.length; i++){
-    let route = path[i];
+  let previousCoor;
+  for(let i = 0; i < choosenIcr.length; i++){
+    // route = path[i+1];
     //let nextRoute = path[i+1];
-    let nextCoor = [parseFloat(route.split(' ')[0]), parseFloat(route.split(' ')[1])]
-    if(choosenIcr[i-1] === currentFeature.properties.name){
+    let nextCoor = [parseFloat(path[i+1].split(' ')[0]), parseFloat(path[i+1].split(' ')[1])]
+    if(choosenIcr[i] === currentFeature.properties.name){
       currentFeature.geometry.coordinates.push(nextCoor)
     }
     else{
@@ -290,15 +291,17 @@ const route_to_geojson = (path) => {
           //"icr": "SZ",
           //"part": null,
           //"balises": 0
-          "name": choosenIcr[i-1]
+          "name": choosenIcr[i]
         }
       });
       featuresInd++;
       currentFeature = geoJsonOutput.features[featuresInd];
       //currentFeature.properties.name = choosenIcr[i-1];
       //console.log(currentFeature);
+      currentFeature.geometry.coordinates.push(previousCoor)
       currentFeature.geometry.coordinates.push(nextCoor)
     }
+    previousCoor = nextCoor;
   }
   //console.log(geoJsonOutput.features[0].properties)
   fs.writeFile('./exemple2017.json', JSON.stringify(geoJsonOutput, null, 2) , 'utf-8');
