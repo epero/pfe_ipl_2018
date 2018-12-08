@@ -1,8 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { MapRouteService } from "../services/map-route.service";
-
-import { OpenStreetMapProvider } from "leaflet-geosearch";
+import { AddressesService } from "../services/addresses.service";
 
 @Component({
   selector: "app-direction-form",
@@ -10,57 +9,77 @@ import { OpenStreetMapProvider } from "leaflet-geosearch";
   styleUrls: ["./direction-form.component.scss"]
 })
 export class DirectionFormComponent implements OnInit {
-  startAddr: String;
-  endAddr: String;
-  url: string;
-  startAddrList: Array<String>;
-  endAddrList: Array<String>;
-  startCoord: String;
-  endCoord: String;
-  private provider: OpenStreetMapProvider;
+  startInput: String;
+  startJSON: any;
+  startSearch: boolean;
+  endInput: String;
+  endJSON: any;
+  endSearch: boolean;
+  startAddrList: Array<any>;
+  endAddrList: Array<any>;
 
   constructor(
     private httpClient: HttpClient,
-    private mapRouteService: MapRouteService
+    private mapRouteService: MapRouteService,
+    private addressesService: AddressesService
   ) {
-    this.url = "http://localhost:3030/api/ors-directions";
-    this.provider = new OpenStreetMapProvider({
-      params: { countrycodes: "be" }
-    });
     this.startAddrList = [];
     this.endAddrList = [];
   }
 
   ngOnInit() {}
 
-  onStartAddrChange() {
-    //TODO delay to not DDOS the server on every keystroke.
-    this.provider.search({ query: this.startAddr }).then(result => {
-      this.startAddrList = [];
-      result.forEach(element => {
-        this.startAddrList.push(element);
+  onStartInputChange() {
+    if (this.startSearch) {
+      this.addressesService.getAddresses(this.startInput).then(addresses => {
+        this.startAddrList = Object.keys(addresses).map(key => addresses[key]);
       });
-    });
+    }
   }
 
-  onEndAddrChange() {
-    //TODO delay to not DDOS the server on every keystroke.
-    this.provider.search({ query: this.endAddr }).then(result => {
-      this.endAddrList = [];
-      result.forEach(element => {
-        this.endAddrList.push(element);
+  onStartInputFocus() {
+    this.startSearch = true;
+  }
+
+  onStartInputBlur() {
+    this.startSearch = false;
+  }
+
+  onStartAddrItemClick(addr) {
+    this.startAddrList = [];
+    this.startJSON = addr;
+  }
+
+  onEndInputChange() {
+    if (this.endSearch) {
+      this.addressesService.getAddresses(this.endInput).then(addresses => {
+        this.endAddrList = Object.keys(addresses).map(key => addresses[key]);
       });
-    });
+    }
+  }
+
+  onEndInputFocus() {
+    this.endSearch = true;
+  }
+
+  onEndInputBlur() {
+    this.endSearch = false;
+  }
+
+  onEndAddrItemClick(addr) {
+    this.endAddrList = [];
+    this.endJSON = addr;
   }
 
   onSearchRouteBtnClick() {
     //send coordinates to backend
-    if (this.startAddr !== undefined && this.endAddr !== undefined) {
+
+    if (this.startJSON !== undefined && this.endJSON !== undefined) {
       this.mapRouteService.sendCoordinatesToServer(
-        this.startAddrList[0]["x"],
-        this.startAddrList[0]["y"],
-        this.endAddrList[0]["x"],
-        this.endAddrList[0]["y"]
+        this.startJSON["x"],
+        this.startJSON["y"],
+        this.endJSON["x"],
+        this.endJSON["y"]
       );
     }
   }
