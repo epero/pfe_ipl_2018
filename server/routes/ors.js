@@ -12,7 +12,7 @@ router.post("/", async function(req, res, next) {
    */
   try {
     var json = req.body.coordinates;
-    let startIcr = graph.closestEntryToNetwork(json[0], 100, 7);
+    let startIcr = graph.closestEntryToNetwork(json[0], 100, 6);
     let endIcr = graph.closestEntryToNetwork(json[1], 100, 7);
     let geoJsonStart = await ors.calculate([json[0], startIcr]);
     geoJsonStart = geoJsonStart.features[0];
