@@ -258,6 +258,7 @@ const closestEntryToNetwork = (coordinate, range, precision) => {
 
   let search_ind_long = Math.floor(sorted_longitudes.length / 2);
   let search_ind_min = 0;
+  let previous_ind;
   let search_ind_max = sorted_longitudes.length - 1;
   let search_long = sorted_longitudes[search_ind_long];
 
@@ -268,11 +269,15 @@ const closestEntryToNetwork = (coordinate, range, precision) => {
     } else {
       search_ind_min = search_ind_long;
     }
+    previous_ind = search_ind_long;
     search_ind_long = Math.floor((search_ind_max + search_ind_min) / 2);
+    if (previous_ind === search_ind_long) {
+      console.log("No entry found ... Searching within a shorter precision");
+      return closestEntryToNetwork(coordinate, range * 2, precision - 1);
+    }
     //console.log("MAX : " + search_ind_max);
     //console.log("MIN : " + search_ind_min);
     //console.log(search_ind_long);
-    //console.log(search_long);
     search_long = sorted_longitudes[search_ind_long];
   }
 
@@ -287,8 +292,15 @@ const closestEntryToNetwork = (coordinate, range, precision) => {
     } else {
       search_ind_min = search_ind_lat;
     }
+    previous_ind = search_ind_lat;
     search_ind_lat = Math.floor((search_ind_max + search_ind_min) / 2);
+    if (previous_ind === search_ind_lat) {
+      console.log("No entry found ... Searching within a shorter precision");
+      return closestEntryToNetwork(coordinate, range * 2, precision - 1);
+    }
     //console.log(search_ind_long);
+    //console.log(search_ind_long);
+    //console.log(search_long);
     search_lat = sorted_latitudes[search_ind_lat];
   }
 
