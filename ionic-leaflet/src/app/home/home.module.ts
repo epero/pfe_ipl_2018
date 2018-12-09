@@ -14,6 +14,8 @@ import { DirectionFormComponent } from '../direction-form/direction-form.compone
 import { SwipeUpDrawerComponent } from '../swipe-up-drawer/swipe-up-drawer.component';
 import { TrajectoireComponent } from '../trajectoire/trajectoire.component';
 
+import { MapBoxComponent } from '../map-box/map-box.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -33,6 +35,7 @@ import { TrajectoireComponent } from '../trajectoire/trajectoire.component';
     LeafletMapComponent,
     DirectionFormComponent,
     SwipeUpDrawerComponent,
+    MapBoxComponent
     TrajectoireComponent
   ],
   providers: [Geolocation]
