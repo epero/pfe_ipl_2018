@@ -18,9 +18,9 @@ export class SwipeUpDrawerComponent implements OnInit {
   ngOnInit() {
     this.position = 'down';
     this.windowHeight = window.innerWidth;
-    this.test = new window['Hammer'].Manager(document.getElementById('swm'));
-    let pan = new window['Hammer'].Pan();
-    let tap = new window['Hammer'].Tap();
+    this.test = new window['Hammer'].Manager(document.getElementById('touch'));
+    const pan = new window['Hammer'].Pan();
+    const tap = new window['Hammer'].Tap();
     this.test.add(pan);
     this.test.add(tap);
     this.test.on('tap', e => {
