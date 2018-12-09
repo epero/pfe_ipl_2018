@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
-import { HttpClient } from "@angular/common/http";
-import { GeoJsonObject } from "geojson";
+import { HttpClient } from '@angular/common/http';
+import { GeoJsonObject } from 'geojson';
 import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
@@ -28,8 +28,8 @@ export class MapBoxComponent implements OnInit {
         mapboxgl.accessToken = 'pk.eyJ1IjoieGRhcmthIiwiYSI6ImNqcGgxdXBobjByNHUza3BkbGtvMGY2eTUifQ.WuwZ_XI2zNxxObLi6moULg';
 
         //Display map style according to time
-        var d = new Date();
-        var n = d.getHours();
+        const d = new Date();
+        const n = d.getHours();
         if(n >= 18 || n <= 6) {
             this.map = this.initializingMap('dark');
         } else {

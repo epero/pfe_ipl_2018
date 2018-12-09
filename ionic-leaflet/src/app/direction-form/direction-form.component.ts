@@ -17,6 +17,8 @@ export class DirectionFormComponent implements OnInit {
   endSearch: boolean;
   startAddrList: Array<any>;
   endAddrList: Array<any>;
+  deployed: boolean;
+  haveRoute: boolean;
 
   constructor(
     private httpClient: HttpClient,
@@ -25,9 +27,15 @@ export class DirectionFormComponent implements OnInit {
   ) {
     this.startAddrList = [];
     this.endAddrList = [];
+    this.deployed = true;
+    this.haveRoute = false;
   }
 
   ngOnInit() {
+    this.mapRouteService.routeSubject.subscribe(() => {
+      this.deployed = false;
+      this.haveRoute = true;
+    });
     this.startInput =
       '75, Rue François Gay, Woluwe-Saint-Pierre, Bruxelles-Capitale, 1150, Belgique';
     this.endInput =
@@ -78,7 +86,6 @@ export class DirectionFormComponent implements OnInit {
 
   onSearchRouteBtnClick() {
     //send coordinates to backend
-
     if (this.startJSON !== undefined && this.endJSON !== undefined) {
       this.mapRouteService.sendCoordinatesToServer(
         this.startJSON['x'],
@@ -87,5 +94,13 @@ export class DirectionFormComponent implements OnInit {
         this.endJSON['y']
       );
     }
+  }
+
+  onChangerBtnClick() {
+    this.deployed = true;
+  }
+
+  onAnnulerBtnClick() {
+    this.deployed = false;
   }
 }

@@ -1,49 +1,32 @@
-<p>
-  <ion-searchbar
-    name="startInput"
-    placeholder="Votre adresse de départ"
-    [(ngModel)]="startInput"
-    [value]="startJSON?.label"
-    (ionChange)="onStartInputChange()"
-    (ionFocus)="onStartInputFocus()"
-    (ionBlur)="onStartInputBlur()"
-    debounce="250"
-  >
-  </ion-searchbar>
-  <ion-list name="startAddrList" ngDefaultControl [(ngModel)]="startAddrList">
-    <ion-item
-      *ngFor="let addr of startAddrList"
-      (click)="onStartAddrItemClick(addr)"
-    >
-      {{ addr.label }}
-    </ion-item>
-  </ion-list>
+<div class="directionForm" [ngClass]="{'deployed': deployed, 'minimised': !deployed}">
+  <ng-container *ngIf="deployed; else minimised">
+    <ion-searchbar name="startInput" placeholder="Votre adresse de départ" [(ngModel)]="startInput" [value]="startJSON?.label"
+      (ionChange)="onStartInputChange()" (ionFocus)="onStartInputFocus()" (ionBlur)="onStartInputBlur()" debounce="250">
+    </ion-searchbar>
+    <ion-list name="startAddrList" ngDefaultControl [(ngModel)]="startAddrList">
+      <ion-item *ngFor="let addr of startAddrList" (click)="onStartAddrItemClick(addr)">
+        {{ addr.label }}
+      </ion-item>
+    </ion-list>
 
-  <ion-searchbar
-    name="endInput"
-    placeholder="Votre adresse d'arrivée"
-    [(ngModel)]="endInput"
-    [value]="endJSON?.label"
-    (ionChange)="onEndInputChange()"
-    (ionFocus)="onEndInputFocus()"
-    (ionBlur)="onEndInputBlur()"
-    debounce="250"
-  ></ion-searchbar>
-  <ion-list name="endAddrList" ngDefaultControl [(ngModel)]="endAddrList">
-    <ion-item
-      *ngFor="let addr of endAddrList"
-      (click)="onEndAddrItemClick(addr)"
-    >
-      {{ addr.label }}
-    </ion-item>
-  </ion-list>
+    <ion-searchbar name="endInput" placeholder="Votre adresse d'arrivée" [(ngModel)]="endInput" [value]="endJSON?.label"
+      (ionChange)="onEndInputChange()" (ionFocus)="onEndInputFocus()" (ionBlur)="onEndInputBlur()" debounce="250"></ion-searchbar>
+    <ion-list name="endAddrList" ngDefaultControl [(ngModel)]="endAddrList">
+      <ion-item *ngFor="let addr of endAddrList" (click)="onEndAddrItemClick(addr)">
+        {{ addr.label }}
+      </ion-item>
+    </ion-list>
 
-  <ion-button
-    shape="round"
-    color="primary"
-    fill="outline"
-    id="searchRouteBtn"
-    (click)="onSearchRouteBtnClick()"
-    >Search route</ion-button
-  >
-</p>
+    <ion-button shape="round" color="primary" fill="outline" id="searchRouteBtn" (click)="onSearchRouteBtnClick()">
+      Search route
+    </ion-button>
+    <ion-button *ngIf="haveRoute" shape="round" color="danger" fill="outline" id="annulerBtn" (click)="onAnnulerBtnClick()">
+      Annuler
+    </ion-button>
+  </ng-container>
+  <ng-template #minimised>
+    <ion-button (click)="onChangerBtnClick()">
+      Changer
+    </ion-button>
+  </ng-template>
+</div>
