@@ -1,0 +1,9 @@
+<div id="map"></div>
+<form [formGroup]='form' id='menu'>
+    <input id='basic' type='radio' formControlName='mapStyle' value='basic' (click)="waitInitializingMap()">
+    <label for='basic'>basic</label>
+    <input id='light' type='radio' formControlName='mapStyle' value='light' (click)="waitInitializingMap()">
+    <label for='light'>light</label>
+    <input id='dark' type='radio' formControlName='mapStyle' value='dark' (click)="waitInitializingMap()">
+    <label for='light'>dark</label>
+</form>

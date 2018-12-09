@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { HomePage } from './home.page';
@@ -14,10 +14,13 @@ import { DirectionFormComponent } from '../direction-form/direction-form.compone
 import { SwipeUpDrawerComponent } from '../swipe-up-drawer/swipe-up-drawer.component';
 import { TrajectoireComponent } from '../trajectoire/trajectoire.component';
 
+import { MapBoxComponent } from '../map-box/map-box.component';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
     HttpClientModule,
     FontAwesomeModule,
@@ -33,6 +36,7 @@ import { TrajectoireComponent } from '../trajectoire/trajectoire.component';
     LeafletMapComponent,
     DirectionFormComponent,
     SwipeUpDrawerComponent,
+    MapBoxComponent,
     TrajectoireComponent
   ],
   providers: [Geolocation]
