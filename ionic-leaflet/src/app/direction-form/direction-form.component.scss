@@ -1,0 +1,22 @@
+.directionForm {
+  z-index: 500;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 5px 5px 5px 5px;
+  text-align: center;
+  padding: 5px;
+}
+
+.deployed {
+  width: 80%;
+  transition: all 0.3s ease;
+}
+
+.minimised {
+  width: 110px;
+  transition: all 0.3s ease;
+}
