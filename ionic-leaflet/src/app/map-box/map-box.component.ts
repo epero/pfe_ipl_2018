@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import { HttpClient } from "@angular/common/http";
 import { GeoJsonObject } from "geojson";
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-map-box',
@@ -11,22 +12,45 @@ import { GeoJsonObject } from "geojson";
 export class MapBoxComponent implements OnInit {
 
     private geojson: GeoJsonObject;
+    form: FormGroup;
 
     constructor(
         private http: HttpClient
-    ) { }
+    ) {
+        this.form = new FormGroup({
+            mapStyle: new FormControl('basic')
+        });
+     }
 
     ngOnInit() {
 
         mapboxgl.accessToken = 'pk.eyJ1IjoieGRhcmthIiwiYSI6ImNqcGgxdXBobjByNHUza3BkbGtvMGY2eTUifQ.WuwZ_XI2zNxxObLi6moULg';
 
-        var map = this.initializingMap('basic');
+        //Display map style according to time
+        var d = new Date();
+        var n = d.getHours();
+        if(n >= 18 || n <= 6) {
+            this.form.setValue({
+                mapStyle: 'dark'
+            });
+        } else {
+            this.form.setValue({
+                mapStyle: 'basic'
+            });
+        }
+        
+        var map = this.initializingMap();
     }
 
-    initializingMap(mapStyle) {
+    waitInitializingMap() {
+        setTimeout(() => this.initializingMap(), 1);
+    }
+
+    initializingMap() {
+        console.log(this.form.get('mapStyle').value);
         var map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/' + mapStyle + '-v9',
+            style: 'mapbox://styles/mapbox/' + this.form.get('mapStyle').value + '-v9',
             zoom: 11,
             center: [4.3517103, 50.8303396]
         });
