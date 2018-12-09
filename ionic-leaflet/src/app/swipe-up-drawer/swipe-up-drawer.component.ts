@@ -8,6 +8,7 @@ import 'hammerjs';
 })
 export class SwipeUpDrawerComponent implements OnInit {
   @ViewChild('drawer') el: ElementRef;
+  @ViewChild('content') content: ElementRef;
   event: any;
   windowHeight: number;
   test: any;
@@ -17,7 +18,7 @@ export class SwipeUpDrawerComponent implements OnInit {
 
   ngOnInit() {
     this.position = 'down';
-    this.windowHeight = window.innerWidth;
+    this.windowHeight = window.innerHeight;
     this.test = new window['Hammer'].Manager(document.getElementById('touch'));
     const pan = new window['Hammer'].Pan();
     const tap = new window['Hammer'].Tap();
@@ -30,9 +31,15 @@ export class SwipeUpDrawerComponent implements OnInit {
       this.position = 'middle';
     });
     this.test.on('pan', e => {
+      this.windowHeight = window.innerHeight;
+      console.log(this.windowHeight);
       let y = e.center.y;
       y = y < 0 ? 0 : y;
+      console.log(y);
       this.el.nativeElement.style.top = y + 'px';
+      y = this.windowHeight - y - 50;
+      console.log(y);
+      this.content.nativeElement.style.height = y + 'px';
     });
     this.test.on('panend', e => {
       this.onSwipe(e);
@@ -42,10 +49,12 @@ export class SwipeUpDrawerComponent implements OnInit {
   onSwipe(event: any) {
     if (event.overallVelocityY > 0.7) {
       this.el.nativeElement.style.top = '';
+      this.content.nativeElement.style.height = '0%';
       this.position = 'down';
     }
     if (event.overallVelocityY < -0.7) {
       this.el.nativeElement.style.top = '';
+      this.content.nativeElement.style.height = '80%';
       this.position = 'up';
     }
   }
@@ -53,9 +62,11 @@ export class SwipeUpDrawerComponent implements OnInit {
   onTap() {
     if (this.position !== 'up') {
       this.el.nativeElement.style.top = '';
+      this.content.nativeElement.style.height = '80%';
       this.position = 'up';
     } else {
       this.el.nativeElement.style.top = '';
+      this.content.nativeElement.style.height = '0%';
       this.position = 'down';
     }
   }
