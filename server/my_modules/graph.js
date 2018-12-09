@@ -247,85 +247,43 @@ const path_to_geojson = path => {
 const closestEntryToNetwork = (coordinate, range, precision) => {
   let src_long = coordinate[0];
   let src_lat = coordinate[1];
-  //console.log("REceived : " + src_long + "  " + src_lat);
-  //const precision = 7;
-  //const range = 100;
+
   let regexLong = new RegExp("^" + src_long.substring(0, precision));
   let regexLat = new RegExp("^" + src_lat.substring(0, precision));
-  //console.log("REGEX LONG  : " + regexLong);
-  //console.log("REGEX LAT : " + regexLat);
-  //let search_ind = ~~(src_long.length / 2);
 
-  let search_ind_long = Math.floor(sorted_longitudes.length / 2);
-  let search_ind_min = 0;
-  let previous_ind;
-  let search_ind_max = sorted_longitudes.length - 1;
-  let search_long = sorted_longitudes[search_ind_long];
+  let limits_longitude = binary_search(
+    sorted_longitudes,
+    src_long,
+    regexLong,
+    "longitude",
+    range
+  );
 
-  while (!String(search_long.longitude).match(regexLong)) {
-    if (search_long.longitude > src_long) {
-      search_ind_max = search_ind_long;
-      //console.log();
-    } else {
-      search_ind_min = search_ind_long;
-    }
-    previous_ind = search_ind_long;
-    search_ind_long = Math.floor((search_ind_max + search_ind_min) / 2);
-    if (previous_ind === search_ind_long) {
-      console.log("No entry found ... Searching within a shorter precision");
-      return closestEntryToNetwork(coordinate, range * 2, precision - 1);
-    }
-    //console.log("MAX : " + search_ind_max);
-    //console.log("MIN : " + search_ind_min);
-    //console.log(search_ind_long);
-    search_long = sorted_longitudes[search_ind_long];
+  if (limits_longitude === -1) {
+    console.log("No entry found ... Searching within a shorter precision");
+    return closestEntryToNetwork(coordinate, range * 2, precision - 1);
   }
 
-  let search_ind_lat = Math.floor(sorted_latitudes.length / 2);
-  search_ind_min = 0;
-  search_ind_max = sorted_latitudes.length - 1;
-  let search_lat = sorted_latitudes[search_ind_lat];
+  let limits_latitudes = binary_search(
+    sorted_latitudes,
+    src_lat,
+    regexLat,
+    "latitude",
+    range
+  );
 
-  while (!String(search_lat.latitude).match(regexLat)) {
-    if (search_lat.latitude > src_lat) {
-      search_ind_max = search_ind_lat;
-    } else {
-      search_ind_min = search_ind_lat;
-    }
-    previous_ind = search_ind_lat;
-    search_ind_lat = Math.floor((search_ind_max + search_ind_min) / 2);
-    if (previous_ind === search_ind_lat) {
-      console.log("No entry found ... Searching within a shorter precision");
-      return closestEntryToNetwork(coordinate, range * 2, precision - 1);
-    }
-    //console.log(search_ind_long);
-    //console.log(search_ind_long);
-    //console.log(search_long);
-    search_lat = sorted_latitudes[search_ind_lat];
+  if (limits_latitudes === -1) {
+    console.log("No entry found ... Searching within a shorter precision");
+    return closestEntryToNetwork(coordinate, range * 2, precision - 1);
   }
-
-  //console.log("FOUND FOR LONGITUDE : " + search_long.longitude);
-  //console.log("FOUND FOR LATITUDE : " + search_lat.latitude);
-
-  let search_ind_long_min = search_ind_long - range;
-  if (search_ind_long_min < 0) search_ind_long_min = 0;
-  let search_ind_long_max = search_ind_long + range;
-  if (search_ind_long_max >= sorted_longitudes.length)
-    search_ind_long_max = sorted_longitudes.length - 1;
 
   let potentialLongitudes = sorted_longitudes.slice(
-    search_ind_long_min,
-    search_ind_long_max
+    limits_longitude.min,
+    limits_longitude.max
   );
-  //  .map(a => `${a.longitude} ${a.latitude}`);
 
-  let search_ind_lat_min = search_ind_lat - range;
-  if (search_ind_lat_min < 0) search_ind_lat_min = 0;
-  let search_ind_lat_max = search_ind_lat + range;
-  if (search_ind_lat_max >= sorted_latitudes.length)
-    search_ind_lat_max = sorted_latitudes.length - 1;
   let potentialLatitudes = sorted_latitudes
-    .slice(search_ind_lat_min, search_ind_lat_max)
+    .slice(limits_latitudes.min, limits_latitudes.max)
     .map(a => `${a.longitude} ${a.latitude}`);
 
   potentialLatitudes = new Set(potentialLatitudes);
@@ -353,15 +311,42 @@ const closestEntryToNetwork = (coordinate, range, precision) => {
       minDistance = currDistance;
       minIndex = index;
     }
-    console.log("CLOSEST entry : " + potentialEntries[minIndex]);
-    return [
-      potentialEntries[minIndex].longitude,
-      potentialEntries[minIndex].latitude
-    ];
   }
+  console.log("CLOSEST entry : " + potentialEntries[minIndex]);
+  return [
+    potentialEntries[minIndex].longitude,
+    potentialEntries[minIndex].latitude
+  ];
 };
 
-//const binary_search = (arr, source, )
+const binary_search = (arr, source, regex, coord_type, range) => {
+  let pointer_ind = Math.floor(arr.length / 2);
+  let pointer_ind_min = 0;
+  let previous_ind;
+  let pointer_ind_max = arr.length - 1;
+  let pointer = arr[pointer_ind];
+
+  while (!String(pointer[coord_type]).match(regex)) {
+    if (pointer[coord_type] > source) {
+      pointer_ind_max = pointer_ind;
+    } else {
+      pointer_ind_min = pointer_ind;
+    }
+    previous_ind = pointer_ind;
+    pointer_ind = Math.floor((pointer_ind_max + pointer_ind_min) / 2);
+    if (previous_ind === pointer_ind) {
+      return -1;
+    }
+    pointer = arr[pointer_ind];
+  }
+
+  pointer_ind_min = pointer_ind - range;
+  if (pointer_ind_min < 0) pointer_ind_min = 0;
+  pointer_ind_max = pointer_ind + range;
+  if (pointer_ind_max >= arr.length) pointer_ind_max = arr.length - 1;
+
+  return { min: pointer_ind_min, max: pointer_ind_max };
+};
 
 exports.graph = null;
 exports.parse = parse;
