@@ -113,10 +113,10 @@ export class LeafletMapComponent implements OnInit {
     //Colorization of ICR routes
     var layer = L.geoJSON(this.geojson, {
       style: function(feature) {
-        if (feature.properties.name) {
+        if (feature.properties.icr) {
           // A changer en feature.properties.name quand le dijkstra sera utilisé
           //properties icr existe
-          switch (feature.properties.name) {
+          switch (feature.properties.icr) {
             case "1":
               return { color: "#00cc00" };
             case "2":

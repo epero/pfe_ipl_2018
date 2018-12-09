@@ -1,0 +1,8 @@
+<ion-list class="scroll">
+  <ion-item *ngFor="let step of trajet">
+    <ion-label>
+      {{step.instruction}}
+      <span *ngIf="step.distance > -1"> sur {{step.distance}}m</span>
+    </ion-label>
+  </ion-item>
+</ion-list>

@@ -12,6 +12,9 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DirectionFormComponent } from '../direction-form/direction-form.component';
 import { SwipeUpDrawerComponent } from '../swipe-up-drawer/swipe-up-drawer.component';
+import { TrajectoireComponent } from '../trajectoire/trajectoire.component';
+
+import { MapBoxComponent } from '../map-box/map-box.component';
 
 @NgModule({
   imports: [
@@ -31,7 +34,9 @@ import { SwipeUpDrawerComponent } from '../swipe-up-drawer/swipe-up-drawer.compo
     HomePage,
     LeafletMapComponent,
     DirectionFormComponent,
-    SwipeUpDrawerComponent
+    SwipeUpDrawerComponent,
+    MapBoxComponent,
+    TrajectoireComponent
   ],
   providers: [Geolocation]
 })
