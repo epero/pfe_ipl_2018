@@ -43,9 +43,9 @@ const coordinates_2_graph = (icr, coordinates) => {
     if (coordinates[i2 + 1]) {
       let currDistance = Math.sqrt(
         (coordinate[0] - coordinates[i2 + 1][0]) *
-          (coordinate[0] - coordinates[i2 + 1][0]) +
-          (coordinate[1] - coordinates[i2 + 1][1]) *
-            (coordinate[1] - coordinates[i2 + 1][1])
+        (coordinate[0] - coordinates[i2 + 1][0]) +
+        (coordinate[1] - coordinates[i2 + 1][1]) *
+        (coordinate[1] - coordinates[i2 + 1][1])
       );
 
       if (!graph[coordinate[0] + " " + coordinate[1]]) {
@@ -151,7 +151,9 @@ const calculate = coordinates => {
 const path_to_geojson = path => {
   let geoJsonOutput = {
     type: "FeatureCollection",
-    features: [[]]
+    features: [
+      []
+    ]
   };
 
   let possIcr = new Array(path.length - 1);
@@ -234,11 +236,11 @@ const path_to_geojson = path => {
     }
     previousCoor = nextCoor;
   }
-  fs.writeFile(
+  /*fs.writeFile(
     "./exemple2017.json",
     JSON.stringify(geoJsonOutput, null, 2),
     "utf-8"
-  );
+  );*/
   return geoJsonOutput;
 };
 
@@ -331,9 +333,9 @@ const closestEntryToNetwork = (coordinate, range, precision) => {
     //console.log(potentialEntries[index]);
     let currDistance = Math.sqrt(
       (src_long - potentialEntries[index].longitude) *
-        (src_long - potentialEntries[index].longitude) +
-        (src_lat - potentialEntries[index].latitude) *
-          (src_lat - potentialEntries[index].latitude)
+      (src_long - potentialEntries[index].longitude) +
+      (src_lat - potentialEntries[index].latitude) *
+      (src_lat - potentialEntries[index].latitude)
     );
     if (!minDistance || currDistance < minDistance) {
       minDistance = currDistance;
