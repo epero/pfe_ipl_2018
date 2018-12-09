@@ -35,7 +35,7 @@ import { MapBoxComponent } from '../map-box/map-box.component';
     LeafletMapComponent,
     DirectionFormComponent,
     SwipeUpDrawerComponent,
-    MapBoxComponent
+    MapBoxComponent,
     TrajectoireComponent
   ],
   providers: [Geolocation]
