@@ -13,6 +13,7 @@ export class MapBoxComponent implements OnInit {
 
     private geojson: GeoJsonObject;
     form: FormGroup;
+    map: any;
 
     constructor(
         private http: HttpClient
@@ -30,27 +31,17 @@ export class MapBoxComponent implements OnInit {
         var d = new Date();
         var n = d.getHours();
         if(n >= 18 || n <= 6) {
-            this.form.setValue({
-                mapStyle: 'dark'
-            });
+            this.map = this.initializingMap('dark');
         } else {
-            this.form.setValue({
-                mapStyle: 'basic'
-            });
+            this.map = this.initializingMap('basic');
         }
+    }
+
+    initializingMap(mapStyle) {
         
-        var map = this.initializingMap();
-    }
-
-    waitInitializingMap() {
-        setTimeout(() => this.initializingMap(), 1);
-    }
-
-    initializingMap() {
-        console.log(this.form.get('mapStyle').value);
         var map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/' + this.form.get('mapStyle').value + '-v9',
+            style: 'mapbox://styles/mapbox/' + mapStyle + '-v9',
             zoom: 11,
             center: [4.3517103, 50.8303396]
         });
@@ -116,13 +107,13 @@ export class MapBoxComponent implements OnInit {
                         color = "#00510A";
                         break;
                     case "A":
-                        color = "#f4bc6e";
+                        color = "#FF8205";
                         break;
                     case "B":
-                        color = "#f4bc6e";
+                        color = "#FF8205";
                         break;
                     case "C":
-                        color = "#f4bc6e";
+                        color = "#FF8205";
                         break;
                     case "CK":
                         color = "#05AFFF";

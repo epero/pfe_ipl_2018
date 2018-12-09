@@ -1,9 +1,14 @@
 <div id="map"></div>
-<form [formGroup]='form' id='menu'>
-    <input id='basic' type='radio' formControlName='mapStyle' value='basic' (click)="waitInitializingMap()">
-    <label for='basic'>basic</label>
-    <input id='light' type='radio' formControlName='mapStyle' value='light' (click)="waitInitializingMap()">
-    <label for='light'>light</label>
-    <input id='dark' type='radio' formControlName='mapStyle' value='dark' (click)="waitInitializingMap()">
-    <label for='light'>dark</label>
-</form>
+<ion-fab vertical="top" horizontal="start" slot="fixed">
+    <ion-fab-button>
+        <ion-icon name="brush"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="bottom">
+        <ion-fab-button (click)="initializingMap('basic')">
+            <ion-icon name="bulb"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button (click)="initializingMap('dark')">
+            <ion-icon name="moon"></ion-icon>
+        </ion-fab-button>
+    </ion-fab-list>
+</ion-fab>
