@@ -5,15 +5,15 @@ var fs = require("fs");
 var graph = require("../my_modules/graph");
 const ors = require("../my_modules/ors");
 
-router.post("/", async function(req, res, next) {
+router.post("/", async function (req, res, next) {
   /**
    * req.body.coordinates expected format: [[longitude,latitude], [longitude,latitude]]
    * ex: [[4.353434, 50.850575], [4.450772, 50.849415]]
    */
   try {
     var json = req.body.coordinates;
-    let startIcr = graph.closestEntryToNetwork(json[0], 100, 7);
-    let endIcr = graph.closestEntryToNetwork(json[1], 100, 7);
+    let startIcr = graph.closestEntryToNetwork(json[0], 100, 5);
+    let endIcr = graph.closestEntryToNetwork(json[1], 100, 5);
     let geoJsonStart = await ors.calculate([json[0], startIcr]);
     geoJsonStart = geoJsonStart.features[0];
     geoJsonStart.properties.name = "ors";

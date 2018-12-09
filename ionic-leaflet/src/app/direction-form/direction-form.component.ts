@@ -1,12 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { MapRouteService } from "../services/map-route.service";
-import { AddressesService } from "../services/addresses.service";
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { MapRouteService } from '../services/map-route.service';
+import { AddressesService } from '../services/addresses.service';
 
 @Component({
-  selector: "app-direction-form",
-  templateUrl: "./direction-form.component.html",
-  styleUrls: ["./direction-form.component.scss"]
+  selector: 'app-direction-form',
+  templateUrl: './direction-form.component.html',
+  styleUrls: ['./direction-form.component.scss']
 })
 export class DirectionFormComponent implements OnInit {
   startInput: String;
@@ -27,7 +27,12 @@ export class DirectionFormComponent implements OnInit {
     this.endAddrList = [];
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.startInput =
+      '75, Rue François Gay, Woluwe-Saint-Pierre, Bruxelles-Capitale, 1150, Belgique';
+    this.endInput =
+      'Clos Chapelle-aux-Champs, Woluwe-Saint-Lambert, Bruxelles-Capitale, 1200, Belgique';
+  }
 
   onStartInputChange() {
     if (this.startSearch) {
@@ -76,10 +81,10 @@ export class DirectionFormComponent implements OnInit {
 
     if (this.startJSON !== undefined && this.endJSON !== undefined) {
       this.mapRouteService.sendCoordinatesToServer(
-        this.startJSON["x"],
-        this.startJSON["y"],
-        this.endJSON["x"],
-        this.endJSON["y"]
+        this.startJSON['x'],
+        this.startJSON['y'],
+        this.endJSON['x'],
+        this.endJSON['y']
       );
     }
   }
