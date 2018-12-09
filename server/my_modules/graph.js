@@ -269,8 +269,8 @@ const closestEntryToNetwork = (coordinate, range, precision) => {
     search_ind_long = Math.floor((search_ind_max + search_ind_min) / 2);
     //console.log("MAX : " + search_ind_max);
     //console.log("MIN : " + search_ind_min);
-    //console.log(search_ind_long);
-    //console.log(search_long);
+    console.log(search_ind_long);
+    console.log(search_long);
     search_long = sorted_longitudes[search_ind_long];
   }
 
