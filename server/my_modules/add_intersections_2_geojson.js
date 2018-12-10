@@ -1,15 +1,17 @@
 var fs = require("fs");
 //var obj  = require('../icr-2017-01-01')
-var obj = require("../latlong_icr.json");
+//var obj = require("../latlong_icr.json");
+let file = require("../geojsons/icr-2017-01-01");
 
-const parse = () => {
-  let features = obj.features;
-  //features.forEach((feature) => {
+const parse = source_file => {
+  //let pathname = `../geojsons/${source_file}`;
+  //console.log(pathname);
+  //file = require(pathname);
+  let features = file.features;
   for (ii = 0; ii < features.length; ii++) {
     let feature = features[ii];
     let arrayCoordinates = feature.geometry.coordinates;
     if (feature.geometry.type === "LineString") {
-      //arrayCoordinates.forEach((coordinate, i2) => {
       for (i2 = 0; i2 < arrayCoordinates.length; i2++) {
         let coordinate = arrayCoordinates[i2];
         if (arrayCoordinates[i2 + 1]) {
@@ -23,24 +25,21 @@ const parse = () => {
             arrayCoordinates.splice(i2 + 1, 0, [result.x, result.y]);
             console.log("INSERTED : " + result);
             console.log(
-              "BEFORE : " + obj.features[ii].geometry.coordinates[i2]
+              "BEFORE : " + file.features[ii].geometry.coordinates[i2]
             );
             console.log(
-              "PUT :" + obj.features[ii].geometry.coordinates[i2 + 1]
+              "PUT :" + file.features[ii].geometry.coordinates[i2 + 1]
             );
             console.log(
-              "AFTER : " + obj.features[ii].geometry.coordinates[i2 + 2]
+              "AFTER : " + file.features[ii].geometry.coordinates[i2 + 2]
             );
             parse();
           }
         }
-        //})
       }
     } else {
-      //arrayCoordinates.forEach((coordinates, i1) => {
       for (i1 = 0; i1 < arrayCoordinates.length; i1++) {
         let coordinates = arrayCoordinates[i1];
-        //coordinates.forEach((coordinate, i2) => {
         for (i3 = 0; i3 < coordinates.length; i3++) {
           let coordinate = coordinates[i3];
           if (coordinates[i3 + 1]) {
@@ -54,34 +53,31 @@ const parse = () => {
               coordinates.splice(i3 + 1, 0, [result.x, result.y]);
               console.log("INSERTED : " + result);
               console.log(
-                "BEFORE : " + obj.features[ii].geometry.coordinates[i1][i3]
+                "BEFORE : " + file.features[ii].geometry.coordinates[i1][i3]
               );
               console.log(
-                "PUT :" + obj.features[ii].geometry.coordinates[i1][i3 + 1]
+                "PUT :" + file.features[ii].geometry.coordinates[i1][i3 + 1]
               );
               console.log(
-                "AFTER : " + obj.features[ii].geometry.coordinates[i1][i3 + 2]
+                "AFTER : " + file.features[ii].geometry.coordinates[i1][i3 + 2]
               );
               parse();
             }
           }
-          //})
         }
-        //})
       }
     }
-
-    //})
   }
+  //ASYNC
   fs.writeFile(
-    "./icr-test-with-intersections.json",
-    JSON.stringify(obj, null, 2),
+    `./geojsons/icr-with-intersections.json`,
+    JSON.stringify(file, null, 2),
     "utf-8"
   );
 };
 
 const compare_line_2_lines = (lineStartX, lineStartY, lineEndX, lineEndY) => {
-  let features = obj.features;
+  let features = file.features;
   for (iii = 0; iii < features.length; iii++) {
     let feature = features[iii];
     let arrayCoordinates = feature.geometry.coordinates;
@@ -107,13 +103,13 @@ const compare_line_2_lines = (lineStartX, lineStartY, lineEndX, lineEndY) => {
             console.log();
             arrayCoordinates.splice(ii2 + 1, 0, [result.x, result.y]);
             console.log(
-              "BEFORE : " + obj.features[iii].geometry.coordinates[ii2]
+              "BEFORE : " + file.features[iii].geometry.coordinates[ii2]
             );
             console.log(
-              "PUT :" + obj.features[iii].geometry.coordinates[ii2 + 1]
+              "PUT :" + file.features[iii].geometry.coordinates[ii2 + 1]
             );
             console.log(
-              "AFTER : " + obj.features[iii].geometry.coordinates[ii2 + 2]
+              "AFTER : " + file.features[iii].geometry.coordinates[ii2 + 2]
             );
             return result;
           }
@@ -143,14 +139,14 @@ const compare_line_2_lines = (lineStartX, lineStartY, lineEndX, lineEndY) => {
               console.log();
               coordinates.splice(ii3 + 1, 0, [result.x, result.y]);
               console.log(
-                "BEFORE : " + obj.features[iii].geometry.coordinates[ii1][ii3]
+                "BEFORE : " + file.features[iii].geometry.coordinates[ii1][ii3]
               );
               console.log(
-                "PUT :" + obj.features[iii].geometry.coordinates[ii1][ii3 + 1]
+                "PUT :" + file.features[iii].geometry.coordinates[ii1][ii3 + 1]
               );
               console.log(
                 "AFTER : " +
-                  obj.features[iii].geometry.coordinates[ii1][ii3 + 2]
+                  file.features[iii].geometry.coordinates[ii1][ii3 + 2]
               );
               return result;
             }
