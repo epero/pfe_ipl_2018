@@ -72,7 +72,10 @@ const parse = source_file => {
   fs.writeFile(
     `./geojsons/icr-with-intersections.json`,
     JSON.stringify(file, null, 2),
-    "utf-8"
+    "utf-8",
+    err => {
+      if (err) throw err;
+    }
   );
 };
 
