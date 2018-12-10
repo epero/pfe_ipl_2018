@@ -83,7 +83,10 @@ const parse = () => {
   fs.writeFile(
     `./geojsons/icr-with-colors.json`,
     JSON.stringify(file, null, 2),
-    "utf-8"
+    "utf-8",
+    err => {
+      if (err) throw err;
+    }
   );
 };
 
