@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MapRouteService } from '../services/map-route.service';
 import { AddressesService } from '../services/addresses.service';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-direction-form',
@@ -19,11 +20,13 @@ export class DirectionFormComponent implements OnInit {
   endAddrList: Array<any>;
   deployed: boolean;
   haveRoute: boolean;
+  loader: HTMLIonLoadingElement;
 
   constructor(
     private httpClient: HttpClient,
     private mapRouteService: MapRouteService,
-    private addressesService: AddressesService
+    private addressesService: AddressesService,
+    private loadingController: LoadingController
   ) {
     this.startAddrList = [];
     this.endAddrList = [];
@@ -35,6 +38,7 @@ export class DirectionFormComponent implements OnInit {
     this.mapRouteService.routeSubject.subscribe(() => {
       this.deployed = false;
       this.haveRoute = true;
+      this.removeLoader();
     });
     this.startInput =
       '75, Rue François Gay, Woluwe-Saint-Pierre, Bruxelles-Capitale, 1150, Belgique';
@@ -93,6 +97,7 @@ export class DirectionFormComponent implements OnInit {
         this.endJSON['x'],
         this.endJSON['y']
       );
+      this.afficheLoader();
     }
   }
 
@@ -102,5 +107,21 @@ export class DirectionFormComponent implements OnInit {
 
   onAnnulerBtnClick() {
     this.deployed = false;
+  }
+
+  async afficheLoader() {
+    this.loader = await this.loadingController.create({
+      spinner: 'dots',
+      message: 'Chargement de la route',
+      animated: true,
+      id: 'routeLoader',
+      showBackdrop: true,
+      translucent: true
+    });
+    return await this.loader.present();
+  }
+
+  async removeLoader() {
+    await this.loader.dismiss();
   }
 }
