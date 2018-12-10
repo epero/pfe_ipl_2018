@@ -28,7 +28,6 @@ export class MapRouteService {
       })
       .catch(error => {
         console.log(error);
-        document.write(JSON.stringify(error));
       });
   }
 
