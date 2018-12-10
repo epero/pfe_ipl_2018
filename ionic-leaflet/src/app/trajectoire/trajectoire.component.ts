@@ -21,8 +21,12 @@ export class TrajectoireComponent implements OnInit {
       let i = 1;
       while (i < features.length - 1) {
         const etape = features[i];
-        const instruction = "Suivre l'ICR " + etape["properties"]["icr"];
-        const obj = { instruction, distance: -1 };
+        const obj = {
+          distance: -1,
+          icr: true,
+          icrName: etape['properties']['icr'],
+          color: etape['properties']['color']
+        };
         this.trajet.push(obj);
         i++;
       }
@@ -42,7 +46,8 @@ export class TrajectoireComponent implements OnInit {
     for (let i = 0; i < orsSegments.length; i++) {
       const steps = orsSegments[i]["steps"];
       for (let j = 0; j < steps.length - fin; j++) {
-        const step = steps[j];
+        let step = steps[j];
+        step.icr = false;
         this.trajet.push(step);
       }
     }

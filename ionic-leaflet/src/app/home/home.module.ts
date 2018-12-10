@@ -13,8 +13,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DirectionFormComponent } from '../direction-form/direction-form.component';
 import { SwipeUpDrawerComponent } from '../swipe-up-drawer/swipe-up-drawer.component';
 import { TrajectoireComponent } from '../trajectoire/trajectoire.component';
-
 import { MapBoxComponent } from '../map-box/map-box.component';
+import { IcrIconComponent } from '../icr-icon/icr-icon.component';
+import { InstructionTypeIconComponent } from '../instruction-type-icon/instruction-type-icon.component';
 
 @NgModule({
   imports: [
@@ -37,7 +38,9 @@ import { MapBoxComponent } from '../map-box/map-box.component';
     DirectionFormComponent,
     SwipeUpDrawerComponent,
     MapBoxComponent,
-    TrajectoireComponent
+    TrajectoireComponent,
+    IcrIconComponent,
+    InstructionTypeIconComponent
   ],
   providers: [Geolocation]
 })
