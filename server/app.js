@@ -14,7 +14,7 @@ const directionsRouter = require("./routes/directions");
 //const bl72_parseur = require('./my_modules/bl72_parseur');
 const graph = require("./my_modules/graph");
 //const add_intersections_2_geojson = require("./my_modules/add_intersections_2_geojson");
-//const add_colors_2_geojson = require("./my_modules/add_colors_2_geojson");
+const add_colors_2_geojson = require("./my_modules/add_colors_2_geojson");
 
 const projectRoot = path.join(__dirname, "../..");
 const serverRoot = path.join(__dirname, ".");

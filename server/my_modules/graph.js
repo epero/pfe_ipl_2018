@@ -237,11 +237,6 @@ const path_to_geojson = path => {
     }
     previousCoor = nextCoor;
   }
-  /*fs.writeFile(
-    "./exemple2017.json",
-    JSON.stringify(geoJsonOutput, null, 2),
-    "utf-8"
-  );*/
   return geoJsonOutput;
 };
 
