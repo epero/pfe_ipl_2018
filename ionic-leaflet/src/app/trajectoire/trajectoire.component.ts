@@ -10,12 +10,11 @@ import { GeoJsonObject } from 'geojson';
 export class TrajectoireComponent implements OnInit {
   trajet: Array<any>;
 
-  constructor(private mapRouteService: MapRouteService) {
-    this.trajet = [];
-  }
+  constructor(private mapRouteService: MapRouteService) {}
 
   ngOnInit() {
     this.mapRouteService.routeSubject.subscribe(route => {
+      this.trajet = [];
       const features = route['features'];
       const ors1 = features[0];
       this.addORSFeaturesToTrajet(ors1, false);

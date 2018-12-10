@@ -1,12 +1,14 @@
-<p>
-  map-box sama
-</p>
 <div id="map"></div>
-<div id='menu'>
-    <input id='basic' type='radio' name='rtoggle' value='basic' checked='checked' (click)="initializingMap('basic')">
-    <label for='basic'>basic</label>
-    <input id='light' type='radio' name='rtoggle' value='light' (click)="initializingMap('light')">
-    <label for='light'>light</label>
-    <input id='dark' type='radio' name='rtoggle' value='dark' (click)="initializingMap('dark')">
-    <label for='dark'>dark</label>
-</div>
+<ion-fab vertical="top" horizontal="start" slot="fixed">
+    <ion-fab-button>
+        <ion-icon name="contrast"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="bottom">
+        <ion-fab-button (click)="initializingMap('basic')">
+            <ion-icon name="sunny"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button (click)="initializingMap('dark')">
+            <ion-icon name="moon"></ion-icon>
+        </ion-fab-button>
+    </ion-fab-list>
+</ion-fab>

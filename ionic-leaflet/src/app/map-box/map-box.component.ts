@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
-import { HttpClient } from "@angular/common/http";
-import { GeoJsonObject } from "geojson";
+import { HttpClient } from '@angular/common/http';
+import { GeoJsonObject } from 'geojson';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-map-box',
@@ -11,19 +12,33 @@ import { GeoJsonObject } from "geojson";
 export class MapBoxComponent implements OnInit {
 
     private geojson: GeoJsonObject;
+    form: FormGroup;
+    map: any;
 
     constructor(
         private http: HttpClient
-    ) { }
+    ) {
+        this.form = new FormGroup({
+            mapStyle: new FormControl('basic')
+        });
+     }
 
     ngOnInit() {
 
         mapboxgl.accessToken = 'pk.eyJ1IjoieGRhcmthIiwiYSI6ImNqcGgxdXBobjByNHUza3BkbGtvMGY2eTUifQ.WuwZ_XI2zNxxObLi6moULg';
 
-        var map = this.initializingMap('basic');
+        //Display map style according to time
+        const d = new Date();
+        const n = d.getHours();
+        if(n >= 18 || n <= 6) {
+            this.map = this.initializingMap('dark');
+        } else {
+            this.map = this.initializingMap('basic');
+        }
     }
 
     initializingMap(mapStyle) {
+        
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/' + mapStyle + '-v9',
@@ -92,13 +107,13 @@ export class MapBoxComponent implements OnInit {
                         color = "#00510A";
                         break;
                     case "A":
-                        color = "#f4bc6e";
+                        color = "#FF8205";
                         break;
                     case "B":
-                        color = "#f4bc6e";
+                        color = "#FF8205";
                         break;
                     case "C":
-                        color = "#f4bc6e";
+                        color = "#FF8205";
                         break;
                     case "CK":
                         color = "#05AFFF";
