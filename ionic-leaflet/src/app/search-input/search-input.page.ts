@@ -1,12 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { NavController } from "@ionic/angular";
-import { ActivatedRoute } from "@angular/router";
-import { AddressesService } from "../services/addresses.service";
+import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
+import { AddressesService } from '../services/addresses.service';
 
 @Component({
-  selector: "app-search-input",
-  templateUrl: "./search-input.page.html",
-  styleUrls: ["./search-input.page.scss"]
+  selector: 'app-search-input',
+  templateUrl: './search-input.page.html',
+  styleUrls: ['./search-input.page.scss']
 })
 export class SearchInputPage implements OnInit {
   private slug: String;
@@ -23,8 +23,11 @@ export class SearchInputPage implements OnInit {
 
   ngOnInit() {
     this.addrList = [];
-    this.slug = this.route.snapshot.paramMap.get("id");
-    this.point = this.slug === "start" ? "de départ" : "d'arrivée";
+    this.slug = this.route.snapshot.paramMap.get('id');
+    this.point = this.slug === 'start' ? 'de départ' : "d'arrivée";
+    if (this.addressesService.address['' + this.slug]) {
+      this.input = this.addressesService.address['' + this.slug].label;
+    }
   }
 
   onInputChange() {
@@ -46,6 +49,6 @@ export class SearchInputPage implements OnInit {
   onAddrItemClick(addr: JSON) {
     this.addrList = [];
     this.addressesService.setAdress(this.slug, addr);
-    this.navController.navigateBack("/home", true);
+    this.navController.navigateBack('/home', true);
   }
 }
