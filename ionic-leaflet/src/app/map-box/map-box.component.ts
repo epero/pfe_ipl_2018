@@ -1,30 +1,31 @@
-import { Component, OnInit } from "@angular/core";
-import * as mapboxgl from "mapbox-gl";
-import { HttpClient } from "@angular/common/http";
-import { GeoJsonObject } from "geojson";
-import { FormGroup, FormControl } from "@angular/forms";
-import { MapRouteService } from "../services/map-route.service";
-import { layer } from "@fortawesome/fontawesome-svg-core";
+import { Component, OnInit } from '@angular/core';
+import * as mapboxgl from 'mapbox-gl';
+import { HttpClient } from '@angular/common/http';
+import { GeoJsonObject } from 'geojson';
+import { FormGroup, FormControl } from '@angular/forms';
+import { MapRouteService } from '../services/map-route.service';
 
 @Component({
-  selector: "app-map-box",
-  templateUrl: "./map-box.component.html",
-  styleUrls: ["./map-box.component.scss"]
+  selector: 'app-map-box',
+  templateUrl: './map-box.component.html',
+  styleUrls: ['./map-box.component.scss']
 })
 export class MapBoxComponent implements OnInit {
   private geojson: GeoJsonObject;
   form: FormGroup;
   map: any;
-  icrLayerID:string;
-  routeLayerID:string;
-  startpoint:any;
-  endpoint:any;
+  icrLayerID: string;
+  routeLayerID: string;
+  startpoint: any;
+  endpoint: any;
 
-  constructor(private http: HttpClient, private mapRouteService: MapRouteService) {
+  constructor(
+    private http: HttpClient,
+    private mapRouteService: MapRouteService
+  ) {
     this.form = new FormGroup({
-      mapStyle: new FormControl("basic")
+      mapStyle: new FormControl('basic')
     });
-
   }
 
   ngOnInit() {
@@ -32,13 +33,13 @@ export class MapBoxComponent implements OnInit {
     this.icrLayerID="all_icr";
     this.routeLayerID="route"
     mapboxgl.accessToken =
-      "pk.eyJ1IjoieGRhcmthIiwiYSI6ImNqcGgxdXBobjByNHUza3BkbGtvMGY2eTUifQ.WuwZ_XI2zNxxObLi6moULg";
+      'pk.eyJ1IjoieGRhcmthIiwiYSI6ImNqcGgxdXBobjByNHUza3BkbGtvMGY2eTUifQ.WuwZ_XI2zNxxObLi6moULg';
 
     //Display map style according to time
     const d = new Date();
     const n = d.getHours();
     if (n >= 18 || n <= 6) {
-      this.map = this.initializingMap("dark");
+      this.map = this.initializingMap('dark');
     } else {
       this.map = this.initializingMap("light");
     }
@@ -130,28 +131,28 @@ export class MapBoxComponent implements OnInit {
       console.log("displayGeoJson "+layerID)
       
     map.addLayer({
-        id: layerID,
-        type: "line",
-        source: {
-          type: "geojson",
-          data: geojson
-        },
-        layout: {
-          "line-join": "round",
-          "line-cap": "round"
-        },
-        paint: {
-          "line-color": ["get", "color"],
-          "line-width": 2
-        },
-        visibility:'visible'
-      });
+      id: layerID,
+      type: 'line',
+      source: {
+        type: 'geojson',
+        data: geojson
+      },
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': ['get', 'color'],
+        'line-width': 2
+      },
+      visibility: 'visible'
+    });
   }
 
   displayICRWithColors(map) {
 
     this.http
-      .get<any>("assets/icr-with-colors.json")
+      .get<any>('assets/icr-with-colors.json')
       .toPromise()
       .then(geojson => this.displayGeoJson(geojson,map,this.icrLayerID));
      return map; 
