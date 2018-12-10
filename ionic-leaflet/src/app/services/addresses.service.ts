@@ -8,12 +8,14 @@ import { Subject } from "rxjs";
 export class AddressesService {
   private provider: OpenStreetMapProvider;
   addresses: Array<any>;
-  addressesSubject: Subject<Array<any>>;
+  address: JSON;
+  addressSubject: Subject<JSON>;
 
   constructor() {
     this.provider = new OpenStreetMapProvider({
       params: { countrycodes: "be" }
     });
+    this.addressSubject = new Subject<JSON>();
   }
 
   getAddresses(address) {
@@ -29,5 +31,15 @@ export class AddressesService {
         })
         .catch(err => reject(err))
     );
+  }
+
+  setAdress(id, address: any) {
+    this.address = address;
+    this.address["id"] = id;
+    this.emitAdress();
+  }
+
+  emitAdress() {
+    this.addressSubject.next(this.address);
   }
 }

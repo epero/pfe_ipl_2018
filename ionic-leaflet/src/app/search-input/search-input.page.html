@@ -1,0 +1,20 @@
+<ion-content padding>
+  <ion-item>
+    <ion-back-button item-start text="" defaultHref="home"></ion-back-button>
+    <ion-searchbar
+      name="input"
+      placeholder="Votre adresse {{point}}"
+      [(ngModel)]="input"
+      (ionChange)="onInputChange()"
+      (ionFocus)="onInputFocus()"
+      (ionBlur)="onInputBlur()"
+      debounce="250"
+    >
+    </ion-searchbar>
+  </ion-item>
+  <ion-list name="addrList" ngDefaultControl [(ngModel)]="addrList">
+    <ion-item *ngFor="let addr of addrList" (click)="onAddrItemClick(addr)">
+      {{ addr.label }}
+    </ion-item>
+  </ion-list>
+</ion-content>
