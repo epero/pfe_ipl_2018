@@ -28,6 +28,7 @@ export class MapBoxComponent implements OnInit {
   }
 
   ngOnInit() {
+      console.log("onInit")
     this.icrLayerID="all_icr";
     this.routeLayerID="route"
     mapboxgl.accessToken =
@@ -39,11 +40,60 @@ export class MapBoxComponent implements OnInit {
     if (n >= 18 || n <= 6) {
       this.map = this.initializingMap("dark");
     } else {
-      this.map = this.initializingMap("basic");
+      this.map = this.initializingMap("light");
     }
+
+    // Display route
+    this.mapRouteService.routeSubject.subscribe(geojson => {
+        console.log("subscribe")
+        console.log(geojson)
+        //hide ICR layer
+        this.map.setLayoutProperty(this.icrLayerID,'visibility','none');
+        //check if current route layer exists and remove if exists
+        if(this.map.getLayer(this.routeLayerID) !== undefined){
+            this.map.removeLayer(this.routeLayerID).removeSource(this.routeLayerID);
+        }
+        //display new route layer
+        this.displayGeoJson(geojson,this.map,this.routeLayerID);
+  
+        if (this.startpoint !== undefined) this.startpoint.remove();
+        if (this.endpoint !== undefined) this.endpoint.remove();
+  
+        var features = geojson["features"];
+        var coordinatesFirstFeature = features[0]["geometry"]["coordinates"];
+        var coordinatesLastFeature =
+          features[features["length"] - 1]["geometry"]["coordinates"];
+        var lengthLF = coordinatesLastFeature["length"];
+  
+        var latStart=coordinatesFirstFeature[0][1];
+        var longStart=coordinatesFirstFeature[0][0];
+        var latEnd=coordinatesLastFeature[lengthLF - 1][1];
+        var longEnd=coordinatesLastFeature[lengthLF - 1][0];
+        this.startpoint = this.addPointToMap(
+          latStart,
+          longStart,
+          "../assets/marker/start.png"
+        );
+        this.endpoint = this.addPointToMap(
+          latEnd,
+          longEnd,
+          "assets/marker/end.png"
+        );
+        var coordinates=[[longStart,latStart],[longEnd,latEnd]];
+        var bounds =coordinates.reduce(function(bounds,coord){
+            return bounds.extend(coord);
+        },new mapboxgl.LngLatBounds(coordinates[0],coordinates[0]));
+        this.map.fitBounds(bounds,{
+            padding:200
+        });
+   
+    });
+    console.log(this.map)
+
   }
 
   initializingMap(mapStyle) {
+      console.log("initialize")
     var map = new mapboxgl.Map({
       container: "map",
       style: "mapbox://styles/mapbox/" + mapStyle + "-v9",
@@ -61,51 +111,24 @@ export class MapBoxComponent implements OnInit {
       map.resize();
 
       map=this.displayICRWithColors(map);
-    });
-
-    // Display route
-    this.mapRouteService.routeSubject.subscribe(geojson => {
-        //hide ICR layer
-        this.map.setLayoutProperty(this.icrLayerID,'visibility','none');
-        //check if current route layer exists and remove if exists
-        if(this.map.getLayer(this.routeLayerID) !== undefined){
-            this.map.removeLayer(this.routeLayerID).removeSource(this.routeLayerID);
-        }
-        //display new route layer
-        this.displayGeoJson(geojson,this.map,this.routeLayerID);
-  
-        //if (this.startpoint !== undefined) this.startpoint.removeFrom(this.map);
-        //if (this.endpoint !== undefined) this.endpoint.removeFrom(this.map);
-  
-        /*var features = geojson["features"];
-        var coordinatesFirstFeature = features[0]["geometry"]["coordinates"];
-        var coordinatesLastFeature =
-          features[features["length"] - 1]["geometry"]["coordinates"];
-        var lengthLF = coordinatesLastFeature["length"];
-  
-        this.startpoint = this.displayPoint(
-          coordinatesFirstFeature[0][1],
-          coordinatesFirstFeature[0][0],
-          "assets/marker/start.png"
-        );
-        this.endpoint = this.displayPoint(
-          coordinatesLastFeature[lengthLF - 1][1],
-          coordinatesLastFeature[lengthLF - 1][0],
-          "assets/marker/end.png"
-        );*/
-    });
+    });   
     
-
     return map;
   }
 
-  displayPoint(lat:number,long:number,iconUrl:string){
-    var marker = new mapboxgl.Marker()
-    .setLngLat([30.5, 50.5])
+  addPointToMap(lat:number,long:number,iconUrl:string){
+    /*var el =document.createElement('div');
+    el.style.backgroundImage=iconUrl;*/
+    var marker = new mapboxgl.Marker(/*el*/)
+    .setLngLat([long, lat])
+    //.setColor("red")
     .addTo(this.map);
+    return marker
   }
 
   displayGeoJson(geojson: GeoJsonObject, map, layerID){
+      console.log("displayGeoJson "+layerID)
+      
     map.addLayer({
         id: layerID,
         type: "line",
@@ -125,32 +148,12 @@ export class MapBoxComponent implements OnInit {
       });
   }
 
-  //TODO mettre id layer en param
   displayICRWithColors(map) {
+
     this.http
       .get<any>("assets/icr-with-colors.json")
       .toPromise()
-      .then(geojson => this.displayGeoJson(geojson,map,this.icrLayerID)
-      /*{
-        map.addLayer({
-          id: this.icrLayerID ,
-          type: "line",
-          source: {
-            type: "geojson",
-            data: geojson
-          },
-          layout: {
-            "line-join": "round",
-            "line-cap": "round"
-          },
-          paint: {
-            "line-color": ["get", "color"],
-            "line-width": 2
-          },
-          visibility:'visible'
-        });
-      }*/);
-
+      .then(geojson => this.displayGeoJson(geojson,map,this.icrLayerID));
      return map; 
   }
 }
