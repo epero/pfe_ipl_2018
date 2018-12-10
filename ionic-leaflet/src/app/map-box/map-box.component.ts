@@ -20,6 +20,8 @@ export class MapBoxComponent implements OnInit {
   startpoint: any;
   endpoint: any;
 
+  locationMarker: any;
+
   constructor(
     private http: HttpClient,
     private mapRouteService: MapRouteService,
@@ -44,21 +46,20 @@ export class MapBoxComponent implements OnInit {
     } else {
       this.map = this.initializingMap("light");
     }
-  
-    this.geolocation.getCurrentPosition({timeout:15000}).then((resp) => {
-        // resp.coords.latitude
-        // resp.coords.longitude
-        console.log("hello biatch : " + resp.coords.latitude + " - " + resp.coords.longitude);
-        }).catch((error) => {
-        console.log('Error getting location', error);
+    
+    //geolocalisation
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+          enableHighAccuracy: true
+      },
+      trackUserLocation: true
     });
+    this.map.addControl(geolocate)
 
-    let watch = this.geolocation.watchPosition();
-        watch.subscribe((data) => {
-        // data can be a set of coordinates, or an error (if an error occurred).
-        // data.coords.latitude
-        // data.coords.longitude
-    });
+    this.map.on('load', function()
+      {
+        geolocate.trigger();
+      });
   }
 
   initializingMap(mapStyle) {
@@ -66,7 +67,8 @@ export class MapBoxComponent implements OnInit {
       container: "map",
       style: "mapbox://styles/mapbox/" + mapStyle + "-v9",
       zoom: 11,
-      center: [4.3517103, 50.8603396]
+      center: [4.3517103, 50.8603396],
+      showUserLocation: true
     });
 
     //Showing ICR routes
