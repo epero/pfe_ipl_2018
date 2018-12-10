@@ -1,20 +1,9 @@
-<<<<<<< HEAD
-import { Component, OnInit } from '@angular/core';
-import * as mapboxgl from 'mapbox-gl';
-import { HttpClient } from '@angular/common/http';
-import { GeoJsonObject } from 'geojson';
-import { FormGroup, FormControl } from '@angular/forms';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { Platform } from '@ionic/angular';
-=======
 import { Component, OnInit } from "@angular/core";
 import * as mapboxgl from "mapbox-gl";
 import { HttpClient } from "@angular/common/http";
 import { GeoJsonObject } from "geojson";
 import { FormGroup, FormControl } from "@angular/forms";
 import { MapRouteService } from "../services/map-route.service";
-import { layer } from "@fortawesome/fontawesome-svg-core";
->>>>>>> 6613010cfa9bdbcf7a60b24944fd9bbfd8659dac
 
 @Component({
   selector: 'app-map-box',
@@ -30,15 +19,7 @@ export class MapBoxComponent implements OnInit {
   startpoint:any;
   endpoint:any;
 
-<<<<<<< HEAD
-  constructor(
-    private http: HttpClient,
-    private geolocation: Geolocation,
-    private plateform: Platform
-  ) {
-=======
   constructor(private http: HttpClient, private mapRouteService: MapRouteService) {
->>>>>>> 6613010cfa9bdbcf7a60b24944fd9bbfd8659dac
     this.form = new FormGroup({
       mapStyle: new FormControl('basic')
     });
@@ -160,81 +141,6 @@ export class MapBoxComponent implements OnInit {
   //TODO mettre id layer en param
   displayICRWithColors(map) {
     this.http
-<<<<<<< HEAD
-      .get<any>('assets/latlong_icr.json')
-      .toPromise()
-      .then(data => {
-        var color = null;
-        data.features.forEach(element => {
-          switch (element.properties.icr) {
-            case '1':
-              color = '#00cc00';
-              break;
-            case '2':
-              color = '#99b3ff';
-              break;
-            case '3':
-              color = '#FF3232';
-              break;
-            case '4':
-              color = '#9932FF';
-              break;
-            case '5':
-              color = '#00510A';
-              break;
-            case '6':
-              color = '#00510A';
-              break;
-            case '7':
-              color = '#D12200';
-              break;
-            case '8':
-              color = '#00cc00';
-              break;
-            case '9':
-              color = '#9932FF';
-              break;
-            case '10':
-              color = '#FF3232';
-              break;
-            case '11':
-              color = '#187c00';
-              break;
-            case '12':
-              color = '#00510A';
-              break;
-            case 'A':
-              color = '#FF8205';
-              break;
-            case 'B':
-              color = '#FF8205';
-              break;
-            case 'C':
-              color = '#FF8205';
-              break;
-            case 'CK':
-              color = '#05AFFF';
-              break;
-            case 'SZ':
-              color = '#05AFFF';
-              break;
-            case 'MM':
-              color = '#00256B';
-              break;
-            case 'PP':
-              color = '#D12200';
-              break;
-          }
-          element.properties['color'] = color;
-        });
-
-        map.addLayer({
-          id: 'all_icr',
-          type: 'line',
-          source: {
-            type: 'geojson',
-            data: data
-=======
       .get<any>("assets/icr-with-colors.json")
       .toPromise()
       .then(geojson => this.displayGeoJson(geojson,map,this.icrLayerID)
@@ -245,23 +151,16 @@ export class MapBoxComponent implements OnInit {
           source: {
             type: "geojson",
             data: geojson
->>>>>>> 6613010cfa9bdbcf7a60b24944fd9bbfd8659dac
           },
           layout: {
             'line-join': 'round',
             'line-cap': 'round'
           },
           paint: {
-<<<<<<< HEAD
-            'line-color': ['get', 'color'],
-            'line-width': 2
-          }
-=======
             "line-color": ["get", "color"],
             "line-width": 2
           },
           visibility:'visible'
->>>>>>> 6613010cfa9bdbcf7a60b24944fd9bbfd8659dac
         });
       }*/);
 
