@@ -3,6 +3,8 @@ import * as mapboxgl from "mapbox-gl";
 import { HttpClient } from "@angular/common/http";
 import { GeoJsonObject } from "geojson";
 import { FormGroup, FormControl } from "@angular/forms";
+import { MapRouteService } from "../services/map-route.service";
+import { layer } from "@fortawesome/fontawesome-svg-core";
 
 @Component({
   selector: "app-map-box",
@@ -13,8 +15,10 @@ export class MapBoxComponent implements OnInit {
   private geojson: GeoJsonObject;
   form: FormGroup;
   map: any;
+  icrLayer:any;
+  routeLayer:any;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private mapRouteService: MapRouteService) {
     this.form = new FormGroup({
       mapStyle: new FormControl("basic")
     });
@@ -51,12 +55,62 @@ export class MapBoxComponent implements OnInit {
       mapCanvas["style"].width = "100%";
       map.resize();
 
-      this.displayICRWithColors(map);
+      this.icrLayer=this.displayICRWithColors(map);
     });
+
+    // Display route
+    this.mapRouteService.routeSubject.subscribe(geojson => {
+        //if (this.mapLayer !== undefined) this.map.removeLayer(this.mapLayer);
+        this.map.setLayoutProperty(this.icrLayer,'visibility','none');
+        this.routeLayer = this.displayGeoJson(geojson,this.map,"route");
+  
+        /*if (this.startpoint !== undefined) this.startpoint.removeFrom(this.map);
+        if (this.endpoint !== undefined) this.endpoint.removeFrom(this.map);
+  
+        var features = geojson["features"];
+        var coordinatesFirstFeature = features[0]["geometry"]["coordinates"];
+        var coordinatesLastFeature =
+          features[features["length"] - 1]["geometry"]["coordinates"];
+        var lengthLF = coordinatesLastFeature["length"];
+  
+        this.startpoint = this.printPoint(
+          coordinatesFirstFeature[0][1],
+          coordinatesFirstFeature[0][0],
+          "assets/marker/start.png"
+        );
+        this.endpoint = this.printPoint(
+          coordinatesLastFeature[lengthLF - 1][1],
+          coordinatesLastFeature[lengthLF - 1][0],
+          "assets/marker/end.png"
+        );*/
+    });
+    
 
     return map;
   }
 
+  displayGeoJson(geojson: GeoJsonObject, map, layerID){
+    var layer = map.addLayer({
+        id: layerID,
+        type: "line",
+        source: {
+          type: "geojson",
+          data: geojson
+        },
+        layout: {
+          "line-join": "round",
+          "line-cap": "round"
+        },
+        paint: {
+          "line-color": ["get", "color"],
+          "line-width": 2
+        },
+        visibility:'visible'
+      });
+      return layer;
+  }
+
+  //TODO mettre id layer en param
   displayICRWithColors(map) {
     this.http
       .get<any>("assets/latlong_icr.json")
@@ -126,7 +180,7 @@ export class MapBoxComponent implements OnInit {
           element.properties["color"] = color;
         });
 
-        map.addLayer({
+        var layer=map.addLayer({
           id: "all_icr",
           type: "line",
           source: {
@@ -140,8 +194,11 @@ export class MapBoxComponent implements OnInit {
           paint: {
             "line-color": ["get", "color"],
             "line-width": 2
-          }
+          },
+          visibility:'visible'
         });
       });
+
+     return layer; 
   }
 }
