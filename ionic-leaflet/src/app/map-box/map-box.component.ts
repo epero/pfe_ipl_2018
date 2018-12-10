@@ -15,16 +15,21 @@ export class MapBoxComponent implements OnInit {
   private geojson: GeoJsonObject;
   form: FormGroup;
   map: any;
-  icrLayer:any;
-  routeLayer:any;
+  icrLayerID:string;
+  routeLayerID:string;
+  startpoint:any;
+  endpoint:any;
 
   constructor(private http: HttpClient, private mapRouteService: MapRouteService) {
     this.form = new FormGroup({
       mapStyle: new FormControl("basic")
     });
+
   }
 
   ngOnInit() {
+    this.icrLayerID="all_icr";
+    this.routeLayerID="route"
     mapboxgl.accessToken =
       "pk.eyJ1IjoieGRhcmthIiwiYSI6ImNqcGgxdXBobjByNHUza3BkbGtvMGY2eTUifQ.WuwZ_XI2zNxxObLi6moULg";
 
@@ -55,14 +60,15 @@ export class MapBoxComponent implements OnInit {
       mapCanvas["style"].width = "100%";
       map.resize();
 
-      this.icrLayer=this.displayICRWithColors(map);
+      map=this.displayICRWithColors(map);
     });
 
     // Display route
     this.mapRouteService.routeSubject.subscribe(geojson => {
         //if (this.mapLayer !== undefined) this.map.removeLayer(this.mapLayer);
-        this.map.setLayoutProperty(this.icrLayer,'visibility','none');
-        this.routeLayer = this.displayGeoJson(geojson,this.map,"route");
+        console.log(this.map)
+        this.map.setLayoutProperty(this.icrLayerID,'visibility','none');
+        this.displayGeoJson(geojson,this.map,this.routeLayerID);
   
         /*if (this.startpoint !== undefined) this.startpoint.removeFrom(this.map);
         if (this.endpoint !== undefined) this.endpoint.removeFrom(this.map);
@@ -113,75 +119,11 @@ export class MapBoxComponent implements OnInit {
   //TODO mettre id layer en param
   displayICRWithColors(map) {
     this.http
-      .get<any>("assets/latlong_icr.json")
+      .get<any>("assets/icr-with-colors.json")
       .toPromise()
       .then(data => {
-        var color = null;
-        data.features.forEach(element => {
-          switch (element.properties.icr) {
-            case "1":
-              color = "#00cc00";
-              break;
-            case "2":
-              color = "#99b3ff";
-              break;
-            case "3":
-              color = "#FF3232";
-              break;
-            case "4":
-              color = "#9932FF";
-              break;
-            case "5":
-              color = "#00510A";
-              break;
-            case "6":
-              color = "#00510A";
-              break;
-            case "7":
-              color = "#D12200";
-              break;
-            case "8":
-              color = "#00cc00";
-              break;
-            case "9":
-              color = "#9932FF";
-              break;
-            case "10":
-              color = "#FF3232";
-              break;
-            case "11":
-              color = "#187c00";
-              break;
-            case "12":
-              color = "#00510A";
-              break;
-            case "A":
-              color = "#FF8205";
-              break;
-            case "B":
-              color = "#FF8205";
-              break;
-            case "C":
-              color = "#FF8205";
-              break;
-            case "CK":
-              color = "#05AFFF";
-              break;
-            case "SZ":
-              color = "#05AFFF";
-              break;
-            case "MM":
-              color = "#00256B";
-              break;
-            case "PP":
-              color = "#D12200";
-              break;
-          }
-          element.properties["color"] = color;
-        });
-
-        var layer=map.addLayer({
-          id: "all_icr",
+        map.addLayer({
+          id: this.icrLayerID ,
           type: "line",
           source: {
             type: "geojson",
@@ -199,6 +141,6 @@ export class MapBoxComponent implements OnInit {
         });
       });
 
-     return layer; 
+     return map; 
   }
 }

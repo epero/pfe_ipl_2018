@@ -2,6 +2,7 @@
 //var geojson = require('../latlong_icr');
 //var geojson = require('../icr-test-with-intersections')
 var geojson = require("../geojsons/icr-with-colors");
+var irc_2_color = require("./icr_2_color");
 //const SortedSet = require("collections/sorted-set");
 //const SSet = require('sorted-set')
 var fs = require("fs");
@@ -198,7 +199,8 @@ const path_to_geojson = path => {
       coordinates: []
     },
     properties: {
-      icr: choosenIcr[0]
+      icr: choosenIcr[0],
+      color: irc_2_color.find(choosenIcr[0])
     }
   });
   let featuresInd = 1;
@@ -224,7 +226,8 @@ const path_to_geojson = path => {
           coordinates: []
         },
         properties: {
-          icr: choosenIcr[i]
+          icr: choosenIcr[i],
+          color: irc_2_color.find(choosenIcr[i])
         }
       });
       featuresInd++;
@@ -234,11 +237,6 @@ const path_to_geojson = path => {
     }
     previousCoor = nextCoor;
   }
-  /*fs.writeFile(
-    "./exemple2017.json",
-    JSON.stringify(geoJsonOutput, null, 2),
-    "utf-8"
-  );*/
   return geoJsonOutput;
 };
 
