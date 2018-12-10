@@ -43,7 +43,7 @@ export class MapBoxComponent implements OnInit {
     } else {
       this.map = this.initializingMap("light");
     }
-
+    //
     // Display route
     this.mapRouteService.routeSubject.subscribe(geojson => {
         console.log("subscribe")
