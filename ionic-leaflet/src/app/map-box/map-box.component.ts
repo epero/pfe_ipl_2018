@@ -65,26 +65,30 @@ export class MapBoxComponent implements OnInit {
 
     // Display route
     this.mapRouteService.routeSubject.subscribe(geojson => {
-        //if (this.mapLayer !== undefined) this.map.removeLayer(this.mapLayer);
-        console.log(this.map)
+        //hide ICR layer
         this.map.setLayoutProperty(this.icrLayerID,'visibility','none');
+        //check if current route layer exists and remove if exists
+        if(this.map.getLayer(this.routeLayerID) !== undefined){
+            this.map.removeLayer(this.routeLayerID).removeSource(this.routeLayerID);
+        }
+        //display new route layer
         this.displayGeoJson(geojson,this.map,this.routeLayerID);
   
-        /*if (this.startpoint !== undefined) this.startpoint.removeFrom(this.map);
-        if (this.endpoint !== undefined) this.endpoint.removeFrom(this.map);
+        //if (this.startpoint !== undefined) this.startpoint.removeFrom(this.map);
+        //if (this.endpoint !== undefined) this.endpoint.removeFrom(this.map);
   
-        var features = geojson["features"];
+        /*var features = geojson["features"];
         var coordinatesFirstFeature = features[0]["geometry"]["coordinates"];
         var coordinatesLastFeature =
           features[features["length"] - 1]["geometry"]["coordinates"];
         var lengthLF = coordinatesLastFeature["length"];
   
-        this.startpoint = this.printPoint(
+        this.startpoint = this.displayPoint(
           coordinatesFirstFeature[0][1],
           coordinatesFirstFeature[0][0],
           "assets/marker/start.png"
         );
-        this.endpoint = this.printPoint(
+        this.endpoint = this.displayPoint(
           coordinatesLastFeature[lengthLF - 1][1],
           coordinatesLastFeature[lengthLF - 1][0],
           "assets/marker/end.png"
@@ -95,8 +99,14 @@ export class MapBoxComponent implements OnInit {
     return map;
   }
 
+  displayPoint(lat:number,long:number,iconUrl:string){
+    var marker = new mapboxgl.Marker()
+    .setLngLat([30.5, 50.5])
+    .addTo(this.map);
+  }
+
   displayGeoJson(geojson: GeoJsonObject, map, layerID){
-    var layer = map.addLayer({
+    map.addLayer({
         id: layerID,
         type: "line",
         source: {
@@ -113,7 +123,6 @@ export class MapBoxComponent implements OnInit {
         },
         visibility:'visible'
       });
-      return layer;
   }
 
   //TODO mettre id layer en param
@@ -121,13 +130,14 @@ export class MapBoxComponent implements OnInit {
     this.http
       .get<any>("assets/icr-with-colors.json")
       .toPromise()
-      .then(data => {
+      .then(geojson => this.displayGeoJson(geojson,map,this.icrLayerID)
+      /*{
         map.addLayer({
           id: this.icrLayerID ,
           type: "line",
           source: {
             type: "geojson",
-            data: data
+            data: geojson
           },
           layout: {
             "line-join": "round",
@@ -139,7 +149,7 @@ export class MapBoxComponent implements OnInit {
           },
           visibility:'visible'
         });
-      });
+      }*/);
 
      return map; 
   }
