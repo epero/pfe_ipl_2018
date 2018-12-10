@@ -18,6 +18,7 @@ export class DirectionFormComponent implements OnInit {
   deployed: boolean;
   haveRoute: boolean;
   loader: HTMLIonLoadingElement;
+  loaderPromise: Promise<void>;
 
   constructor(
     private httpClient: HttpClient,
@@ -71,7 +72,7 @@ export class DirectionFormComponent implements OnInit {
         this.endJSON["x"],
         this.endJSON["y"]
       );
-      this.afficheLoader();
+      this.loaderPromise = this.afficheLoader();
     }
   }
 
@@ -96,6 +97,6 @@ export class DirectionFormComponent implements OnInit {
   }
 
   async removeLoader() {
-    await this.loader.dismiss();
+    this.loaderPromise.then(() => this.loader.dismiss());
   }
 }
