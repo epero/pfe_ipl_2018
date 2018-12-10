@@ -2,16 +2,19 @@
 //var geojson = require('../latlong_icr');
 //var geojson = require('../icr-test-with-intersections')
 var geojson = require("../geojsons/icr-with-colors");
-var irc_2_color = require("./icr_2_color");
+const irc_2_color = require("./icr_2_color");
+const coordinatesMod = require("./coordinates");
 //const SortedSet = require("collections/sorted-set");
 //const SSet = require('sorted-set')
 var fs = require("fs");
 let graph = null;
 let sorted_longitudes = null;
 let sorted_latitudes = null;
+let routes = null;
 
 const parse = () => {
   graph = {};
+  routes = {};
   sorted_longitudes = new Set();
   sorted_latitudes = new Set();
 
@@ -49,6 +52,15 @@ const coordinates_2_graph = (icr, coordinates) => {
             (coordinate[1] - coordinates[i2 + 1][1])
       );
 
+      let distanceMeters = coordinatesMod.metersBetweenCoordinates(
+        coordinate[0],
+        coordinate[1],
+        coordinates[i2 + 1][0],
+        coordinates[i2 + 1][1]
+      );
+
+      let routeDuration = distanceMeters / 1000 / 18;
+
       if (!graph[coordinate[0] + " " + coordinate[1]]) {
         graph[coordinate[0] + " " + coordinate[1]] = [];
         sorted_longitudes.add({
@@ -65,8 +77,48 @@ const coordinates_2_graph = (icr, coordinates) => {
         latitude: coordinates[i2 + 1][1],
         destination: `${coordinates[i2 + 1][0]} ${coordinates[i2 + 1][1]}`,
         distance: currDistance,
+        distanceMeters: distanceMeters,
         icr: icr
       });
+
+      if (
+        !routes[
+          coordinate[0] +
+            " " +
+            coordinate[1] +
+            " - " +
+            coordinates[i2 + 1][0] +
+            " " +
+            coordinates[i2 + 1][1]
+        ]
+      ) {
+        routes[
+          coordinate[0] +
+            " " +
+            coordinate[1] +
+            " - " +
+            coordinates[i2 + 1][0] +
+            " " +
+            coordinates[i2 + 1][1]
+        ] = {
+          distance: currDistance,
+          distanceMeters: distanceMeters,
+          duration: routeDuration
+        };
+        routes[
+          coordinates[i2 + 1][0] +
+            " " +
+            coordinates[i2 + 1][1] +
+            " - " +
+            coordinate[0] +
+            " " +
+            coordinate[1]
+        ] = {
+          distance: currDistance,
+          distanceMeters: distanceMeters,
+          duration: routeDuration
+        };
+      }
 
       if (!graph[coordinates[i2 + 1][0] + " " + coordinates[i2 + 1][1]]) {
         graph[coordinates[i2 + 1][0] + " " + coordinates[i2 + 1][1]] = [];
@@ -84,6 +136,7 @@ const coordinates_2_graph = (icr, coordinates) => {
         latitude: coordinate[1],
         destination: `${coordinate[0]} ${coordinate[1]}`,
         distance: currDistance,
+        distanceMeters: distanceMeters,
         icr: icr
       });
     }
@@ -205,20 +258,49 @@ const path_to_geojson = path => {
   });
   let featuresInd = 1;
   let currentFeature = geoJsonOutput.features[featuresInd];
+  let currDistanceMeters = 0;
+  let currDuration = 0;
+
   currentFeature.geometry.coordinates.push([
     parseFloat(path[0].split(" ")[0]),
     parseFloat(path[0].split(" ")[1])
   ]);
 
-  let previousCoor;
+  let previousCoor = [
+    parseFloat(path[0].split(" ")[0]),
+    parseFloat(path[0].split(" ")[1])
+  ];
   for (let i = 0; i < choosenIcr.length; i++) {
     let nextCoor = [
       parseFloat(path[i + 1].split(" ")[0]),
       parseFloat(path[i + 1].split(" ")[1])
     ];
+    currDistanceMeters +=
+      routes[
+        previousCoor[0] +
+          " " +
+          previousCoor[1] +
+          " - " +
+          nextCoor[0] +
+          " " +
+          nextCoor[1]
+      ].distanceMeters;
+    currDuration +=
+      routes[
+        previousCoor[0] +
+          " " +
+          previousCoor[1] +
+          " - " +
+          nextCoor[0] +
+          " " +
+          nextCoor[1]
+      ].duration;
     if (choosenIcr[i] === currentFeature.properties.icr) {
       currentFeature.geometry.coordinates.push(nextCoor);
     } else {
+      currentFeature.properties["distance"] = currDistanceMeters;
+      currentFeature.properties["duration"] = currDuration;
+
       geoJsonOutput.features.push({
         type: "Feature",
         geometry: {
@@ -234,9 +316,32 @@ const path_to_geojson = path => {
       currentFeature = geoJsonOutput.features[featuresInd];
       currentFeature.geometry.coordinates.push(previousCoor);
       currentFeature.geometry.coordinates.push(nextCoor);
+      currDistanceMeters =
+        routes[
+          previousCoor[0] +
+            " " +
+            previousCoor[1] +
+            " - " +
+            nextCoor[0] +
+            " " +
+            nextCoor[1]
+        ].distanceMeters;
+      currDuration +=
+        routes[
+          previousCoor[0] +
+            " " +
+            previousCoor[1] +
+            " - " +
+            nextCoor[0] +
+            " " +
+            nextCoor[1]
+        ].duration;
     }
+    //console.log("DISTANCE : " + currDistanceMeters);
     previousCoor = nextCoor;
   }
+  currentFeature.properties["distance"] = currDistanceMeters;
+  currentFeature.properties["duration"] = currDuration;
   return geoJsonOutput;
 };
 

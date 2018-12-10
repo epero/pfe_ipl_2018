@@ -64,7 +64,7 @@ app.use(function(req, res, next) {
 });
 
 //add_intersections_2_geojson.parse();
-add_colors_2_geojson.parse();
+//add_colors_2_geojson.parse();
 
 graph.parse();
 
