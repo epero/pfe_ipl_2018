@@ -1,16 +1,17 @@
 var fs = require("fs");
 //var obj  = require('../icr-2017-01-01')
 //var obj = require("../latlong_icr.json");
+let file = require("../geojsons/icr-2017-01-01");
 
-const parse = file => {
-  file = require(`../geojsons/${file}`);
+const parse = source_file => {
+  //let pathname = `../geojsons/${source_file}`;
+  //console.log(pathname);
+  //file = require(pathname);
   let features = file.features;
-  //features.forEach((feature) => {
   for (ii = 0; ii < features.length; ii++) {
     let feature = features[ii];
     let arrayCoordinates = feature.geometry.coordinates;
     if (feature.geometry.type === "LineString") {
-      //arrayCoordinates.forEach((coordinate, i2) => {
       for (i2 = 0; i2 < arrayCoordinates.length; i2++) {
         let coordinate = arrayCoordinates[i2];
         if (arrayCoordinates[i2 + 1]) {
@@ -35,13 +36,10 @@ const parse = file => {
             parse();
           }
         }
-        //})
       }
     } else {
-      //arrayCoordinates.forEach((coordinates, i1) => {
       for (i1 = 0; i1 < arrayCoordinates.length; i1++) {
         let coordinates = arrayCoordinates[i1];
-        //coordinates.forEach((coordinate, i2) => {
         for (i3 = 0; i3 < coordinates.length; i3++) {
           let coordinate = coordinates[i3];
           if (coordinates[i3 + 1]) {
@@ -66,17 +64,13 @@ const parse = file => {
               parse();
             }
           }
-          //})
         }
-        //})
       }
     }
-
-    //})
   }
   //ASYNC
   fs.writeFile(
-    `../geojsons/icr-with-intersections-${new Date()}.json`,
+    `./geojsons/icr-with-intersections.json`,
     JSON.stringify(file, null, 2),
     "utf-8"
   );

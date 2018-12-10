@@ -1,9 +1,12 @@
 var fs = require("fs");
 //var obj  = require('../icr-2017-01-01')
 //var obj = require("../latlong_icr.json");
+let file = require("../geojsons/icr-with-intersections");
 
-const parse = file => {
-  file = require(`../geojsons/${file}`);
+const parse = () => {
+  //let pathname = `../geojsons/${source_file}`;
+  //console.log(pathname);
+  //let file = require(source_file);
   let features = file.features;
   for (ii = 0; ii < features.length; ii++) {
     let feature = features[ii];
@@ -74,7 +77,7 @@ const parse = file => {
 
   //CAREFULL because ASYNC
   fs.writeFile(
-    `./icr-with-colors-${new Date()}.json`,
+    `./geojsons/icr-with-colors.json`,
     JSON.stringify(file, null, 2),
     "utf-8"
   );
