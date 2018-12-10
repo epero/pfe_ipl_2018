@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { GeoJsonObject } from 'geojson';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MapRouteService } from '../services/map-route.service';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @Component({
   selector: 'app-map-box',
@@ -21,7 +22,8 @@ export class MapBoxComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private mapRouteService: MapRouteService
+    private mapRouteService: MapRouteService,
+    private geolocation: Geolocation
   ) {
     this.form = new FormGroup({
       mapStyle: new FormControl('basic')
@@ -29,7 +31,6 @@ export class MapBoxComponent implements OnInit {
   }
 
   ngOnInit() {
-      console.log("onInit")
     this.icrLayerID="all_icr";
     this.routeLayerID="route"
     mapboxgl.accessToken =
@@ -44,18 +45,28 @@ export class MapBoxComponent implements OnInit {
       this.map = this.initializingMap("light");
     }
   
-    
-    console.log(this.map)
+    this.geolocation.getCurrentPosition({timeout:15000}).then((resp) => {
+        // resp.coords.latitude
+        // resp.coords.longitude
+        console.log("hello biatch : " + resp.coords.latitude + " - " + resp.coords.longitude);
+        }).catch((error) => {
+        console.log('Error getting location', error);
+    });
 
+    let watch = this.geolocation.watchPosition();
+        watch.subscribe((data) => {
+        // data can be a set of coordinates, or an error (if an error occurred).
+        // data.coords.latitude
+        // data.coords.longitude
+    });
   }
 
   initializingMap(mapStyle) {
-    console.log("initialize")
     var map = new mapboxgl.Map({
       container: "map",
       style: "mapbox://styles/mapbox/" + mapStyle + "-v9",
       zoom: 11,
-      center: [4.3517103, 50.8303396]
+      center: [4.3517103, 50.8603396]
     });
 
     //Showing ICR routes
