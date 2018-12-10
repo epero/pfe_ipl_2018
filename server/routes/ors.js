@@ -23,10 +23,14 @@ router.post("/", async function(req, res, next) {
 
     let geoJsonStart = await ors.calculate([json[0], startIcr.coordinates]);
     geoJsonStart = geoJsonStart.features[0];
+    //TODO a mettre dans module ors
     geoJsonStart.properties.icr = "ors";
+    geoJsonStart.properties.color = "#0000FF";
     let geoJsonEnd = await ors.calculate([endIcr.coordinates, json[1]]);
     geoJsonEnd = geoJsonEnd.features[0];
+    //TODO a mettre dans module ors
     geoJsonEnd.properties.icr = "ors";
+    geoJsonEnd.properties.color = "#0000FF";
     let geoJsonIcr = graph.calculate({
       source_long: startIcr.coordinates[0],
       source_lat: startIcr.coordinates[1],
