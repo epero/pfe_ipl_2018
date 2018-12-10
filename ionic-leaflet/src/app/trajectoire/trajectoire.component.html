@@ -1,8 +1,22 @@
 <ion-list class="scroll">
   <ion-item *ngFor="let step of trajet">
-    <ion-label>
-      {{step.instruction}}
-      <span *ngIf="step.distance > -1"> sur {{step.distance}}m</span>
-    </ion-label>
+    <ng-container *ngIf="step.icr; else nonIcr">
+      <ion-label>
+        <app-icr-icon icrName="{{step.icrName}}" color="{{step.color}}"></app-icr-icon> Suivre l'ICR {{step.icrName}}
+        <span *ngIf="step.distance > -1">
+          sur {{step.distance}}m</span>
+      </ion-label>
+    </ng-container>
+    <ng-template #nonIcr>
+      <ion-label>
+        <ng-container *ngIf="step.distance !== 0;else arriver">
+          <app-instruction-type-icon type="{{step.type}}"></app-instruction-type-icon>{{step.name}} sur
+          {{step.distance}}m
+        </ng-container>
+        <ng-template #arriver>
+          {{step.instruction}}
+        </ng-template>
+      </ion-label>
+    </ng-template>
   </ion-item>
 </ion-list>
