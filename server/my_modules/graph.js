@@ -1,7 +1,7 @@
 //var geojson  = require('../icr-2017-01-01');
 //var geojson = require('../latlong_icr');
 //var geojson = require('../icr-test-with-intersections')
-var geojson = require("../icr-2017-01-01_mine");
+var geojson = require("../geojsons/icr-with-colors");
 //const SortedSet = require("collections/sorted-set");
 //const SSet = require('sorted-set')
 var fs = require("fs");
@@ -18,10 +18,10 @@ const parse = () => {
   for (let index = 0; index < features.length; index++) {
     let arrayCoordinates = features[index].geometry.coordinates;
     if (features[index].geometry.type === "LineString") {
-      coordinates_2_graph(features[index].properties.name, arrayCoordinates);
+      coordinates_2_graph(features[index].properties.icr, arrayCoordinates);
     } else if (features[index].geometry.type === "MultiLineString") {
       arrayCoordinates.forEach((coordinates, i1) => {
-        coordinates_2_graph(features[index].properties.name, coordinates);
+        coordinates_2_graph(features[index].properties.icr, coordinates);
       });
     } else {
       graph = null;
@@ -43,9 +43,9 @@ const coordinates_2_graph = (icr, coordinates) => {
     if (coordinates[i2 + 1]) {
       let currDistance = Math.sqrt(
         (coordinate[0] - coordinates[i2 + 1][0]) *
-        (coordinate[0] - coordinates[i2 + 1][0]) +
-        (coordinate[1] - coordinates[i2 + 1][1]) *
-        (coordinate[1] - coordinates[i2 + 1][1])
+          (coordinate[0] - coordinates[i2 + 1][0]) +
+          (coordinate[1] - coordinates[i2 + 1][1]) *
+            (coordinate[1] - coordinates[i2 + 1][1])
       );
 
       if (!graph[coordinate[0] + " " + coordinate[1]]) {
@@ -151,9 +151,7 @@ const calculate = coordinates => {
 const path_to_geojson = path => {
   let geoJsonOutput = {
     type: "FeatureCollection",
-    features: [
-      []
-    ]
+    features: [[]]
   };
 
   let possIcr = new Array(path.length - 1);
@@ -200,7 +198,7 @@ const path_to_geojson = path => {
       coordinates: []
     },
     properties: {
-      name: choosenIcr[0]
+      icr: choosenIcr[0]
     }
   });
   let featuresInd = 1;
@@ -216,7 +214,7 @@ const path_to_geojson = path => {
       parseFloat(path[i + 1].split(" ")[0]),
       parseFloat(path[i + 1].split(" ")[1])
     ];
-    if (choosenIcr[i] === currentFeature.properties.name) {
+    if (choosenIcr[i] === currentFeature.properties.icr) {
       currentFeature.geometry.coordinates.push(nextCoor);
     } else {
       geoJsonOutput.features.push({
@@ -226,7 +224,7 @@ const path_to_geojson = path => {
           coordinates: []
         },
         properties: {
-          name: choosenIcr[i]
+          icr: choosenIcr[i]
         }
       });
       featuresInd++;
@@ -303,20 +301,49 @@ const closestEntryToNetwork = (coordinate, range, precision) => {
     //console.log(potentialEntries[index]);
     let currDistance = Math.sqrt(
       (src_long - potentialEntries[index].longitude) *
-      (src_long - potentialEntries[index].longitude) +
-      (src_lat - potentialEntries[index].latitude) *
-      (src_lat - potentialEntries[index].latitude)
+        (src_long - potentialEntries[index].longitude) +
+        (src_lat - potentialEntries[index].latitude) *
+          (src_lat - potentialEntries[index].latitude)
     );
     if (!minDistance || currDistance < minDistance) {
       minDistance = currDistance;
       minIndex = index;
     }
   }
-  console.log("CLOSEST entry : " + potentialEntries[minIndex]);
-  return [
-    potentialEntries[minIndex].longitude,
-    potentialEntries[minIndex].latitude
-  ];
+  //console.log("CLOSEST entry : " + potentialEntries[minIndex]);
+  return {
+    coordinates: [
+      potentialEntries[minIndex].longitude,
+      potentialEntries[minIndex].latitude
+    ],
+    distance: minDistance
+  };
+};
+
+const closestEntryToNetworkSlow = coordinate => {
+  let src_long = coordinate[0];
+  let src_lat = coordinate[1];
+  let minDistance;
+  let minIndex;
+  for (let index = 0; index < sorted_latitudes.length; index++) {
+    let currDistance = Math.sqrt(
+      (src_long - sorted_latitudes[index].longitude) *
+        (src_long - sorted_latitudes[index].longitude) +
+        (src_lat - sorted_latitudes[index].latitude) *
+          (src_lat - sorted_latitudes[index].latitude)
+    );
+    if (!minDistance || currDistance < minDistance) {
+      minDistance = currDistance;
+      minIndex = index;
+    }
+  }
+  return {
+    coordinates: [
+      sorted_latitudes[minIndex].longitude,
+      sorted_latitudes[minIndex].latitude
+    ],
+    distance: minDistance
+  };
 };
 
 const binary_search = (arr, source, regex, coord_type, range) => {
@@ -352,3 +379,4 @@ exports.graph = null;
 exports.parse = parse;
 exports.calculate = calculate;
 exports.closestEntryToNetwork = closestEntryToNetwork;
+exports.closestEntryToNetworkSlow = closestEntryToNetworkSlow;

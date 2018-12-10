@@ -20,6 +20,7 @@ export class MapRouteService {
     this.httpClient
       .post<GeoJsonObject>(
         'http://test-dockerfull-env-2.xgpz6fryfk.eu-west-1.elasticbeanstalk.com/api/ors-directions',
+        //"http://localhost:8081/api/ors-directions",
         json
       )
       .toPromise()
@@ -28,7 +29,6 @@ export class MapRouteService {
       })
       .catch(error => {
         console.log(error);
-        document.write(JSON.stringify(error));
       });
   }
 

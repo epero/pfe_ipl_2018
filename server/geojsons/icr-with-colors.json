@@ -4,7 +4,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "MM"
+        "name": "MM",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -2625,7 +2626,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "11B"
+        "name": "11B",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "LineString",
@@ -2952,7 +2954,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "MMA"
+        "name": "MMA",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "LineString",
@@ -3223,7 +3226,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "SZA"
+        "name": "SZA",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -3574,7 +3578,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "2A"
+        "name": "2A",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -4121,7 +4126,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "2B"
+        "name": "2B",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -4938,7 +4944,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "5B"
+        "name": "5B",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -5947,7 +5954,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "3B"
+        "name": "3B",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -6430,7 +6438,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "4B"
+        "name": "4B",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "LineString",
@@ -7237,7 +7246,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "SZB"
+        "name": "SZB",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "LineString",
@@ -7496,7 +7506,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "9B"
+        "name": "9B",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -8051,7 +8062,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "11A"
+        "name": "11A",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -8310,7 +8322,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "4A"
+        "name": "4A",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "LineString",
@@ -8469,7 +8482,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "5"
+        "name": "5",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -8828,7 +8842,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "C"
+        "name": "C",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -14373,7 +14388,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "G/C"
+        "name": "G/C",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -16368,7 +16384,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "8"
+        "name": "8",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -17595,7 +17612,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "6A"
+        "name": "6A",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "LineString",
@@ -18062,7 +18080,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "6"
+        "name": "6",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -19517,7 +19536,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "1"
+        "name": "1",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -20580,7 +20600,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "B"
+        "name": "B",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -24989,7 +25010,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "9A"
+        "name": "9A",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -25980,7 +26002,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "10B"
+        "name": "10B",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -26639,7 +26662,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "10A"
+        "name": "10A",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "LineString",
@@ -26994,7 +27018,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "PP"
+        "name": "PP",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -28379,7 +28404,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "12A"
+        "name": "12A",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "LineString",
@@ -28822,7 +28848,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "3A"
+        "name": "3A",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -29193,7 +29220,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "3"
+        "name": "3",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -30276,7 +30304,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "4"
+        "name": "4",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -30745,7 +30774,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "1A"
+        "name": "1A",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -31104,7 +31134,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "SZ"
+        "name": "SZ",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -33059,7 +33090,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "CK"
+        "name": "CK",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "LineString",
@@ -34278,7 +34310,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "9"
+        "name": "9",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "LineString",
@@ -34617,7 +34650,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "A"
+        "name": "A",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -36970,7 +37004,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "6B"
+        "name": "6B",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "LineString",
@@ -37289,7 +37324,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "2"
+        "name": "2",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -37734,7 +37770,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "11"
+        "name": "11",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -38949,7 +38986,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "12"
+        "name": "12",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -39662,7 +39700,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "7"
+        "name": "7",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -41043,7 +41082,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "1B"
+        "name": "1B",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -41426,7 +41466,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "10"
+        "name": "10",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "MultiLineString",
@@ -42289,7 +42330,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "MMB"
+        "name": "MMB",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "LineString",
@@ -42708,7 +42750,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "12B"
+        "name": "12B",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "LineString",
@@ -43151,7 +43194,8 @@
     {
       "type": "Feature",
       "properties": {
-        "icr": "5A"
+        "name": "5A",
+        "color": "#0000FF"
       },
       "geometry": {
         "type": "LineString",
