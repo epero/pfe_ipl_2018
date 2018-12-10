@@ -1,9 +1,9 @@
-import { Component, OnInit } from "@angular/core";
-import * as mapboxgl from "mapbox-gl";
-import { HttpClient } from "@angular/common/http";
-import { GeoJsonObject } from "geojson";
-import { FormGroup, FormControl } from "@angular/forms";
-import { MapRouteService } from "../services/map-route.service";
+import { Component, OnInit } from '@angular/core';
+import * as mapboxgl from 'mapbox-gl';
+import { HttpClient } from '@angular/common/http';
+import { GeoJsonObject } from 'geojson';
+import { FormGroup, FormControl } from '@angular/forms';
+import { MapRouteService } from '../services/map-route.service';
 
 @Component({
   selector: 'app-map-box',
@@ -14,21 +14,23 @@ export class MapBoxComponent implements OnInit {
   private geojson: GeoJsonObject;
   form: FormGroup;
   map: any;
-  icrLayerID:string;
-  routeLayerID:string;
-  startpoint:any;
-  endpoint:any;
+  icrLayerID: string;
+  routeLayerID: string;
+  startpoint: any;
+  endpoint: any;
 
-  constructor(private http: HttpClient, private mapRouteService: MapRouteService) {
+  constructor(
+    private http: HttpClient,
+    private mapRouteService: MapRouteService
+  ) {
     this.form = new FormGroup({
       mapStyle: new FormControl('basic')
     });
-
   }
 
   ngOnInit() {
-    this.icrLayerID="all_icr";
-    this.routeLayerID="route"
+    this.icrLayerID = 'all_icr';
+    this.routeLayerID = 'route';
     mapboxgl.accessToken =
       'pk.eyJ1IjoieGRhcmthIiwiYSI6ImNqcGgxdXBobjByNHUza3BkbGtvMGY2eTUifQ.WuwZ_XI2zNxxObLi6moULg';
 
@@ -40,20 +42,6 @@ export class MapBoxComponent implements OnInit {
     } else {
       this.map = this.initializingMap('basic');
     }
-
-    this.plateform.ready().then(() => {
-      this.geolocation
-        .getCurrentPosition()
-        .then(resp => {
-          this.map.flyTo({
-            center: [resp.coords.longitude, resp.coords.latitude],
-            zoom: 18
-          });
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    });
   }
 
   initializingMap(mapStyle) {
@@ -73,24 +61,24 @@ export class MapBoxComponent implements OnInit {
       mapCanvas['style'].width = '100%';
       map.resize();
 
-      map=this.displayICRWithColors(map);
+      map = this.displayICRWithColors(map);
     });
 
     // Display route
     this.mapRouteService.routeSubject.subscribe(geojson => {
-        //hide ICR layer
-        this.map.setLayoutProperty(this.icrLayerID,'visibility','none');
-        //check if current route layer exists and remove if exists
-        if(this.map.getLayer(this.routeLayerID) !== undefined){
-            this.map.removeLayer(this.routeLayerID).removeSource(this.routeLayerID);
-        }
-        //display new route layer
-        this.displayGeoJson(geojson,this.map,this.routeLayerID);
-  
-        //if (this.startpoint !== undefined) this.startpoint.removeFrom(this.map);
-        //if (this.endpoint !== undefined) this.endpoint.removeFrom(this.map);
-  
-        /*var features = geojson["features"];
+      //hide ICR layer
+      this.map.setLayoutProperty(this.icrLayerID, 'visibility', 'none');
+      //check if current route layer exists and remove if exists
+      if (this.map.getLayer(this.routeLayerID) !== undefined) {
+        this.map.removeLayer(this.routeLayerID).removeSource(this.routeLayerID);
+      }
+      //display new route layer
+      this.displayGeoJson(geojson, this.map, this.routeLayerID);
+
+      //if (this.startpoint !== undefined) this.startpoint.removeFrom(this.map);
+      //if (this.endpoint !== undefined) this.endpoint.removeFrom(this.map);
+
+      /*var features = geojson["features"];
         var coordinatesFirstFeature = features[0]["geometry"]["coordinates"];
         var coordinatesLastFeature =
           features[features["length"] - 1]["geometry"]["coordinates"];
@@ -107,44 +95,42 @@ export class MapBoxComponent implements OnInit {
           "assets/marker/end.png"
         );*/
     });
-    
 
     return map;
   }
 
-  displayPoint(lat:number,long:number,iconUrl:string){
-    var marker = new mapboxgl.Marker()
-    .setLngLat([30.5, 50.5])
-    .addTo(this.map);
+  displayPoint(lat: number, long: number, iconUrl: string) {
+    var marker = new mapboxgl.Marker().setLngLat([30.5, 50.5]).addTo(this.map);
   }
 
-  displayGeoJson(geojson: GeoJsonObject, map, layerID){
+  displayGeoJson(geojson: GeoJsonObject, map, layerID) {
     map.addLayer({
-        id: layerID,
-        type: "line",
-        source: {
-          type: "geojson",
-          data: geojson
-        },
-        layout: {
-          "line-join": "round",
-          "line-cap": "round"
-        },
-        paint: {
-          "line-color": ["get", "color"],
-          "line-width": 2
-        },
-        visibility:'visible'
-      });
+      id: layerID,
+      type: 'line',
+      source: {
+        type: 'geojson',
+        data: geojson
+      },
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': ['get', 'color'],
+        'line-width': 2
+      },
+      visibility: 'visible'
+    });
   }
 
   //TODO mettre id layer en param
   displayICRWithColors(map) {
     this.http
-      .get<any>("assets/icr-with-colors.json")
+      .get<any>('assets/icr-with-colors.json')
       .toPromise()
-      .then(geojson => this.displayGeoJson(geojson,map,this.icrLayerID)
-      /*{
+      .then(
+        geojson => this.displayGeoJson(geojson, map, this.icrLayerID)
+        /*{
         map.addLayer({
           id: this.icrLayerID ,
           type: "line",
@@ -162,8 +148,9 @@ export class MapBoxComponent implements OnInit {
           },
           visibility:'visible'
         });
-      }*/);
+      }*/
+      );
 
-     return map; 
+    return map;
   }
 }
