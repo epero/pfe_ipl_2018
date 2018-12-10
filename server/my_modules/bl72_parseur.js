@@ -17,7 +17,14 @@ const parse = () => {
       });
     });
   });
-  fs.writeFile("./latlong_icr.json", JSON.stringify(obj, null, 2), "utf-8");
+  fs.writeFile(
+    "./latlong_icr.json",
+    JSON.stringify(obj, null, 2),
+    "utf-8",
+    err => {
+      if (err) throw err;
+    }
+  );
 };
 
 exports.parse = parse;
