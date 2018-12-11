@@ -67,7 +67,7 @@ export class DirectionFormComponent implements OnInit {
       this.startJSON["y"],
       this.endJSON["x"],
       this.endJSON["y"]
-    );
+    ).then(()=>this.removeLoader());
     this.loaderPromise = this.afficheLoader();
   }
 
