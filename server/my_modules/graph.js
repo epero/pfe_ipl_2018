@@ -5,7 +5,8 @@ var geojson = require("../geojsons/icr-with-colors");
 const irc_2_color = require("./icr_2_color");
 const coordinatesMod = require("./coordinates");
 //const SortedSet = require("collections/sorted-set");
-//const SSet = require('sorted-set')
+//const SSet = require("sorted-set");
+
 var fs = require("fs");
 let graph = null;
 let sorted_longitudes = null;
@@ -59,7 +60,7 @@ const coordinates_2_graph = (icr, coordinates) => {
         coordinates[i2 + 1][1]
       );
 
-      let routeDuration = distanceMeters / 1000 / 18;
+      let routeDuration = (distanceMeters / 1000 / 18) * 60;
 
       if (!graph[coordinate[0] + " " + coordinate[1]]) {
         graph[coordinate[0] + " " + coordinate[1]] = [];
@@ -146,7 +147,6 @@ const coordinates_2_graph = (icr, coordinates) => {
 const calculate = coordinates => {
   let distances = new Map();
   let etiqProv = new Set();
-
   let etiqDef = new Set();
   let arbre = new Map();
 
@@ -166,10 +166,13 @@ const calculate = coordinates => {
         if (!etiqProv.has(currentDestination)) {
           distances[currentDestination] = currentDistance;
           etiqProv.add(currentDestination);
+          //heap.push(currentDestination);
+
           arbre.set(currentDestination, current);
         } else if (distances[currentDestination] > currentDistance) {
           distances[currentDestination] = currentDistance;
           etiqProv.add(currentDestination);
+
           arbre.set(currentDestination, current);
         }
       }
@@ -179,11 +182,18 @@ const calculate = coordinates => {
       found = false;
       break;
     }
-    let sorted = Array.from(etiqProv).sort((a, b) => {
+    /*let sorted = Array.from(etiqProv).sort((a, b) => {
       if (distances[a] === distances[b]) return a - b;
       return distances[a] - distances[b];
-    });
-    current = sorted[0];
+    });*/
+    let min;
+    for (let ccc of etiqProv) {
+      if (!min || distances[ccc] < distances[min]) {
+        min = ccc;
+      }
+    }
+    current = min;
+    //current = sorted[0];
     etiqProv.delete(current);
     etiqDef.add(current);
   }
@@ -199,7 +209,7 @@ const calculate = coordinates => {
     shortestPath.unshift(source);
     return path_to_geojson(shortestPath);
   }
-  console.log("FOUND : " + found);
+  //console.log("FOUND : " + found);
 };
 
 const path_to_geojson = path => {
@@ -326,7 +336,7 @@ const path_to_geojson = path => {
             " " +
             nextCoor[1]
         ].distanceMeters;
-      currDuration +=
+      currDuration =
         routes[
           previousCoor[0] +
             " " +
