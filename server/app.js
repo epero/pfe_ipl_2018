@@ -7,8 +7,7 @@ const logger = require("morgan");
 const assetPath = require("./asset_path.js");
 
 const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
-const orsRouter = require("./routes/ors");
+const testRouter = require("./routes/test");
 const directionsRouter = require("./routes/directions");
 
 //const bl72_parseur = require('./my_modules/bl72_parseur');
@@ -69,8 +68,7 @@ app.use(function(req, res, next) {
 graph.parse();
 
 app.use("/", indexRouter);
-app.use("/api/users", usersRouter);
-app.use("/api/ors-directions", orsRouter);
+app.use("/api/test", testRouter);
 app.use("/api/directions", directionsRouter);
 
 // catch 404 and forward to error handler
@@ -87,7 +85,8 @@ app.use((err, req, res, next) => {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.json(err);
+  //res.render("error");
 });
 
 module.exports = app;
