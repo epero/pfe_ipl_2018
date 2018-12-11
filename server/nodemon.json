@@ -1,3 +1,3 @@
 {
-  "watch": ["./my_modules", "app.js", "./routes"]
+  "watch": ["./my_modules", "app.js", "./routes", "./tests"]
 }

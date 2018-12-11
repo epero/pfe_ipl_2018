@@ -1,12 +1,12 @@
 const checkSegmentIntersection = (
-  line1StartX,
-  line1StartY,
-  line1EndX,
-  line1EndY,
-  line2StartX,
-  line2StartY,
-  line2EndX,
-  line2EndY
+  segmant_a_start_long,
+  segment_a_start_lat,
+  segment_a_end_long,
+  segment_a_end_lat,
+  segment_b_start_long,
+  segment_b_start_lat,
+  segment_b_end_long,
+  segment_b_end_lat
 ) => {
   // if the lines intersect, the result contains the x and y of the intersection (treating the lines as infinite) and booleans for whether line segment 1 or line segment 2 contain the point
   var denominator,
@@ -22,32 +22,56 @@ const checkSegmentIntersection = (
     };
 
   //DEJA FAIT => COMMENT???
-  if (line1EndX === line2StartX && line1EndY === line2StartY) return result;
-  if (line2EndX === line1StartX && line2EndY === line1StartY) return result;
+  if (
+    segment_a_end_long === segment_b_start_long &&
+    segment_a_end_lat === segment_b_start_lat
+  )
+    return result;
+  if (
+    segment_b_end_long === segmant_a_start_long &&
+    segment_b_end_lat === segment_a_start_lat
+  )
+    return result;
 
-  if (line1StartX === line2StartX && line1StartY === line2StartY) return result;
-  if (line1EndX === line2EndX && line1EndY === line2EndY) return result;
+  if (
+    segmant_a_start_long === segment_b_start_long &&
+    segment_a_start_lat === segment_b_start_lat
+  )
+    return result;
+  if (
+    segment_a_end_long === segment_b_end_long &&
+    segment_a_end_lat === segment_b_end_lat
+  )
+    return result;
 
   denominator =
-    (line2EndY - line2StartY) * (line1EndX - line1StartX) -
-    (line2EndX - line2StartX) * (line1EndY - line1StartY);
+    (segment_b_end_lat - segment_b_start_lat) *
+      (segment_a_end_long - segmant_a_start_long) -
+    (segment_b_end_long - segment_b_start_long) *
+      (segment_a_end_lat - segment_a_start_lat);
   if (denominator == 0) {
     return result;
   }
-  a = line1StartY - line2StartY;
-  b = line1StartX - line2StartX;
-  numerator1 = (line2EndX - line2StartX) * a - (line2EndY - line2StartY) * b;
-  numerator2 = (line1EndX - line1StartX) * a - (line1EndY - line1StartY) * b;
+  a = segment_a_start_lat - segment_b_start_lat;
+  b = segmant_a_start_long - segment_b_start_long;
+  numerator1 =
+    (segment_b_end_long - segment_b_start_long) * a -
+    (segment_b_end_lat - segment_b_start_lat) * b;
+  numerator2 =
+    (segment_a_end_long - segmant_a_start_long) * a -
+    (segment_a_end_lat - segment_a_start_lat) * b;
   a = numerator1 / denominator;
   b = numerator2 / denominator;
 
   // if we cast these lines infinitely in both directions, they intersect here:
-  result.x = line1StartX + a * (line1EndX - line1StartX);
-  result.y = line1StartY + a * (line1EndY - line1StartY);
+  result.x =
+    segmant_a_start_long + a * (segment_a_end_long - segmant_a_start_long);
+  result.y =
+    segment_a_start_lat + a * (segment_a_end_lat - segment_a_start_lat);
   /*
           // it is worth noting that this should be the same as:
-          x = line2StartX + (b * (line2EndX - line2StartX));
-          y = line2StartX + (b * (line2EndY - line2StartY));
+          x = segment_b_start_long + (b * (segment_b_end_long - segment_b_start_long));
+          y = segment_b_start_long + (b * (segment_b_end_lat - segment_b_start_lat));
           */
   // if line1 is a segment and line2 is infinite, they intersect if:
   if (a > 0 && a < 1) {
