@@ -73,7 +73,7 @@ export class SearchInputPage implements OnInit {
   }
 
   onInputClear() {
-    this.addressesService.setAddress(this.slug, "");
+    this.addressesService.setAddress(this.slug, undefined);
   }
 
   onAddrItemClick(addr: JSON) {
