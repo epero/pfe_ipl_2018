@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Subject } from "rxjs";
-import { GeoJsonObject } from "geojson";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Subject } from 'rxjs';
+import { GeoJsonObject } from 'geojson';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class MapRouteService {
   routeSubject: Subject<GeoJsonObject>;
@@ -19,8 +19,8 @@ export class MapRouteService {
 
     this.httpClient
       .post<GeoJsonObject>(
-        //'http://test-dockerfull-env-2.xgpz6fryfk.eu-west-1.elasticbeanstalk.com/api/ors-directions',
-        "http://localhost:8081/api/ors-directions",
+        'http://test-dockerfull-env-2.xgpz6fryfk.eu-west-1.elasticbeanstalk.com/api/ors-directions',
+        //"http://localhost:8081/api/ors-directions",
         json
       )
       .toPromise()
