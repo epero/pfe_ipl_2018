@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { NavController, Searchbar } from "@ionic/angular";
 import { ActivatedRoute } from "@angular/router";
 import { AddressesService } from "../services/addresses.service";
+import { Geolocation } from "@ionic-native/geolocation/ngx";
 
 @Component({
   selector: "app-search-input",
@@ -14,17 +15,31 @@ export class SearchInputPage implements OnInit {
   canSearch: boolean;
   addrList: Array<any>;
   point: String;
+  position: any;
 
   @ViewChild("searchbar") searchbar: Searchbar;
 
   constructor(
     private addressesService: AddressesService,
     private navController: NavController,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private geolocation: Geolocation
   ) {}
 
   ionViewWillEnter() {
     this.searchbar.setFocus();
+    this.geolocation
+      .getCurrentPosition({ enableHighAccuracy: true })
+      .then(resp => {
+        this.position = {
+          x: "" + resp.coords.longitude,
+          y: "" + resp.coords.latitude,
+          label: "Votre position"
+        };
+      })
+      .catch(error => {
+        console.log("Error getting location", error); //TODO gérer erreur
+      });
   }
 
   ngOnInit() {
@@ -55,10 +70,19 @@ export class SearchInputPage implements OnInit {
   onAddrItemClick(addr: JSON) {
     this.addrList = [];
     this.addressesService.setAdress(this.slug, addr);
-    this.navController.navigateBack("/home", true);
+    this.navigateBack();
+  }
+
+  onPositionClick() {
+    this.addressesService.setAdress(this.slug, this.position);
+    this.navigateBack();
   }
 
   onBackButtonClick() {
+    this.navigateBack();
+  }
+
+  navigateBack() {
     this.navController.navigateBack("/home", true);
   }
 }
