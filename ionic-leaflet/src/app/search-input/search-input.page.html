@@ -9,6 +9,7 @@
       (ionChange)="onInputChange()"
       (ionFocus)="onInputFocus()"
       (ionBlur)="onInputBlur()"
+      (ionClear)="onInputClear()"
       debounce="250"
     >
     </ion-searchbar>
@@ -23,7 +24,10 @@
       >{{ position.label }}</ion-item
     >
     <ion-item *ngFor="let addr of addrList" (click)="onAddrItemClick(addr)">
-      <ion-label> {{ addr.label }} </ion-label>
+      <ion-label>
+        <h3>{{ addr["numero"] }} {{ addr["rue"] }}</h3>
+        <p>{{ addr["codePostal"] }} {{ addr["commune"] }}</p>
+      </ion-label>
     </ion-item>
   </ion-list>
 </ion-content>
