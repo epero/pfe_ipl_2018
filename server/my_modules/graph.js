@@ -7,7 +7,6 @@ const coordinatesMod = require("./coordinates");
 //const SortedSet = require("collections/sorted-set");
 //const SSet = require("sorted-set");
 
-const math = require("mathjs");
 var fs = require("fs");
 let graph = null;
 let sorted_longitudes = null;
