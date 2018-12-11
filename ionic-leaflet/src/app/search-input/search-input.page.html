@@ -1,6 +1,8 @@
-<ion-content>
-  <ion-item>
-    <ion-back-button item-start text="" defaultHref="home"></ion-back-button>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button item-start text="" defaultHref="home"></ion-back-button>
+    </ion-buttons>
     <ion-searchbar
       #searchbar
       name="input"
@@ -13,7 +15,9 @@
       debounce="250"
     >
     </ion-searchbar>
-  </ion-item>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
   <ion-list name="addrList" ngDefaultControl [(ngModel)]="addrList">
     <ion-item *ngIf="!position"
       ><ion-icon name="locate" margin-end></ion-icon>Recherche de votre
