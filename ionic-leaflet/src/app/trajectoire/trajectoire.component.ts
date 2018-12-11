@@ -11,33 +11,28 @@ export class TrajectoireComponent implements OnInit {
   orsa: Array<Object>;
   orsb: Array<Object>;
   icrs: Array<Object>;
+  depart: Object;
+  arriver: Object;
+  orsatoggle: boolean;
+  orsbtoggle: boolean;
 
-  constructor(private mapRouteService: MapRouteService) {}
+  constructor(private mapRouteService: MapRouteService) {
+    this.orsatoggle = false;
+    this.orsbtoggle = false;
+  }
 
-  ionViewDidEnter() {
-    console.log('didenter');
+  onOrsaDivClick() {
+    this.orsatoggle = !this.orsatoggle;
+  }
+
+  onOrsbDivClick() {
+    this.orsbtoggle = !this.orsbtoggle;
   }
 
   ngOnInit() {
     this.mapRouteService.routeSubject.subscribe(route => {
       const features = route['features'];
-      /*const orsa = features[0];
-      this.addORSFeaturesToTrajet(orsa, false);
-      let i = 1;
       this.icrs = [];
-      while (i < features.length - 1) {
-        const etape = features[i];
-        const obj = {
-          distance: -1,
-          icr: true,
-          icrName: etape['properties']['icr'],
-          color: etape['properties']['color']
-        };
-        this.icrs.push(obj);
-        i++;
-      }
-      const orsb = features[i];
-      this.addORSFeaturesToTrajet(orsb, true);*/
       for (let i = 0; i < features.length; i++) {
         const feature = features[i];
         if (feature.id) {
@@ -47,11 +42,17 @@ export class TrajectoireComponent implements OnInit {
             this.addORSFeaturesToORSObj(feature, true, false);
           }
         } else {
-          console.log('icr');
+          const obj = {
+            distance: feature['properties']['distance'],
+            icr: true,
+            icrName: feature['properties']['icr'],
+            color: feature['properties']['color']
+          };
+          this.icrs.push(obj);
         }
       }
-      console.log(this.orsa);
-      console.log(this.orsb);
+      console.log(this.depart);
+      console.log(this.arriver);
     });
   }
 
@@ -68,8 +69,12 @@ export class TrajectoireComponent implements OnInit {
       fin = 1;
     }
     const orsSegments = ors['properties']['segments'];
+    if (first) {
+      this.depart = orsSegments[0]['steps'][0];
+    }
     for (let i = 0; i < orsSegments.length; i++) {
       const steps = orsSegments[i]['steps'];
+      this.arriver = steps[steps.length - 2];
       for (let j = 0; j < steps.length - fin; j++) {
         let step = steps[j];
         step.icr = false;
