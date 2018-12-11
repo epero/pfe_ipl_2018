@@ -1,17 +1,17 @@
-<ion-list class="scroll">
+<!--<ion-list class="scroll">
   <ion-item *ngFor="let step of trajet">
     <ng-container *ngIf="step.icr; else nonIcr">
       <ion-label>
-        <app-icr-icon icrName="{{step.icrName}}" color="{{step.color}}"></app-icr-icon> Suivre l'ICR {{step.icrName}}
-        <span *ngIf="step.distance > -1">
-          sur {{step.distance}}m</span>
+        <app-icr-icon icrName="{{step.icrName}}" color="{{step.color}}"></app-icr-icon>
+        Suivre l'ICR {{step.icrName}}
+        <span *ngIf="step.distance > -1">sur {{step.distance}}m</span>
       </ion-label>
     </ng-container>
     <ng-template #nonIcr>
       <ion-label>
         <ng-container *ngIf="step.distance !== 0;else arriver">
-          <app-instruction-type-icon type="{{step.type}}"></app-instruction-type-icon>{{step.name}} sur
-          {{step.distance}}m
+          <app-instruction-type-icon type="{{step.type}}"></app-instruction-type-icon>
+          {{step.name}} sur {{step.distance}}m
         </ng-container>
         <ng-template #arriver>
           {{step.instruction}}
@@ -19,4 +19,36 @@
       </ion-label>
     </ng-template>
   </ion-item>
-</ion-list>
+</ion-list>-->
+
+<div class="scroll">
+  <div class="orsa" *ngIf="orsa">
+    <ion-list>
+      <ion-item *ngFor="let orsastep of orsa">
+        <ng-container *ngIf="orsastep.distance !== 0;else arriver">
+          <app-instruction-type-icon type="{{orsastep.type}}"></app-instruction-type-icon>
+          {{orsastep.name}} sur {{orsastep.distance}}m
+        </ng-container>
+        <ng-template #arriver>
+          {{orsastep.instruction}}
+        </ng-template>
+      </ion-item>
+    </ion-list>
+  </div>
+  <div *ngFor="let icr of icrs">
+
+  </div>
+  <div class="orsb" *ngIf="orsb">
+    <ion-list>
+      <ion-item *ngFor="let orsbstep of orsb">
+        <ng-container *ngIf="orsbstep.distance !== 0;else arriverorsb">
+          <app-instruction-type-icon type="{{orsbstep.type}}"></app-instruction-type-icon>
+          {{orsbstep.name}} sur {{orsbstep.distance}}m
+        </ng-container>
+        <ng-template #arriverorsb>
+          {{orsbstep.instruction}}
+        </ng-template>
+      </ion-item>
+    </ion-list>
+  </div>
+</div>

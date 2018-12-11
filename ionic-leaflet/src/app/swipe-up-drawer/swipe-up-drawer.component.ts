@@ -34,6 +34,10 @@ export class SwipeUpDrawerComponent implements OnInit {
       this.windowHeight = window.innerHeight;
       let y = e.center.y;
       y = y < 0 ? 0 : y;
+      if (y > this.windowHeight - 50) {
+        this.setDrawer('down');
+        return;
+      }
       this.el.nativeElement.style.top = y + 'px';
       y = this.windowHeight - y - 50;
       this.content.nativeElement.style.height = y + 'px';
@@ -43,28 +47,33 @@ export class SwipeUpDrawerComponent implements OnInit {
     });
   }
 
+  setDrawer(pos: string) {
+    this.el.nativeElement.style.top = '';
+    switch (pos) {
+      case 'down':
+        this.content.nativeElement.style.height = '0%';
+        break;
+      case 'up':
+        this.content.nativeElement.style.height = '80%';
+        break;
+    }
+    this.position = pos;
+  }
+
   onSwipe(event: any) {
     if (event.overallVelocityY > 0.7) {
-      this.el.nativeElement.style.top = '';
-      this.content.nativeElement.style.height = '0%';
-      this.position = 'down';
+      this.setDrawer('down');
     }
     if (event.overallVelocityY < -0.7) {
-      this.el.nativeElement.style.top = '';
-      this.content.nativeElement.style.height = '80%';
-      this.position = 'up';
+      this.setDrawer('up');
     }
   }
 
   onTap() {
     if (this.position !== 'up') {
-      this.el.nativeElement.style.top = '';
-      this.content.nativeElement.style.height = '80%';
-      this.position = 'up';
+      this.setDrawer('up');
     } else {
-      this.el.nativeElement.style.top = '';
-      this.content.nativeElement.style.height = '0%';
-      this.position = 'down';
+      this.setDrawer('down');
     }
   }
 }
