@@ -47,19 +47,28 @@ export class MapBoxComponent implements OnInit {
       this.map = this.initializingMap("light");
     }
     
-    //geolocalisation
+    //GeolocalisationMap
     const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
           enableHighAccuracy: true
       },
       trackUserLocation: true
     });
-    this.map.addControl(geolocate)
+    this.map.addControl(geolocate, 'top-right');
 
     this.map.on('load', function()
       {
         geolocate.trigger();
       });
+
+    //NavigationMap
+    var nav = new mapboxgl.NavigationControl({
+        showCompass: true,
+        showZoom: false
+    });
+
+
+    this.map.addControl(nav, 'top-right');
   }
 
   initializingMap(mapStyle) {
