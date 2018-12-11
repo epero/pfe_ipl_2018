@@ -1,19 +1,22 @@
-import { Injectable } from "@angular/core";
-import { OpenStreetMapProvider } from "leaflet-geosearch";
-import { Subject } from "rxjs";
+import { Injectable } from '@angular/core';
+import { OpenStreetMapProvider } from 'leaflet-geosearch';
+import { Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class AddressesService {
   private provider: OpenStreetMapProvider;
   addresses: Array<any>;
-  addressesSubject: Subject<Array<any>>;
+  address: Object;
+  addressSubject: Subject<Object>;
 
   constructor() {
+    this.address = {};
     this.provider = new OpenStreetMapProvider({
-      params: { countrycodes: "be" }
+      params: { countrycodes: 'be' }
     });
+    this.addressSubject = new Subject<Object>();
   }
 
   getAddresses(address) {
@@ -29,5 +32,14 @@ export class AddressesService {
         })
         .catch(err => reject(err))
     );
+  }
+
+  setAdress(id, address: any) {
+    this.address[id] = address;
+    this.emitAdress();
+  }
+
+  emitAdress() {
+    this.addressSubject.next(this.address);
   }
 }

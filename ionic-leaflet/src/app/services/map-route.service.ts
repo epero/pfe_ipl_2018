@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Subject } from "rxjs";
-import { GeoJsonObject } from "geojson";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Subject } from 'rxjs';
+import { GeoJsonObject } from 'geojson';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class MapRouteService {
   routeSubject: Subject<GeoJsonObject>;
