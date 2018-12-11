@@ -29,7 +29,6 @@ export class MapBoxComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('onInit');
     this.icrLayerID = 'all_icr';
     this.routeLayerID = 'route';
     mapboxgl.accessToken =
@@ -47,7 +46,6 @@ export class MapBoxComponent implements OnInit {
   }
 
   initializingMap(mapStyle) {
-    console.log('initialize');
     var map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/' + mapStyle + '-v9',
@@ -73,8 +71,6 @@ export class MapBoxComponent implements OnInit {
      * a new route is available or route changes
      */ 
     this.mapRouteService.routeSubject.subscribe(geojson => {
-      console.log('subscribe');
-      console.log(geojson);
       //hide ICR layer
       this.map.setLayoutProperty(this.icrLayerID, 'visibility', 'none');
       //check if current route layer exists and remove if exists
@@ -138,8 +134,6 @@ export class MapBoxComponent implements OnInit {
   }
 
   displayGeoJson(geojson: GeoJsonObject, map, layerID) {
-    console.log('displayGeoJson ' + layerID);
-
     map.addLayer({
       id: layerID,
       type: 'line',
