@@ -4,6 +4,7 @@ const fs = require("fs");
 
 const graph = require("../my_modules/graph");
 const ors = require("../my_modules/ors");
+const coordinatesMod = require("../my_modules/coordinates");
 
 router.post("/", async function(req, res, next) {
   /**
@@ -16,8 +17,9 @@ router.post("/", async function(req, res, next) {
       res.json(geoJsonIcr);
     })
     .catch(error => {
-      if (error.message === "out_of_bounds") {
-        res.status(404).send(error);
+      console.log(error);
+      if (error.message === "invalid_user_input") {
+        res.status(412).send(error);
       } else {
         res.status(500).send(error);
       }
@@ -38,12 +40,29 @@ const find_directions = async coordinates => {
   const min_lat = 50.76388473111428;
   const max_lat = 50.914058111020985;
   if (
+    !coordinates ||
+    coordinates.length !== 2 ||
+    coordinates[0].length !== 2 ||
+    coordinates[1].length !== 2 ||
+    isNaN(coordinates[0][0]) ||
+    isNaN(coordinates[0][1]) ||
+    isNaN(coordinates[1][0]) ||
+    isNaN(coordinates[1][1])
+  ) {
+    throw new Error("invalid_user_input");
+  }
+  coordinates[0][0] = String(coordinates[0][0]);
+  coordinates[0][1] = String(coordinates[0][1]);
+  coordinates[1][0] = String(coordinates[1][0]);
+  coordinates[1][1] = String(coordinates[1][1]);
+
+  if (
     coordinates[0][0] < min_long ||
     coordinates[0][0] > max_long ||
     coordinates[1][0] < min_long ||
     coordinates[1][0] > max_long
   ) {
-    throw new Error("out_of_bounds");
+    throw new Error("invalid_user_input");
   }
   if (
     coordinates[0][1] < min_lat ||
@@ -51,9 +70,40 @@ const find_directions = async coordinates => {
     coordinates[1][1] < min_lat ||
     coordinates[1][1] > max_lat
   ) {
-    throw new Error("out_of_bounds");
+    throw new Error("invalid_user_input");
   }
 
+  //checker si source et destination sont les mêmes
+  if (
+    coordinates[0][0] === coordinates[1][0] &&
+    coordinates[0][1] === coordinates[1][1]
+  ) {
+    throw new Error("invalid_user_input");
+  }
+  //checker si distance entre source et
+
+  console.log(
+    "DS" +
+      coordinatesMod.metersBetweenCoordinates(
+        coordinates[0][0],
+        coordinates[0][1],
+        coordinates[1][0],
+        coordinates[1][1]
+      )
+  );
+  if (
+    coordinatesMod.metersBetweenCoordinates(
+      coordinates[0][0],
+      coordinates[0][1],
+      coordinates[1][0],
+      coordinates[1][1]
+    ) < 200
+  ) {
+    let geoJsonShortDistance = await ors.calculate(coordinates);
+    geoJsonShortDistance.features[0].properties.icr = "ors";
+    geoJsonShortDistance.features[0].properties.color = "#0000FF";
+    return geoJsonShortDistance;
+  }
   let json = coordinates;
   console.log(json);
   let startIcr = graph.closestEntryToNetwork(json[0], 400, 6);
