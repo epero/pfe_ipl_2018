@@ -152,13 +152,13 @@ export class MapBoxComponent implements OnInit {
   }
 
   displayICRWithColors(map) {
-    /*this.http
-    .get<GeoJsonObject>("assets/latlong_icr.json")
-    .subscribe(geojson => {this.displayGeoJson(geojson,map,this.icrLayerID)});*/
     this.http
+    .get<GeoJsonObject>("assets/latlong_icr.json")
+    .subscribe(geojson => {this.displayGeoJson(geojson,map,this.icrLayerID)});
+    /*this.http
       .get<any>('assets/icr-with-colors.json')
       .toPromise()
-      .then(geojson => this.displayGeoJson(geojson,map,this.icrLayerID));
+      .then(geojson => this.displayGeoJson(geojson,map,this.icrLayerID));*/
       return map
   }
 }
