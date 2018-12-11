@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { GeoJsonObject } from 'geojson';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MapRouteService } from '../services/map-route.service';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @Component({
   selector: 'app-map-box',
@@ -19,9 +20,12 @@ export class MapBoxComponent implements OnInit {
   startpoint: any;
   endpoint: any;
 
+  locationMarker: any;
+
   constructor(
     private http: HttpClient,
-    private mapRouteService: MapRouteService
+    private mapRouteService: MapRouteService,
+    private geolocation: Geolocation
   ) {
     this.form = new FormGroup({
       mapStyle: new FormControl('basic')
@@ -29,8 +33,10 @@ export class MapBoxComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.icrLayerID = 'all_icr';
     this.routeLayerID = 'route';
+
     mapboxgl.accessToken =
       'pk.eyJ1IjoieGRhcmthIiwiYSI6ImNqcGgxdXBobjByNHUza3BkbGtvMGY2eTUifQ.WuwZ_XI2zNxxObLi6moULg';
 
@@ -42,7 +48,28 @@ export class MapBoxComponent implements OnInit {
     } else {
       this.map = this.initializingMap('light');
     }
+    
+    //GeolocalisationMap
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+          enableHighAccuracy: true
+      },
+      trackUserLocation: true
+    });
+    this.map.addControl(geolocate, 'top-right');
 
+    this.map.on('load', function()
+      {
+        geolocate.trigger();
+      });
+
+    //NavigationMap
+    var nav = new mapboxgl.NavigationControl({
+        showCompass: true,
+        showZoom: false
+    });
+
+    this.map.addControl(nav, 'top-right');
   }
 
   initializingMap(mapStyle) {
@@ -50,7 +77,8 @@ export class MapBoxComponent implements OnInit {
       container: 'map',
       style: 'mapbox://styles/mapbox/' + mapStyle + '-v9',
       zoom: 11,
-      center: [4.3517103, 50.8303396]
+      center: [4.3517103, 50.8603396],
+      showUserLocation: true
     });
 
     //Showing ICR routes
