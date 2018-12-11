@@ -1,48 +1,22 @@
-<div
-  class="directionForm"
-  [ngClass]="{ deployed: deployed, minimised: !deployed }"
->
-  <ng-container *ngIf="deployed; else: minimised">
-    <ion-item (click)="onStartInputClick()"
-      ><ion-searchbar
-        name="startInput"
-        placeholder="Votre adresse de départ"
-        [(ngModel)]="startInput"
-        [value]="startJSON?.label"
-      >
-      </ion-searchbar>
-    </ion-item>
-
-    <ion-item (click)="onEndInputClick()"
-      ><ion-searchbar
-        name="endInput"
-        placeholder="Votre adresse d'arrivée"
-        [(ngModel)]="endInput"
-        [value]="endJSON?.label"
-      ></ion-searchbar
-    ></ion-item>
-
-    <ion-button
-      shape="round"
-      color="primary"
-      fill="outline"
-      id="searchRouteBtn"
-      (click)="onSearchRouteBtnClick()"
+<div class="directionForm">
+  <ion-item
+    ><ion-searchbar
+      name="startInput"
+      placeholder="Votre adresse de départ"
+      [(ngModel)]="startInput"
+      [value]="startJSON?.label"
+      (ionFocus)="onStartInputClick()"
     >
-      Search route
-    </ion-button>
-    <ion-button
-      *ngIf="haveRoute"
-      shape="round"
-      color="danger"
-      fill="outline"
-      id="annulerBtn"
-      (click)="onAnnulerBtnClick()"
-    >
-      Annuler
-    </ion-button>
-  </ng-container>
-  <ng-template #minimised>
-    <ion-button (click)="onChangerBtnClick()"> Changer </ion-button>
-  </ng-template>
+    </ion-searchbar>
+  </ion-item>
+
+  <ion-item
+    ><ion-searchbar
+      name="endInput"
+      placeholder="Votre adresse d'arrivée"
+      [(ngModel)]="endInput"
+      [value]="endJSON?.label"
+      (ionFocus)="onEndInputClick()"
+    ></ion-searchbar
+  ></ion-item>
 </div>
