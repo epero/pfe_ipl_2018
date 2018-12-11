@@ -14,8 +14,16 @@
     </ion-searchbar>
   </ion-item>
   <ion-list name="addrList" ngDefaultControl [(ngModel)]="addrList">
+    <ion-item *ngIf="!position"
+      ><ion-icon name="locate" margin-end></ion-icon>Recherche de votre
+      position...</ion-item
+    >
+    <ion-item *ngIf="position" (click)="onPositionClick()"
+      ><ion-icon name="locate" margin-end></ion-icon
+      >{{ position.label }}</ion-item
+    >
     <ion-item *ngFor="let addr of addrList" (click)="onAddrItemClick(addr)">
-      {{ addr.label }}
+      <ion-label> {{ addr.label }} </ion-label>
     </ion-item>
   </ion-list>
 </ion-content>
