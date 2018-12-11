@@ -44,7 +44,6 @@ export class MapBoxComponent implements OnInit {
       this.map = this.initializingMap('light');
     }
 
-    console.log(this.map);
   }
 
   initializingMap(mapStyle) {
@@ -64,9 +63,15 @@ export class MapBoxComponent implements OnInit {
       mapDiv.style.width = '100%';
       mapCanvas['style'].width = '100%';
       map.resize();
+
+      this.map = this.displayICRWithColors(map);
+
     });
-    this.map = map = this.displayICRWithColors(map);
-    // Display route
+    
+    /**
+     * Subscribe to map-route.service to display route when
+     * a new route is available or route changes
+     */ 
     this.mapRouteService.routeSubject.subscribe(geojson => {
       console.log('subscribe');
       console.log(geojson);
@@ -102,16 +107,24 @@ export class MapBoxComponent implements OnInit {
         longEnd,
         'assets/marker/end.png'
       );
+
+      // Zoom to route
       var coordinates = [[longStart, latStart], [longEnd, latEnd]];
-      var bounds = coordinates.reduce(function(bounds, coord) {
-        return bounds.extend(coord);
-      }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
-      this.map.fitBounds(bounds, {
-        padding: 200
-      });
+      this.zoomToCoordinates(coordinates);
+
     });
 
     return map;
+  }
+
+
+  zoomToCoordinates(coordinates){
+    var bounds = coordinates.reduce(function(bounds, coord) {
+      return bounds.extend(coord);
+    }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+    this.map.fitBounds(bounds, {
+      padding: 200
+    });
   }
 
   addPointToMap(lat: number, long: number, iconUrl: string) {
@@ -147,13 +160,15 @@ export class MapBoxComponent implements OnInit {
   }
 
   displayICRWithColors(map) {
-    /*this.http
-    .get<GeoJsonObject>("assets/latlong_icr.json")
-    .subscribe(geojson => {this.displayGeoJson(geojson,map,this.icrLayerID)});*/
     this.http
       .get<any>('assets/icr-with-colors.json')
       .toPromise()
-      .then(geojson => this.displayGeoJson(geojson, map, this.icrLayerID));
-    return map;
+      .then(geojson => {
+        //if no route has been entered yet, display ICRs
+        if (this.map.getLayer(this.routeLayerID) === undefined) {
+          this.displayGeoJson(geojson,map,this.icrLayerID)
+        }
+      });
+      return map
   }
 }
