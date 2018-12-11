@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { MapRouteService } from '../services/map-route.service';
-import { AddressesService } from '../services/addresses.service';
-import { LoadingController, NavController } from '@ionic/angular';
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { HttpClient } from "@angular/common/http";
+import { MapRouteService } from "../services/map-route.service";
+import { AddressesService } from "../services/addresses.service";
+import { LoadingController, NavController } from "@ionic/angular";
 
 @Component({
-  selector: 'app-direction-form',
-  templateUrl: './direction-form.component.html',
-  styleUrls: ['./direction-form.component.scss']
+  selector: "app-direction-form",
+  templateUrl: "./direction-form.component.html",
+  styleUrls: ["./direction-form.component.scss"]
 })
 export class DirectionFormComponent implements OnInit {
   startInput: String;
@@ -34,11 +34,14 @@ export class DirectionFormComponent implements OnInit {
 
   ngOnInit() {
     this.addressesService.addressSubject.subscribe(addr => {
-      if (addr['start']) {
-        this.startJSON = addr['start'];
+      if (addr["start"]) {
+        this.startJSON = addr["start"];
       }
-      if (addr['end']) {
-        this.endJSON = addr['end'];
+      if (addr["end"]) {
+        this.endJSON = addr["end"];
+      }
+      if (this.startJSON !== undefined && this.endJSON !== undefined) {
+        this.searchRoute();
       }
     });
 
@@ -50,24 +53,22 @@ export class DirectionFormComponent implements OnInit {
   }
 
   onStartInputClick() {
-    this.navController.navigateForward('/search/start', true);
+    this.navController.navigateForward("/search/start", true);
   }
 
   onEndInputClick() {
-    this.navController.navigateForward('/search/end', true);
+    this.navController.navigateForward("/search/end", true);
   }
 
-  onSearchRouteBtnClick() {
+  searchRoute() {
     //send coordinates to backend
-    if (this.startJSON !== undefined && this.endJSON !== undefined) {
-      this.mapRouteService.sendCoordinatesToServer(
-        this.startJSON['x'],
-        this.startJSON['y'],
-        this.endJSON['x'],
-        this.endJSON['y']
-      );
-      this.loaderPromise = this.afficheLoader();
-    }
+    this.mapRouteService.sendCoordinatesToServer(
+      this.startJSON["x"],
+      this.startJSON["y"],
+      this.endJSON["x"],
+      this.endJSON["y"]
+    );
+    this.loaderPromise = this.afficheLoader();
   }
 
   onChangerBtnClick() {
@@ -80,10 +81,10 @@ export class DirectionFormComponent implements OnInit {
 
   async afficheLoader() {
     this.loader = await this.loadingController.create({
-      spinner: 'dots',
-      message: 'Chargement de la route',
+      spinner: "dots",
+      message: "Chargement de la route",
       animated: true,
-      id: 'routeLoader',
+      id: "routeLoader",
       showBackdrop: true,
       translucent: true
     });
