@@ -1,7 +1,6 @@
 var fs = require("fs");
 var irc_2_color = require("./icr_2_color");
-//var obj  = require('../icr-2017-01-01')
-//var obj = require("../latlong_icr.json");
+//let file = require('../icr-2017-01-01')
 let file = require("../geojsons/icr-with-intersections");
 
 const parse = () => {
@@ -9,12 +8,12 @@ const parse = () => {
   //console.log(pathname);
   //let file = require(source_file);
   let features = file.features;
-  for (ii = 0; ii < features.length; ii++) {
-    let feature = features[ii];
-    console.log(feature.properties.icr);
-    let colorr = irc_2_color.find(feature.properties.icr);
-    console.log(colorr);
-    feature.properties["color"] = colorr;
+  for (let index = 0; index < features.length; index++) {
+    let feature = features[index];
+    //console.log(feature.properties.icr);
+    let color = irc_2_color.get(feature.properties.icr);
+    //console.log(colorr);
+    feature.properties["color"] = color;
   }
   //console.log(file);
   //CAREFULL because ASYNC

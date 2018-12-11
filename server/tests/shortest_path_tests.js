@@ -12,7 +12,7 @@ const test2 = require("../geojsons/francois-chapelle-icr-test.json");
 
 beforeEach("Setting up the graph", function() {
   console.log("beforeEach");
-  graph.parse();
+  graph.init();
 });
 
 describe("Rue Timmermans => Avenue Arnold Delvaux Test", function() {

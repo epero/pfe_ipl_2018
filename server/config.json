@@ -1,0 +1,16 @@
+{
+  "error": {
+    "_412": "invalid_user_input"
+  },
+  "map_limits": {
+    "long_min": 4.259079821011285,
+    "long_max": 4.481428372975057,
+    "lat_min": 50.76388473111428,
+    "lat_max": 50.914058111020985
+  },
+  "icr_search": {
+    "min_distance": 200,
+    "range": 400,
+    "precision": 6
+  }
+}

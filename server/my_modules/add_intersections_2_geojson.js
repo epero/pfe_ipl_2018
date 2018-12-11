@@ -1,13 +1,8 @@
 var fs = require("fs");
-//var obj  = require('../icr-2017-01-01')
-//var obj = require("../latlong_icr.json");
 let file = require("../geojsons/icr-2017-01-01");
 const coordinates = require("./coordinates");
 
-const parse = source_file => {
-  //let pathname = `../geojsons/${source_file}`;
-  //console.log(pathname);
-  //file = require(pathname);
+const parse = () => {
   let features = file.features;
   for (ii = 0; ii < features.length; ii++) {
     let feature = features[ii];
@@ -24,7 +19,7 @@ const parse = source_file => {
           );
           if (result) {
             arrayCoordinates.splice(i2 + 1, 0, [result.x, result.y]);
-            console.log("INSERTED : " + result);
+            /*console.log("INSERTED : " + result);
             console.log(
               "BEFORE : " + file.features[ii].geometry.coordinates[i2]
             );
@@ -33,7 +28,7 @@ const parse = source_file => {
             );
             console.log(
               "AFTER : " + file.features[ii].geometry.coordinates[i2 + 2]
-            );
+            );*/
             parse();
           }
         }

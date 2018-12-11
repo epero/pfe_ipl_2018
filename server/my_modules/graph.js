@@ -8,7 +8,7 @@ let sorted_longitudes = null;
 let sorted_latitudes = null;
 let routes = null;
 
-const parse = () => {
+const init = () => {
   graph = {};
   routes = {};
   sorted_longitudes = new Set();
@@ -258,7 +258,7 @@ const path_to_geojson = path => {
     },
     properties: {
       icr: choosenIcr[0],
-      color: irc_2_color.find(choosenIcr[0])
+      color: irc_2_color.get(choosenIcr[0])
     }
   });
   let featuresInd = 1;
@@ -314,7 +314,7 @@ const path_to_geojson = path => {
         },
         properties: {
           icr: choosenIcr[i],
-          color: irc_2_color.find(choosenIcr[i])
+          color: irc_2_color.get(choosenIcr[i])
         }
       });
       featuresInd++;
@@ -484,7 +484,7 @@ const binary_search = (arr, source, regex, coord_type, range) => {
 };
 
 exports.graph = null;
-exports.parse = parse;
+exports.init = init;
 exports.calculate = calculate;
 exports.closestEntryToNetwork = closestEntryToNetwork;
 exports.closestEntryToNetworkSlow = closestEntryToNetworkSlow;

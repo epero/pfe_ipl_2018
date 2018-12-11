@@ -8,8 +8,8 @@ const parse = () => {
     let arrayCoordinates = feature.geometry.coordinates;
     arrayCoordinates.forEach((coordinates, i1) => {
       coordinates.forEach((coordinate, i2) => {
-        console.log(coordinate[0]);
-        console.log(coordinate[1]);
+        //console.log(coordinate[0]);
+        //console.log(coordinate[1]);
         let latlong = bl72ToLatLng(coordinate[0], coordinate[1]);
 
         coordinate[1] = latlong.latitude;
@@ -18,7 +18,7 @@ const parse = () => {
     });
   });
   fs.writeFile(
-    "./latlong_icr.json",
+    "./geojsons/latlong_icr.json",
     JSON.stringify(obj, null, 2),
     "utf-8",
     err => {

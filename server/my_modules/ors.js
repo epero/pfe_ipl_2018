@@ -2,6 +2,7 @@
  * Imports
  */
 const OrsDirections = require("openrouteservice-js/src/OrsDirections");
+const irc_2_color = require("./icr_2_color");
 
 /**
  * Variables
@@ -26,6 +27,8 @@ let calculate = coordinates => {
       instructions: "true"
     })
       .then(json => {
+        json.features[0].properties.icr = "ors";
+        json.features[0].properties.color = irc_2_color.get("ors");
         resolve(json);
       })
       .catch(err => {
