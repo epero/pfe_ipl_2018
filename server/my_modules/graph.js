@@ -1,11 +1,6 @@
-//var geojson  = require('../icr-2017-01-01');
-//var geojson = require('../latlong_icr');
-//var geojson = require('../icr-test-with-intersections')
 var geojson = require("../geojsons/icr-with-colors");
 const irc_2_color = require("./icr_2_color");
 const coordinatesMod = require("./coordinates");
-//const SortedSet = require("collections/sorted-set");
-//const SSet = require("sorted-set");
 
 var fs = require("fs");
 let graph = null;
