@@ -21,28 +21,31 @@ const checkSegmentIntersection = (
       onLine2: false
     };
 
-  //DEJA FAIT => COMMENT???
   if (
     segment_a_end_long === segment_b_start_long &&
     segment_a_end_lat === segment_b_start_lat
-  )
+  ) {
     return result;
+  }
   if (
     segment_b_end_long === segmant_a_start_long &&
     segment_b_end_lat === segment_a_start_lat
-  )
+  ) {
     return result;
+  }
 
   if (
     segmant_a_start_long === segment_b_start_long &&
     segment_a_start_lat === segment_b_start_lat
-  )
+  ) {
     return result;
+  }
   if (
     segment_a_end_long === segment_b_end_long &&
     segment_a_end_lat === segment_b_end_lat
-  )
+  ) {
     return result;
+  }
 
   denominator =
     (segment_b_end_lat - segment_b_start_lat) *
