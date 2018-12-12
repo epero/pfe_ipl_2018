@@ -6,6 +6,8 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { MapRouteService } from '../services/map-route.service';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { MapService } from '../services/map.service';
+import { NetworkCheckService } from '../services/network-check.service';
+import { DisplayAlertService } from '../services/display-alert.service';
 
 @Component({
   selector: 'app-map-box',
@@ -13,20 +15,22 @@ import { MapService } from '../services/map.service';
   styleUrls: ['./map-box.component.scss']
 })
 export class MapBoxComponent implements OnInit {
-  private geojson: GeoJsonObject;
+  //private geojson: GeoJsonObject;
   form: FormGroup;
   map: any;
   icrLayerID: string;
   routeLayerID: string;
   startpoint: any;
   endpoint: any;
-
+  coordinatesBrussels:any;
   locationMarker: any;
 
   constructor(
     private http: HttpClient,
     private mapRouteService: MapRouteService,
-    private mapService: MapService
+    private mapService: MapService,
+    private networkCheckService:NetworkCheckService,
+    private displayAlertService:DisplayAlertService
   ) {
     this.form = new FormGroup({
       mapStyle: new FormControl('basic')
@@ -34,23 +38,38 @@ export class MapBoxComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.networkCheckService.connectedSubject.subscribe(isConnected=>{
+      if(!isConnected) this.displayAlertService.presentAlert("Aucune connexion!","Impossible d'établir une connexion à internet.")
+    });
     this.icrLayerID = 'all_icr';
     this.routeLayerID = 'route';
+    this.coordinatesBrussels=[[4.481428372975057,50.79274292403498],[4.259079821011285,50.8165248694234],[4.415007260283637,50.914058111020985]/*,[4.375405604421133, 50.84326187013847]*/]
 
     mapboxgl.accessToken = this.mapService.TOKEN;
 
     //Display map style according to time
-    this.initializingMap(this.mapService.couleur);
-    this.displayICRWithColors();
+    this.initializingMap(this.mapService.couleur); 
     this.addGeolocalisation();
     this.addNavigation();
 
     this.addResizeSubscription();
     this.addRouteSubscription();
   }
-
+  /**
+   * if icr layer exists show it else create it
+   */
   showICR() {
-    this.map.setLayoutProperty(this.icrLayerID, 'visibility', 'visible');
+    if(this.map.getLayer(this.icrLayerID) !== undefined){
+      this.map.setLayoutProperty(this.icrLayerID, 'visibility', 'visible');
+    }else{
+      this.map.createAndDisplayICRLayer();
+    }
+  }
+
+  displayICROnly(){
+    this.removeRoute();
+    this.showICR();
+    this.zoomToCoordinates(this.coordinatesBrussels,20);
   }
 
   /**
@@ -64,10 +83,12 @@ export class MapBoxComponent implements OnInit {
     if (this.map.getLayer(this.routeLayerID) !== undefined) {
       this.map.removeLayer(this.routeLayerID).removeSource(this.routeLayerID);
     }
+    if (this.startpoint !== undefined) this.startpoint.remove();
+    if (this.endpoint !== undefined) this.endpoint.remove();
   }
 
   addRoute(geojson: GeoJsonObject) {
-    this.displayGeoJson(geojson, this.routeLayerID);
+    this.createAndDisplayGeojsonLayer(geojson, this.routeLayerID);
   }
 
   /**
@@ -80,7 +101,7 @@ export class MapBoxComponent implements OnInit {
       //check if current route layer exists and remove if exists
       this.removeRoute();
       //display new route layer
-      this.displayGeoJson(geojson, this.routeLayerID);
+      this.createAndDisplayGeojsonLayer(geojson, this.routeLayerID);
 
       if (this.startpoint !== undefined) this.startpoint.remove();
       if (this.endpoint !== undefined) this.endpoint.remove();
@@ -97,18 +118,16 @@ export class MapBoxComponent implements OnInit {
       let longEnd = coordinatesLastFeature[lengthLF - 1][0];
       this.startpoint = this.addPointToMap(
         latStart,
-        longStart,
-        '../assets/marker/start.png'
+        longStart
       );
       this.endpoint = this.addPointToMap(
         latEnd,
-        longEnd,
-        'assets/marker/end.png'
+        longEnd
       );
 
       // Zoom to route
       let coordinates = [[longStart, latStart], [longEnd, latEnd]];
-      this.zoomToCoordinates(coordinates);
+      this.zoomToCoordinates(coordinates,100);
     });
   }
 
@@ -164,10 +183,11 @@ export class MapBoxComponent implements OnInit {
 
     this.map.on('load', () => {
       this.resizeMap();
+      this.createAndDisplayICRLayer();
     });
   }
 
-  zoomToCoordinates(coordinates) {
+  zoomToCoordinates(coordinates, padding) {
     /*var bounds = coordinates.reduce(function(bounds, coord) {
       return bounds.extend(coord);
     }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
@@ -175,21 +195,26 @@ export class MapBoxComponent implements OnInit {
       padding: 200
     });*/
     this.map.fitBounds(coordinates, {
-      padding: 100
+      padding: padding
     });
   }
 
-  addPointToMap(lat: number, long: number, iconUrl: string) {
+  addPointToMap(lat: number, long: number) {
     /*let el =document.createElement('div');
-    el.style.backgroundImage=iconUrl;*/
-    let marker = new mapboxgl.Marker(/*el*/)
+    el.className = 'marker';*/
+    let marker = new mapboxgl.Marker()
       .setLngLat([long, lat])
-      //.setColor("red")
       .addTo(this.map);
     return marker;
   }
 
-  displayGeoJson(geojson: GeoJsonObject, layerID) {
+  createAndDisplayGeojsonLayer(geojson: GeoJsonObject, layerID) {
+
+      if(geojson['features'][0].properties.icr === 'ors') {
+        geojson['features'][0].properties.color = 'rgba(255, 255, 255, 0)';
+        geojson['features'][geojson['features'].length-1].properties.color = "rgba(255, 255, 255, 0)"
+      }
+
     this.map.addLayer({
       id: layerID,
       type: 'line',
@@ -203,21 +228,74 @@ export class MapBoxComponent implements OnInit {
       },
       paint: {
         'line-color': ['get', 'color'],
-        'line-width': 2
+        'line-width': 2,
       },
       visibility: 'visible'
     });
+
+    this.displayORSWithDot(geojson);
   }
 
-  displayICRWithColors() {
+  displayORSWithDot(geojson) {
+
+    if(geojson['features'][0].properties.icr === 'ors') {
+        var ors = geojson['features'][0];
+        var ors2 = geojson['features'][geojson['features'].length-1];
+
+    this.map.addLayer({
+      id: 'ors',
+      type: 'line',
+      source: {
+        type: 'geojson',
+        data: ors
+      },
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': 'white',
+        'line-width': 2,
+        'line-dasharray': [0, 2]
+      },
+      visibility: 'visible'
+    });
+
+    this.map.addLayer({
+      id: 'ors2',
+      type: 'line',
+      source: {
+        type: 'geojson',
+        data: ors2
+      },
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': 'white',
+        'line-width': 2,
+        'line-dasharray': [0, 2]
+      },
+      visibility: 'visible'
+    });
+    }
+  }
+
+  createAndDisplayICRLayer() {
+    //if layer with this id exists remove it
+    if(this.map.getLayer(this.icrLayerID)!== undefined){
+      this.map.removeLayer(this.icrLayerID);
+    }
     this.http
       .get<any>('assets/icr-with-colors.json')
       .toPromise()
       .then(geojson => {
         //if no route has been entered yet, display ICRs
         if (this.map.getLayer(this.routeLayerID) === undefined) {
-          this.displayGeoJson(geojson, this.icrLayerID);
+          this.createAndDisplayGeojsonLayer(geojson, this.icrLayerID);
         }
       });
   }
 }
+//exactement exactement

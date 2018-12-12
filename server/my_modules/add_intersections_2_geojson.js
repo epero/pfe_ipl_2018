@@ -1,19 +1,19 @@
 var fs = require("fs");
-//var obj  = require('../icr-2017-01-01')
-//var obj = require("../latlong_icr.json");
-let file = require("../geojsons/icr-2017-01-01");
-const coordinates = require("./coordinates");
+const coordinatesMod = require("./coordinates");
+let file;
 
 const parse = source_file => {
-  //let pathname = `../geojsons/${source_file}`;
-  //console.log(pathname);
-  //file = require(pathname);
+  let pathname;
+  if (source_file) {
+    pathname = `../geojsons/${source_file}`;
+    file = require(pathname);
+  }
   let features = file.features;
-  for (ii = 0; ii < features.length; ii++) {
+  for (let ii = 0; ii < features.length; ii++) {
     let feature = features[ii];
     let arrayCoordinates = feature.geometry.coordinates;
     if (feature.geometry.type === "LineString") {
-      for (i2 = 0; i2 < arrayCoordinates.length; i2++) {
+      for (let i2 = 0; i2 < arrayCoordinates.length; i2++) {
         let coordinate = arrayCoordinates[i2];
         if (arrayCoordinates[i2 + 1]) {
           let result = compare_line_2_lines(
@@ -39,9 +39,9 @@ const parse = source_file => {
         }
       }
     } else {
-      for (i1 = 0; i1 < arrayCoordinates.length; i1++) {
+      for (let i1 = 0; i1 < arrayCoordinates.length; i1++) {
         let coordinates = arrayCoordinates[i1];
-        for (i3 = 0; i3 < coordinates.length; i3++) {
+        for (let i3 = 0; i3 < coordinates.length; i3++) {
           let coordinate = coordinates[i3];
           if (coordinates[i3 + 1]) {
             let result = compare_line_2_lines(
@@ -69,8 +69,7 @@ const parse = source_file => {
       }
     }
   }
-  //ASYNC
-  fs.writeFile(
+  fs.writeFileSync(
     `./geojsons/icr-with-intersections.json`,
     JSON.stringify(file, null, 2),
     "utf-8",
@@ -78,18 +77,19 @@ const parse = source_file => {
       if (err) throw err;
     }
   );
+  return "icr-with-intersections.json";
 };
 
 const compare_line_2_lines = (lineStartX, lineStartY, lineEndX, lineEndY) => {
   let features = file.features;
-  for (iii = 0; iii < features.length; iii++) {
+  for (let iii = 0; iii < features.length; iii++) {
     let feature = features[iii];
     let arrayCoordinates = feature.geometry.coordinates;
     if (feature.geometry.type === "LineString") {
-      for (ii2 = 0; ii2 < arrayCoordinates.length; ii2++) {
+      for (let ii2 = 0; ii2 < arrayCoordinates.length; ii2++) {
         let coordinate = arrayCoordinates[ii2];
         if (arrayCoordinates[ii2 + 1]) {
-          let result = coordinates.checkSegmentIntersection(
+          let result = coordinatesMod.checkSegmentIntersection(
             lineStartX,
             lineStartY,
             lineEndX,
@@ -120,12 +120,21 @@ const compare_line_2_lines = (lineStartX, lineStartY, lineEndX, lineEndY) => {
         }
       }
     } else {
-      for (ii1 = 0; ii1 < arrayCoordinates.length; ii1++) {
+      for (let ii1 = 0; ii1 < arrayCoordinates.length; ii1++) {
         let coordinates = arrayCoordinates[ii1];
-        for (ii3 = 0; ii3 < coordinates.length; ii3++) {
+        for (let ii3 = 0; ii3 < coordinates.length; ii3++) {
           let coordinate = coordinates[ii3];
           if (coordinates[ii3 + 1]) {
-            let result = coordinates.checkSegmentIntersection(
+            /*console.log(
+              coordinate[0] +
+                "- " +
+                coordinate[1] +
+                " - " +
+                coordinates[ii3 + 1][0] +
+                " - " +
+                coordinates[ii3 + 1][1]
+            );*/
+            let result = coordinatesMod.checkSegmentIntersection(
               lineStartX,
               lineStartY,
               lineEndX,

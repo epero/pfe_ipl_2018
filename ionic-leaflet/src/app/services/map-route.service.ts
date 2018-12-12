@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { GeoJsonObject } from 'geojson';
 import { AlertController } from '@ionic/angular';
 import { MapService } from './map.service';
+import { DisplayAlertService } from "./display-alert.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class MapRouteService {
   constructor(
     private httpClient: HttpClient,
     private alertController: AlertController,
-    private mapService: MapService
+    private mapService: MapService,
+    private displayAlertService:DisplayAlertService
   ) {
     this.routeSubject = new Subject<GeoJsonObject>();
   }
@@ -34,13 +36,16 @@ export class MapRouteService {
         this.setRoute(response);
       })
       .catch(error => {
-        console.log(error);
+        //console.log(error);
         switch (error.status) {
-          case 404:
-            this.presentAlert(
-              'Itinéraire non trouvé',
+          case 412:
+            this.displayAlertService.presentAlert(
+              "Itinéraire non trouvé",
               "L'itinéraire introduit n'existe pas ou est en dehors des limites de la zone de recherche."
             );
+            break;
+            case 404:
+              this.displayAlertService.presentAlert("Erreur 404","");
             break;
           default:
             this.presentAlert(

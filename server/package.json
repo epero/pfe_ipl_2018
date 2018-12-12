@@ -7,6 +7,7 @@
     "start": "node bin/www",
     "clean": "rm -rf dist",
     "server": "nodemon bin/www",
+    "geojson": "node scripts/create_working_geojson.js",
     "dev": "cross-env NODE_ENV=development npm run server"
   },
   "dependencies": {

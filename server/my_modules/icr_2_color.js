@@ -1,4 +1,4 @@
-const find = icr => {
+const get = icr => {
   switch (icr) {
     case "1":
     case "1A":
@@ -95,4 +95,4 @@ const find = icr => {
   return color;
 };
 
-exports.find = find;
+exports.get = get;
