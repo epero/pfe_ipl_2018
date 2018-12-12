@@ -1,26 +1,3 @@
-<!--<ion-list class="scroll">
-  <ion-item *ngFor="let step of trajet">
-    <ng-container *ngIf="step.icr; else nonIcr">
-      <ion-label>
-        <app-icr-icon icrName="{{step.icrName}}" color="{{step.color}}"></app-icr-icon>
-        Suivre l'ICR {{step.icrName}}
-        <span *ngIf="step.distance > -1">sur {{step.distance}}m</span>
-      </ion-label>
-    </ng-container>
-    <ng-template #nonIcr>
-      <ion-label>
-        <ng-container *ngIf="step.distance !== 0;else arriver">
-          <app-instruction-type-icon type="{{step.type}}"></app-instruction-type-icon>
-          {{step.name}} sur {{step.distance}}m
-        </ng-container>
-        <ng-template #arriver>
-          {{step.instruction}}
-        </ng-template>
-      </ion-label>
-    </ng-template>
-  </ion-item>
-</ion-list>-->
-
 <div class="scroll">
   <div class="mpl orsa ors" *ngIf="orsa" (click)="onOrsaDivClick()">
     <ng-container *ngIf="orsatoggle; else orsanolist">
@@ -28,7 +5,10 @@
         <ion-item *ngFor="let orsastep of orsa">
           <ng-container *ngIf="orsastep.distance !== 0;else arriverorsa">
             <app-instruction-type-icon type="{{orsastep.type}}"></app-instruction-type-icon>
-            {{orsastep.name}} sur {{orsastep.distance}}m
+            <ion-label class="mpl-label">
+              <h4>{{orsastep.name}}</h4>
+              <p>{{orsastep.distance | distance}} - {{orsastep.duration | duration}}</p>
+            </ion-label>
           </ng-container>
           <ng-template #arriverorsa>
             {{orsastep.instruction}}
@@ -38,7 +18,7 @@
     </ng-container>
     <ng-template #orsanolist>
       <ion-item>
-        <app-instruction-type-icon type="11"></app-instruction-type-icon> Départ : {{depart.name}}
+        <app-instruction-type-icon type="11"></app-instruction-type-icon> Départ {{depart.name}}
       </ion-item>
     </ng-template>
 
@@ -46,8 +26,10 @@
   <div *ngFor="let icr of icrs">
     <div class="mpl icr" [ngStyle]="{'border-color': icr.color}">
       <app-icr-icon icrName="{{icr.icrName}}" color="{{icr.color}}"></app-icr-icon>
-      Suivre l'ICR {{icr.icrName}}
-      <span *ngIf="icr.distance > -1">sur {{icr.distance}}m</span>
+      <ion-label class="mpl-label">
+        <h4>Suivre l'ICR {{icr.icrName}}</h4>
+        <p *ngIf="icr.distance > -1">{{icr.distance | distance}} - {{icr.duration | duration}}</p>
+      </ion-label>
     </div>
   </div>
   <div class="mpl orsb ors" *ngIf="orsb" (click)="onOrsbDivClick()">
@@ -56,7 +38,10 @@
         <ion-item *ngFor="let orsbstep of orsb">
           <ng-container *ngIf="orsbstep.distance !== 0;else arriverorsb">
             <app-instruction-type-icon type="{{orsbstep.type}}"></app-instruction-type-icon>
-            {{orsbstep.name}} sur {{orsbstep.distance}}m
+            <ion-label class="mpl-label">
+              <h4>{{orsbstep.name}}</h4>
+              <p>{{orsbstep.distance | distance}} - {{orsbstep.duration | duration}}</p>
+            </ion-label>
           </ng-container>
           <ng-template #arriverorsb>
             {{orsbstep.instruction}}
@@ -66,7 +51,7 @@
     </ng-container>
     <ng-template #orsbnolist>
       <ion-item>
-        <app-instruction-type-icon type="10"></app-instruction-type-icon> Arriver : {{arriver.name}}
+        <app-instruction-type-icon type="10"></app-instruction-type-icon> Arriver {{arriver.name}}
       </ion-item>
     </ng-template>
   </div>

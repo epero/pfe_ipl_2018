@@ -1,12 +1,13 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Subject } from "rxjs";
-import { GeoJsonObject } from "geojson";
-import { AlertController } from "@ionic/angular";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Subject } from 'rxjs';
+import { GeoJsonObject } from 'geojson';
+import { AlertController } from '@ionic/angular';
+import { MapService } from './map.service';
 import { DisplayAlertService } from "./display-alert.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class MapRouteService {
   routeSubject: Subject<GeoJsonObject>;
@@ -15,6 +16,7 @@ export class MapRouteService {
   constructor(
     private httpClient: HttpClient,
     private alertController: AlertController,
+    private mapService: MapService,
     private displayAlertService:DisplayAlertService
   ) {
     this.routeSubject = new Subject<GeoJsonObject>();
@@ -25,7 +27,7 @@ export class MapRouteService {
 
     return this.httpClient
       .post<GeoJsonObject>(
-        "http://test-dockerfull-env-2.xgpz6fryfk.eu-west-1.elasticbeanstalk.com/api/directions",
+        'http://test-dockerfull-env-2.xgpz6fryfk.eu-west-1.elasticbeanstalk.com/api/directions',
         //"http://localhost:8081/api/directions",
         json
       )
@@ -46,16 +48,25 @@ export class MapRouteService {
               this.displayAlertService.presentAlert("Erreur 404","");
             break;
           default:
-            this.displayAlertService.presentAlert(
-              "Service indisponible !",
-              "Le service est temporairement indisponible, réessayez plus tard."
+            this.presentAlert(
+              'Service indisponible !',
+              'Le service est temporairement indisponible, réessayez plus tard.'
             );
         }
         return error;
       });
   }
 
+  async presentAlert(title, message) {
+    const alert = await this.alertController.create({
+      header: title,
+      message: message,
+      buttons: ['OK']
+    });
 
+    await alert.present();
+    this.mapService.emitResize();
+  }
   setRoute(route: GeoJsonObject) {
     this.route = route;
     this.emitRoute();
