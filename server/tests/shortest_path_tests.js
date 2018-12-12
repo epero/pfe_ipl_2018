@@ -4,11 +4,12 @@ chai.use(chaiAsPromised).should();
 const folder = "./geojsons/";
 const config = require("../config.json");
 const graph = require("../my_modules/graph");
+const config = require("../config.json");
 const test1 = require(folder + config.test._1.file);
 const test2 = require(folder + config.test._2.file);
 
 beforeEach("Setting up the graph", function() {
-  graph.init();
+  graph.convert(config.icr_search.geojson);
 });
 
 describe(config.test._1.description, function() {

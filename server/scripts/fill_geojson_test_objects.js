@@ -1,8 +1,9 @@
 const folder = "./tests/geojsons/";
 const fs = require("fs");
 const graph = require("../my_modules/graph");
+const config = require("../config.json");
 
-graph.init();
+graph.convert(config.icr_search.geojson);
 
 let geoJsonIcr = graph.calculate({
   source_long: 4.338735111116296,

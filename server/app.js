@@ -5,6 +5,8 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const assetPath = require("./asset_path.js");
 
+const config = require("./config.json");
+
 const indexRouter = require("./routes/index");
 const testRouter = require("./routes/test");
 const directionsRouter = require("./routes/directions");
@@ -57,7 +59,7 @@ app.use(function(req, res, next) {
 });
 
 //Set up the icr graph
-graph.init();
+graph.convert(config.icr_search.geojson);
 
 //Set up out api paths
 app.use("/", indexRouter);

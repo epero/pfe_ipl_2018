@@ -1,6 +1,7 @@
 {
   "error": {
-    "_412": "invalid_user_input"
+    "_412": "invalid_user_input",
+    "_501": "Unknown feature type"
   },
   "map_limits": {
     "long_min": 4.259079821011285,
@@ -9,6 +10,7 @@
     "lat_max": 50.914058111020985
   },
   "icr_search": {
+    "geojson": "icr-with-colors",
     "min_distance": 200,
     "range": 400,
     "precision": 6

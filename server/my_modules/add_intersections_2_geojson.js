@@ -1,6 +1,10 @@
-var fs = require("fs");
+const fs = require("fs");
 const coordinatesMod = require("./coordinates");
 let file;
+
+/**
+ * Add missing intersections of icr paths in the geojson
+ */
 
 const parse = source_file => {
   let pathname;
