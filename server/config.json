@@ -12,5 +12,25 @@
     "min_distance": 200,
     "range": 400,
     "precision": 6
+  },
+  "test": {
+    "_1": {
+      "file": "timmer_arnold_icr_test",
+      "source_long": 4.338735111116296,
+      "source_lat": 50.820070369227444,
+      "dest_long": 4.341406007873148,
+      "dest_lat": 50.79994071139812,
+      "description": "Rue Timmermans => Avenue Arnold Delvaux Test",
+      "message": "should let me know that both objects are the same"
+    },
+    "_2": {
+      "file": "francois-chapelle-icr-test",
+      "source_long": 4.418409863814158,
+      "source_lat": 50.83854259432855,
+      "dest_long": 4.449578660453536,
+      "dest_lat": 50.84759308341391,
+      "description": "Francois Gay => Clos Chapelle-aux-champs Test",
+      "message": "should let me know that both objects are the same"
+    }
   }
 }

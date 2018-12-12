@@ -56,9 +56,10 @@ app.use(function(req, res, next) {
   next();
 });
 
-//set up the icr graph
+//Set up the icr graph
 graph.init();
 
+//Set up out api paths
 app.use("/", indexRouter);
 app.use("/api/test", testRouter);
 app.use("/api/directions", directionsRouter);
