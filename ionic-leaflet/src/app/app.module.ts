@@ -10,6 +10,7 @@ import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { HttpClientModule } from "@angular/common/http";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
+import { Network } from "@ionic-native/network/ngx";
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,7 +26,7 @@ import { Geolocation } from "@ionic-native/geolocation/ngx";
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    
+    Network
   ],
   bootstrap: [AppComponent]
 })
