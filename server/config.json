@@ -12,5 +12,14 @@
     "min_distance": 200,
     "range": 400,
     "precision": 6
+  },
+  "ors": {
+    "profile": "cycling-regular",
+    "preference": "recommended",
+    "units": "m",
+    "language": "fr",
+    "format": "geojson",
+    "instructions": "true",
+    "continue_straight": "true"
   }
 }
