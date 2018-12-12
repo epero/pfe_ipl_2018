@@ -1,3 +1,11 @@
+/**
+ * Coordinates module : useful methods
+ */
+
+/**
+ * Check if two segments intersect
+ * Source : https://jsfiddle.net/justin_c_rounds/Gd2S2/light/
+ */
 const checkSegmentIntersection = (
   segmant_a_start_long,
   segment_a_start_lat,
@@ -21,25 +29,28 @@ const checkSegmentIntersection = (
       onLine2: false
     };
 
+  //if the two segments are the same
   if (
     segment_a_end_long === segment_b_start_long &&
     segment_a_end_lat === segment_b_start_lat
   ) {
     return result;
   }
+  //if the first segment is followed by the second segment
   if (
     segment_b_end_long === segmant_a_start_long &&
     segment_b_end_lat === segment_a_start_lat
   ) {
     return result;
   }
-
+  //if the second segment is followed by the first segment
   if (
     segmant_a_start_long === segment_b_start_long &&
     segment_a_start_lat === segment_b_start_lat
   ) {
     return result;
   }
+
   if (
     segment_a_end_long === segment_b_end_long &&
     segment_a_end_lat === segment_b_end_lat
@@ -71,11 +82,7 @@ const checkSegmentIntersection = (
     segmant_a_start_long + a * (segment_a_end_long - segmant_a_start_long);
   result.y =
     segment_a_start_lat + a * (segment_a_end_lat - segment_a_start_lat);
-  /*
-          // it is worth noting that this should be the same as:
-          x = segment_b_start_long + (b * (segment_b_end_long - segment_b_start_long));
-          y = segment_b_start_long + (b * (segment_b_end_lat - segment_b_start_lat));
-          */
+
   // if line1 is a segment and line2 is infinite, they intersect if:
   if (a > 0 && a < 1) {
     result.onLine1 = true;
@@ -88,6 +95,9 @@ const checkSegmentIntersection = (
   return result;
 };
 
+/**
+ * Source :  https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates-shows-wrong
+ */
 const metersBetweenCoordinates = (a_long, a_lat, b_long, b_lat) => {
   var R = 6371; // Radius of the earth in km
   var dLat = deg2radians(a_lat - b_lat); // deg2rad below

@@ -1,18 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const fs = require("fs");
 const config = require("../config");
-const graph = require("../my_modules/graph");
+const shortest_path = require("../my_modules/shortest_path");
+const path_2_geojson = require("../my_modules/path_2_geojson");
+const entry_2_networks = require("../my_modules/entry_2_network");
 const ors = require("../my_modules/ors");
 const coordinatesMod = require("../my_modules/coordinates");
 
 router.post("/", async function(req, res, next) {
-  /**
-   * req.body.coordinates expected format: [[longitude,latitude], [longitude,latitude]]
-   * ex: [[4.353434, 50.850575], [4.450772, 50.849415]]
-   */
-  let json = req.body.coordinates;
-  find_directions(json)
+  find_directions(req.body.coordinates)
     .then(geoJsonIcr => {
       res.json(geoJsonIcr);
     })
@@ -28,10 +24,9 @@ router.post("/", async function(req, res, next) {
 
 const find_directions = async coordinates => {
   /**
-   * req.body.coordinates expected format: [[longitude,latitude], [longitude,latitude]]
+   * coordinates expected format: [[longitude,latitude], [longitude,latitude]]
    * ex: [[4.353434, 50.850575], [4.450772, 50.849415]]
    */
-
   if (
     !coordinates ||
     coordinates.length !== 2 ||
@@ -54,6 +49,9 @@ const find_directions = async coordinates => {
   const min_lat = config.map_limits.lat_min;
   const max_lat = config.map_limits.lat_max;
 
+  /**
+   * coordinates must be within limits of bruxelles
+   */
   if (
     coordinates[0][0] < min_long ||
     coordinates[0][0] > max_long ||
@@ -67,24 +65,20 @@ const find_directions = async coordinates => {
     throw new Error(config.error._412);
   }
 
-  //checker si source et destination sont les mêmes
+  /**
+   * Source and destination can not be the same
+   */
   if (
     coordinates[0][0] === coordinates[1][0] &&
     coordinates[0][1] === coordinates[1][1]
   ) {
     throw new Error(config.error._412);
   }
-  //checker si distance entre source et destination
 
-  /*console.log(
-    "DS" +
-      coordinatesMod.metersBetweenCoordinates(
-        coordinates[0][0],
-        coordinates[0][1],
-        coordinates[1][0],
-        coordinates[1][1]
-      )
-  );*/
+  /**
+   * If distance between source and destination is below a certain distance
+   * then return the path calculated by the ors api
+   */
   if (
     coordinatesMod.metersBetweenCoordinates(
       coordinates[0][0],
@@ -94,93 +88,58 @@ const find_directions = async coordinates => {
     ) < config.icr_search.min_distance
   ) {
     let geoJsonShortDistance = await ors.calculate(coordinates);
-    //geoJsonShortDistance.features[0].properties.icr = "ors";
-    //geoJsonShortDistance.features[0].properties.color = "#0000FF";
     return geoJsonShortDistance;
   }
-  let json = coordinates;
-  //console.log(json);
-  let startIcr = graph.closestEntryToNetwork(
-    json[0],
-    config.icr_search.range,
-    config.icr_search.precision
-  );
-  let endIcr = graph.closestEntryToNetwork(
-    json[1],
-    config.icr_search.range,
-    config.icr_search.precision
-  );
-  //console.log("entry point in icr : " + startIcr.distance);
-  //console.log("exit icr point s: " + endIcr.distance);
-  //let startTest = graph.closestEntryToNetworkSlow(json[0]);
-  //let endTest = graph.closestEntryToNetworkSlow(json[1]);
-  //console.log("entry point TEST in icr : " + startTest.distance);
-  //console.log("exit icr point TEST: " + endTest.distance);
 
-  let geoJsonStart = await ors.calculate([json[0], startIcr.coordinates]);
-  //geoJsonStart = geoJsonStart.features[0];
-  //TODO a mettre dans module ors
-  //geoJsonStart.properties.icr = "ors";
-  //geoJsonStart.properties.color = "#0000FF";
-  let geoJsonEnd = await ors.calculate([endIcr.coordinates, json[1]]);
-  //geoJsonEnd = geoJsonEnd.features[0];
-  //TODO a mettre dans module ors
-  //geoJsonEnd.properties.icr = "ors";
-  //geoJsonEnd.properties.color = "#0000FF";
-  /*console.log(
-    "FOR SHORTEST PATH : " +
-      [
-        startIcr.coordinates[0],
-        startIcr.coordinates[1],
-        endIcr.coordinates[0],
-        endIcr.coordinates[1]
-      ]
-  );*/
-  let geoJsonIcr = graph.calculate({
+  /**
+   * find closest entry to the icr network from the start point
+   */
+  let startIcr = entry_2_networks.closestEntryToNetwork(
+    coordinates[0],
+    config.icr_search.range,
+    config.icr_search.precision
+  );
+  /**
+   * find closest exit from the icr network to the destination point
+   */
+  let endIcr = entry_2_networks.closestEntryToNetwork(
+    coordinates[1],
+    config.icr_search.range,
+    config.icr_search.precision
+  );
+
+  /**
+   * get the ors path : start => icr entry
+   */
+  let geoJsonStart = await ors.calculate([
+    coordinates[0],
+    startIcr.coordinates
+  ]);
+
+  /**
+   * get the ors path :  icr exit => destination
+   */
+  let geoJsonEnd = await ors.calculate([endIcr.coordinates, coordinates[1]]);
+
+  /**
+   * get the shortest path within the icr network
+   */
+  let icr_path = shortest_path.calculate({
     source_long: startIcr.coordinates[0],
     source_lat: startIcr.coordinates[1],
     dest_long: endIcr.coordinates[0],
     dest_lat: endIcr.coordinates[1]
   });
-  //ASYNC
-  /*fs.writeFile(
-    `./geojsons/francois-chapelle-icr-test.json`,
-    JSON.stringify(geoJsonIcr, null, 2),
-    "utf-8",
-    err => {
-      if (err) throw err;
-    }
-  );*/
-  /*fs.writeFile(
-    `./geojsons/timmer_arnold_icr_test.json`,
-    JSON.stringify(geoJsonIcr, null, 2),
-    "utf-8",
-    err => {
-      if (err) throw err;
-    }
-  );*/
-  //res.json(geoJsonIcr);
+  //TODO
+  let geoJsonIcr = path_2_geojson.convert(icr_path);
+  /**
+   * Format accordingly the returning geojson
+   */
   geoJsonIcr.features[0] = geoJsonStart.features[0];
   geoJsonIcr.features.push(geoJsonEnd.features[0]);
-  //ASYNC
-  /*fs.writeFile(
-    `./geojsons/francois-chapelle-test.json`,
-    JSON.stringify(geoJsonIcr, null, 2),
-    "utf-8",
-    err => {
-      if (err) throw err;
-    }
-  );*/
-  //res.json(geoJsonIcr);
-  /*fs.writeFile(
-    `./geojsons/timmer_arnold_test.json`,
-    JSON.stringify(geoJsonIcr, null, 2),
-    "utf-8",
-    err => {
-      if (err) throw err;
-    }
-  );*/
+
   return geoJsonIcr;
 };
+
 module.exports = router;
 module.exports.find_directions = find_directions;

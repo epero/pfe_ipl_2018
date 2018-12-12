@@ -1,6 +1,9 @@
 var bl72ToLatLng = require("bl72tolatlng");
 var fs = require("fs");
 
+/**
+ * Convert the belgian lambert coordinates to longitude /latitude format within a geojson file
+ */
 const parse = source_file => {
   let pathname = `../geojsons/${source_file}`;
   let file = require(pathname);
@@ -9,10 +12,7 @@ const parse = source_file => {
     let arrayCoordinates = feature.geometry.coordinates;
     arrayCoordinates.forEach((coordinates, i1) => {
       coordinates.forEach((coordinate, i2) => {
-        //console.log(coordinate[0]);
-        //console.log(coordinate[1]);
         let latlong = bl72ToLatLng(coordinate[0], coordinate[1]);
-
         coordinate[1] = latlong.latitude;
         coordinate[0] = latlong.longitude;
         console.log(coordinate[1]);
