@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Subject } from 'rxjs';
-import { GeoJsonObject } from 'geojson';
-import { AlertController } from '@ionic/angular';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Subject } from "rxjs";
+import { GeoJsonObject } from "geojson";
+import { AlertController } from "@ionic/angular";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class MapRouteService {
   routeSubject: Subject<GeoJsonObject>;
@@ -34,16 +34,19 @@ export class MapRouteService {
       .catch(error => {
         console.log(error);
         switch (error.status) {
-          case 404:
+          case 412:
             this.presentAlert(
-              'Itinéraire non trouvé',
+              "Itinéraire non trouvé",
               "L'itinéraire introduit n'existe pas ou est en dehors des limites de la zone de recherche."
             );
             break;
+          case 404:
+            this.presentAlert("Erreur 404", "");
+            break;
           default:
             this.presentAlert(
-              'Service indisponible !',
-              'Le service est temporairement indisponible, réessayez plus tard.'
+              "Service indisponible !",
+              "Le service est temporairement indisponible, réessayez plus tard."
             );
         }
         return error;
@@ -54,7 +57,7 @@ export class MapRouteService {
     const alert = await this.alertController.create({
       header: title,
       message: message,
-      buttons: ['OK']
+      buttons: ["OK"]
     });
 
     await alert.present();
