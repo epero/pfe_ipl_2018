@@ -28,22 +28,22 @@ export class SearchInputPage implements OnInit {
     private mapService: MapService
   ) {}
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     this.searchbar.setFocus();
   }
 
+  ionViewWillEnter() {
+    this.mapService.positionSubject.subscribe(position => {
+      this.setPosition(position);
+    });
+  }
+
   ngOnInit() {
-    console.log("ngOnInit()");
     this.addrList = [];
     this.slug = this.route.snapshot.paramMap.get("id");
     this.point = this.slug === "start" ? "de départ" : "d'arrivée";
-
     if (this.mapService.hasPosition()) {
       this.setPosition(this.mapService.getPosition());
-    } else {
-      this.mapService.positionSubject.subscribe(position => {
-        this.setPosition(position);
-      });
     }
     if (this.addressesService.address[this.slug]) {
       let addr = this.addressesService.address[this.slug];
