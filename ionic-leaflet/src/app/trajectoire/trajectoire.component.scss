@@ -6,6 +6,8 @@
 .mpl {
   margin-left: 20px;
   padding-left: 10px;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
 .ors {
@@ -13,6 +15,12 @@
 }
 
 .icr {
-  padding-top: 10px;
   border-left: 5px solid;
+}
+
+.mpl-label {
+  display: inline-block;
+  height: 50px;
+  vertical-align: middle;
+  padding-left: 10px;
 }

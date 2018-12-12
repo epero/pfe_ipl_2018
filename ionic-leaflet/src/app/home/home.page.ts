@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
 import { MapService } from '../services/map.service';
+import { DrawerService } from '../services/drawer.service';
 
 @Component({
   selector: 'app-home',
@@ -9,13 +9,16 @@ import { MapService } from '../services/map.service';
 })
 export class HomePage implements OnInit {
   constructor(
-    private modalController: ModalController,
-    private mapService: MapService
+    private mapService: MapService,
+    private drawerService: DrawerService
   ) {}
 
   ngOnInit() {}
 
   ionViewDidEnter() {
     this.mapService.emitResize();
+    this.drawerService.toolbarHeight = document.getElementById(
+      'appheader'
+    ).clientHeight;
   }
 }

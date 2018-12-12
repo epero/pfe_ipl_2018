@@ -34,5 +34,14 @@
       "description": "Francois Gay => Clos Chapelle-aux-champs Test",
       "message": "should let me know that both objects are the same"
     }
+  },
+  "ors": {
+    "profile": "cycling-regular",
+    "preference": "recommended",
+    "units": "m",
+    "language": "fr",
+    "format": "geojson",
+    "instructions": "true",
+    "continue_straight": "true"
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import 'hammerjs';
+import { DrawerService } from '../services/drawer.service';
 
 @Component({
   selector: 'app-swipe-up-drawer',
@@ -14,7 +15,7 @@ export class SwipeUpDrawerComponent implements OnInit {
   test: any;
   position: string;
 
-  constructor() {}
+  constructor(private drawerService: DrawerService) {}
 
   ngOnInit() {
     this.position = 'down';
@@ -32,9 +33,9 @@ export class SwipeUpDrawerComponent implements OnInit {
     });
     this.test.on('pan', e => {
       this.windowHeight = window.innerHeight;
-      let y = e.center.y;
+      let y = e.center.y - this.drawerService.toolbarHeight;
       y = y < 0 ? 0 : y;
-      if (y > this.windowHeight - 50) {
+      if (y > this.windowHeight - 50 - this.drawerService.toolbarHeight) {
         this.setDrawer('down');
         return;
       }

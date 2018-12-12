@@ -33,6 +33,8 @@ export class TrajectoireComponent implements OnInit {
     this.mapRouteService.routeSubject.subscribe(route => {
       const features = route['features'];
       this.icrs = [];
+      this.orsa = null;
+      this.orsb = null;
       for (let i = 0; i < features.length; i++) {
         const feature = features[i];
         if (feature.id) {
@@ -46,13 +48,12 @@ export class TrajectoireComponent implements OnInit {
             distance: feature['properties']['distance'],
             icr: true,
             icrName: feature['properties']['icr'],
-            color: feature['properties']['color']
+            color: feature['properties']['color'],
+            duration: feature['properties']['duration'] * 60
           };
           this.icrs.push(obj);
         }
       }
-      console.log(this.depart);
-      console.log(this.arriver);
     });
   }
 

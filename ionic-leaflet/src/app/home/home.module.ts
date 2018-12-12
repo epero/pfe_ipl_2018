@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -16,6 +16,8 @@ import { TrajectoireComponent } from '../trajectoire/trajectoire.component';
 import { MapBoxComponent } from '../map-box/map-box.component';
 import { IcrIconComponent } from '../icr-icon/icr-icon.component';
 import { InstructionTypeIconComponent } from '../instruction-type-icon/instruction-type-icon.component';
+import { DistancePipe } from '../pipes/distance.pipe';
+import { DurationPipe } from '../pipes/duration.pipe';
 
 @NgModule({
   imports: [
@@ -40,8 +42,10 @@ import { InstructionTypeIconComponent } from '../instruction-type-icon/instructi
     MapBoxComponent,
     TrajectoireComponent,
     IcrIconComponent,
-    InstructionTypeIconComponent
+    InstructionTypeIconComponent,
+    DistancePipe,
+    DurationPipe
   ],
-  providers: [Geolocation]
+  providers: [Geolocation, DecimalPipe]
 })
 export class HomePageModule {}

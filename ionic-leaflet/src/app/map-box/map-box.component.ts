@@ -6,6 +6,8 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { MapRouteService } from '../services/map-route.service';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { MapService } from '../services/map.service';
+import { NetworkCheckService } from '../services/network-check.service';
+import { DisplayAlertService } from '../services/display-alert.service';
 
 @Component({
   selector: 'app-map-box',
@@ -13,7 +15,7 @@ import { MapService } from '../services/map.service';
   styleUrls: ['./map-box.component.scss']
 })
 export class MapBoxComponent implements OnInit {
-  private geojson: GeoJsonObject;
+  //private geojson: GeoJsonObject;
   form: FormGroup;
   map: any;
   icrLayerID: string;
@@ -26,7 +28,9 @@ export class MapBoxComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private mapRouteService: MapRouteService,
-    private mapService: MapService
+    private mapService: MapService,
+    private networkCheckService:NetworkCheckService,
+    private displayAlertService:DisplayAlertService
   ) {
     this.form = new FormGroup({
       mapStyle: new FormControl('basic')
@@ -34,9 +38,12 @@ export class MapBoxComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.networkCheckService.connectedSubject.subscribe(isConnected=>{
+      if(!isConnected) this.displayAlertService.presentAlert("Aucune connexion!","Impossible d'établir une connexion à internet.")
+    });
     this.icrLayerID = 'all_icr';
     this.routeLayerID = 'route';
-  this.coordinatesBrussels=[[4.481428372975057,50.79274292403498],[4.259079821011285,50.8165248694234],[4.415007260283637,50.914058111020985]/*,[4.375405604421133, 50.84326187013847]*/]
+    this.coordinatesBrussels=[[4.481428372975057,50.79274292403498],[4.259079821011285,50.8165248694234],[4.415007260283637,50.914058111020985]/*,[4.375405604421133, 50.84326187013847]*/]
 
     mapboxgl.accessToken = this.mapService.TOKEN;
 
@@ -111,13 +118,11 @@ export class MapBoxComponent implements OnInit {
       let longEnd = coordinatesLastFeature[lengthLF - 1][0];
       this.startpoint = this.addPointToMap(
         latStart,
-        longStart,
-        '../assets/marker/start.png'
+        longStart
       );
       this.endpoint = this.addPointToMap(
         latEnd,
-        longEnd,
-        'assets/marker/end.png'
+        longEnd
       );
 
       // Zoom to route
@@ -194,17 +199,22 @@ export class MapBoxComponent implements OnInit {
     });
   }
 
-  addPointToMap(lat: number, long: number, iconUrl: string) {
+  addPointToMap(lat: number, long: number) {
     /*let el =document.createElement('div');
-    el.style.backgroundImage=iconUrl;*/
-    let marker = new mapboxgl.Marker(/*el*/)
+    el.className = 'marker';*/
+    let marker = new mapboxgl.Marker()
       .setLngLat([long, lat])
-      //.setColor("red")
       .addTo(this.map);
     return marker;
   }
 
   createAndDisplayGeojsonLayer(geojson: GeoJsonObject, layerID) {
+
+      if(geojson['features'][0].properties.icr === 'ors') {
+        geojson['features'][0].properties.color = 'rgba(255, 255, 255, 0)';
+        geojson['features'][geojson['features'].length-1].properties.color = "rgba(255, 255, 255, 0)"
+      }
+
     this.map.addLayer({
       id: layerID,
       type: 'line',
@@ -218,10 +228,58 @@ export class MapBoxComponent implements OnInit {
       },
       paint: {
         'line-color': ['get', 'color'],
-        'line-width': 2
+        'line-width': 2,
       },
       visibility: 'visible'
     });
+
+    this.displayORSWithDot(geojson);
+  }
+
+  displayORSWithDot(geojson) {
+
+    if(geojson['features'][0].properties.icr === 'ors') {
+        var ors = geojson['features'][0];
+        var ors2 = geojson['features'][geojson['features'].length-1];
+
+    this.map.addLayer({
+      id: 'ors',
+      type: 'line',
+      source: {
+        type: 'geojson',
+        data: ors
+      },
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': 'white',
+        'line-width': 2,
+        'line-dasharray': [0, 2]
+      },
+      visibility: 'visible'
+    });
+
+    this.map.addLayer({
+      id: 'ors2',
+      type: 'line',
+      source: {
+        type: 'geojson',
+        data: ors2
+      },
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': 'white',
+        'line-width': 2,
+        'line-dasharray': [0, 2]
+      },
+      visibility: 'visible'
+    });
+    }
   }
 
   createAndDisplayICRLayer() {
