@@ -56,7 +56,6 @@ export class SearchInputPage implements OnInit {
         this.addrList.forEach(addr => {
           this.parseAddress(addr);
         });
-        console.log(this.addrList);
       });
     }
   }
@@ -70,7 +69,10 @@ export class SearchInputPage implements OnInit {
   }
 
   onInputClear() {
+    this.addrList = [];
+    this.input = "";
     this.addressesService.setAddress(this.slug, undefined);
+    this.searchbar.setFocus();
   }
 
   onAddrItemClick(addr: JSON) {
@@ -89,7 +91,7 @@ export class SearchInputPage implements OnInit {
   }
 
   navigateBack() {
-    this.navController.navigateBack("/home", true);
+    this.navController.navigateBack("/home", false);
   }
 
   parseAddress(addr) {
