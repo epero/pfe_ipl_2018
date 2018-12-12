@@ -1,3 +1,7 @@
+/**
+ * Returns the color of an icr
+ */
+
 const get = icr => {
   switch (icr) {
     case "1":
