@@ -24,8 +24,7 @@ import { Geolocation } from "@ionic-native/geolocation/ngx";
     Geolocation,
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
 })

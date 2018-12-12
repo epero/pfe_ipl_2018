@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { Geolocation, Geoposition } from "@ionic-native/geolocation/ngx";
+import { Platform } from "@ionic/angular";
 
 @Injectable({
   providedIn: "root"
@@ -13,7 +14,7 @@ export class MapService {
   positionSubject: Subject<Geoposition>;
   position: Geoposition;
 
-  constructor(private geoloc: Geolocation) {
+  constructor(private geolocation: Geolocation, private platform: Platform) {
     this.TOKEN =
       "pk.eyJ1IjoieGRhcmthIiwiYSI6ImNqcGgxdXBobjByNHUza3BkbGtvMGY2eTUifQ.WuwZ_XI2zNxxObLi6moULg";
 
@@ -26,22 +27,27 @@ export class MapService {
 
     this.resizeSubject = new Subject<any>();
     this.positionSubject = new Subject<Geoposition>();
-    this.geoloc
-      .getCurrentPosition({ enableHighAccuracy: true })
-      .then(position => {
-        this.position = position;
-        this.watchLocation();
-      })
-      .catch(err => console.log("Localisation inactive"));
+    platform.ready().then(() => {
+      this.geolocation
+        .getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        })
+        .then(pos => {
+          this.position = pos;
+          this.watch();
+        });
+    });
   }
 
   emitResize() {
     this.resizeSubject.next(1);
   }
 
-  watchLocation() {
-    this.geoloc.watchPosition().subscribe(position => {
-      this.position = position;
+  watch() {
+    this.geolocation.watchPosition().subscribe(pos => {
+      this.position = pos;
       this.emitPosition();
     });
   }
