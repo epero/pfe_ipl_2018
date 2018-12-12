@@ -205,6 +205,12 @@ export class MapBoxComponent implements OnInit {
   }
 
   createAndDisplayGeojsonLayer(geojson: GeoJsonObject, layerID) {
+
+      if(geojson['features'][0].properties.icr === 'ors') {
+        geojson['features'][0].properties.color = 'rgba(255, 255, 255, 0)';
+        geojson['features'][geojson['features'].length-1].properties.color = "rgba(255, 255, 255, 0)"
+      }
+
     this.map.addLayer({
       id: layerID,
       type: 'line',
@@ -218,10 +224,58 @@ export class MapBoxComponent implements OnInit {
       },
       paint: {
         'line-color': ['get', 'color'],
-        'line-width': 2
+        'line-width': 2,
       },
       visibility: 'visible'
     });
+
+    this.displayORSWithDot(geojson);
+  }
+
+  displayORSWithDot(geojson) {
+
+    if(geojson['features'][0].properties.icr === 'ors') {
+        var ors = geojson['features'][0];
+        var ors2 = geojson['features'][geojson['features'].length-1];
+
+    this.map.addLayer({
+      id: 'ors',
+      type: 'line',
+      source: {
+        type: 'geojson',
+        data: ors
+      },
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': 'white',
+        'line-width': 2,
+        'line-dasharray': [0, 2]
+      },
+      visibility: 'visible'
+    });
+
+    this.map.addLayer({
+      id: 'ors2',
+      type: 'line',
+      source: {
+        type: 'geojson',
+        data: ors2
+      },
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': 'white',
+        'line-width': 2,
+        'line-dasharray': [0, 2]
+      },
+      visibility: 'visible'
+    });
+    }
   }
 
   createAndDisplayICRLayer() {
