@@ -8,6 +8,8 @@ import { DrawerService } from '../services/drawer.service';
   styleUrls: ['home.page.scss']
 })
 export class HomePage implements OnInit {
+  interval: number;
+
   constructor(
     private mapService: MapService,
     private drawerService: DrawerService
@@ -17,8 +19,13 @@ export class HomePage implements OnInit {
 
   ionViewDidEnter() {
     setTimeout(() => this.mapService.emitResize(), 500);
-    this.drawerService.toolbarHeight = document.getElementById(
-      'appheader'
-    ).clientHeight;
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+    this.interval = setInterval(() => {
+      this.drawerService.toolbarHeight = document.getElementById(
+        'appheader'
+      ).clientHeight;
+    }, 500);
   }
 }
