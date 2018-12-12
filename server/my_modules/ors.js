@@ -3,6 +3,7 @@
  */
 const OrsDirections = require("openrouteservice-js/src/OrsDirections");
 const irc_2_color = require("./icr_2_color");
+const config = require("../config");
 
 /**
  * Variables
@@ -19,12 +20,13 @@ let calculate = coordinates => {
   return new Promise((resolve, reject) => {
     Directions.calculate({
       coordinates: coordinates,
-      profile: "cycling-regular",
-      preference: "recommended",
-      units: "m",
-      language: "fr", //TODO change according to user language
-      format: "geojson", // TODO change accordingly
-      instructions: "true"
+      profile: config.ors.profile,
+      preference: config.ors.preference,
+      units: config.ors.units,
+      language: config.ors.language,
+      format: config.ors.format,
+      instructions: config.ors.instructions,
+      continue_straight: config.ors.continue_straight
     })
       .then(json => {
         json.features[0].properties.icr = "ors";
