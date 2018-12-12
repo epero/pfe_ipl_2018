@@ -23,8 +23,8 @@ export class MapRouteService {
 
     return this.httpClient
       .post<GeoJsonObject>(
-        //"http://test-dockerfull-env-2.xgpz6fryfk.eu-west-1.elasticbeanstalk.com/api/ors-directions",
-        "http://localhost:8081/api/directions",
+        "http://test-dockerfull-env-2.xgpz6fryfk.eu-west-1.elasticbeanstalk.com/api/directions",
+        //"http://localhost:8081/api/directions",
         json
       )
       .toPromise()
@@ -34,11 +34,14 @@ export class MapRouteService {
       .catch(error => {
         console.log(error);
         switch (error.status) {
-          case 404:
+          case 412:
             this.presentAlert(
               "Itinéraire non trouvé",
               "L'itinéraire introduit n'existe pas ou est en dehors des limites de la zone de recherche."
             );
+            break;
+            case 404:
+              this.presentAlert("Erreur 404","");
             break;
           default:
             this.presentAlert(
