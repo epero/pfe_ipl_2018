@@ -9,7 +9,7 @@ const test2 = require("../geojsons/francois-chapelle-test.json");
 
 beforeEach("Setting up the graph", function() {
   console.log("beforeEach");
-  graph.parse();
+  graph.init();
 });
 
 for (let index = 1; index < test1.features.length - 1; index++) {

@@ -33,12 +33,10 @@ export class SearchInputPage implements OnInit {
   }
 
   ngOnInit() {
+    console.log("ngOnInit()");
     this.addrList = [];
     this.slug = this.route.snapshot.paramMap.get("id");
     this.point = this.slug === "start" ? "de départ" : "d'arrivée";
-    if (this.addressesService.address[this.slug]) {
-      this.input = this.addressesService.address[this.slug].label;
-    }
 
     if (this.mapService.hasPosition()) {
       this.setPosition(this.mapService.getPosition());
@@ -46,6 +44,13 @@ export class SearchInputPage implements OnInit {
       this.mapService.positionSubject.subscribe(position => {
         this.setPosition(position);
       });
+    }
+    if (this.addressesService.address[this.slug]) {
+      let addr = this.addressesService.address[this.slug];
+      this.input = addr.label;
+      if (addr.label !== "Votre position") {
+        this.addrList.push(addr);
+      }
     }
   }
 
@@ -56,7 +61,6 @@ export class SearchInputPage implements OnInit {
         this.addrList.forEach(addr => {
           this.parseAddress(addr);
         });
-        console.log(this.addrList);
       });
     }
   }
@@ -70,7 +74,10 @@ export class SearchInputPage implements OnInit {
   }
 
   onInputClear() {
+    this.addrList = [];
+    this.input = "";
     this.addressesService.setAddress(this.slug, undefined);
+    this.searchbar.setFocus();
   }
 
   onAddrItemClick(addr: JSON) {
@@ -89,7 +96,7 @@ export class SearchInputPage implements OnInit {
   }
 
   navigateBack() {
-    this.navController.navigateBack("/home", true);
+    this.navController.navigateBack("/home", false);
   }
 
   parseAddress(addr) {

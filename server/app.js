@@ -1,7 +1,6 @@
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
-const fs = require("fs");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const assetPath = require("./asset_path.js");
@@ -10,10 +9,7 @@ const indexRouter = require("./routes/index");
 const testRouter = require("./routes/test");
 const directionsRouter = require("./routes/directions");
 
-//const bl72_parseur = require('./my_modules/bl72_parseur');
 const graph = require("./my_modules/graph");
-//const add_intersections_2_geojson = require("./my_modules/add_intersections_2_geojson");
-const add_colors_2_geojson = require("./my_modules/add_colors_2_geojson");
 
 const projectRoot = path.join(__dirname, "../..");
 const serverRoot = path.join(__dirname, ".");
@@ -32,8 +28,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "../../dist")));
 
-//TODO chargement graphe en mémoire
-//bl72_parseur.parse()
 app.use(function(req, res, next) {
   // Website you wish to allow to connect
   let allowedOrigins = ["http://localhost:8080", "http://localhost:8100"];
@@ -62,10 +56,8 @@ app.use(function(req, res, next) {
   next();
 });
 
-//add_intersections_2_geojson.parse();
-//add_colors_2_geojson.parse();
-
-graph.parse();
+//set up the icr graph
+graph.init();
 
 app.use("/", indexRouter);
 app.use("/api/test", testRouter);
