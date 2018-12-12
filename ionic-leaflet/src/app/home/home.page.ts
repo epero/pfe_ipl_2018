@@ -16,7 +16,7 @@ export class HomePage implements OnInit {
   ngOnInit() {}
 
   ionViewDidEnter() {
-    this.mapService.emitResize();
+    setTimeout(() => this.mapService.emitResize(), 500);
     this.drawerService.toolbarHeight = document.getElementById(
       'appheader'
     ).clientHeight;
