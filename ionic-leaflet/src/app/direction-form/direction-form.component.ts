@@ -34,12 +34,9 @@ export class DirectionFormComponent implements OnInit {
 
   ngOnInit() {
     this.addressesService.addressSubject.subscribe(addr => {
-      if (addr["start"]) {
-        this.startJSON = addr["start"];
-      }
-      if (addr["end"]) {
-        this.endJSON = addr["end"];
-      }
+      this.startJSON = addr["start"];
+      this.endJSON = addr["end"];
+
       if (this.startJSON !== undefined && this.endJSON !== undefined) {
         this.searchRoute();
       }
@@ -62,12 +59,14 @@ export class DirectionFormComponent implements OnInit {
 
   searchRoute() {
     //send coordinates to backend
-    this.mapRouteService.sendCoordinatesToServer(
-      this.startJSON["x"],
-      this.startJSON["y"],
-      this.endJSON["x"],
-      this.endJSON["y"]
-    ).then(()=>this.removeLoader());
+    this.mapRouteService
+      .sendCoordinatesToServer(
+        this.startJSON["x"],
+        this.startJSON["y"],
+        this.endJSON["x"],
+        this.endJSON["y"]
+      )
+      .then(() => this.removeLoader());
     this.loaderPromise = this.afficheLoader();
   }
 

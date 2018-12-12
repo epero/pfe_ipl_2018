@@ -1,22 +1,24 @@
 <div class="directionForm">
-  <ion-item
-    ><ion-searchbar
-      name="startInput"
-      placeholder="Votre adresse de départ"
-      [(ngModel)]="startInput"
-      [value]="startJSON?.label"
-      (ionFocus)="onStartInputClick()"
-    >
-    </ion-searchbar>
-  </ion-item>
+  <ion-header>
+    <ion-toolbar>
+      <ion-searchbar
+        search-icon="radio-button-on"
+        name="startInput"
+        placeholder="Votre adresse de départ"
+        [(ngModel)]="startInput"
+        [value]="startJSON?.label"
+        (ionFocus)="onStartInputClick()"
+      >
+      </ion-searchbar>
 
-  <ion-item
-    ><ion-searchbar
-      name="endInput"
-      placeholder="Votre adresse d'arrivée"
-      [(ngModel)]="endInput"
-      [value]="endJSON?.label"
-      (ionFocus)="onEndInputClick()"
-    ></ion-searchbar
-  ></ion-item>
+      <ion-searchbar
+        search-icon="pin"
+        name="endInput"
+        placeholder="Votre adresse d'arrivée"
+        [(ngModel)]="endInput"
+        [value]="endJSON?.label"
+        (ionFocus)="onEndInputClick()"
+      ></ion-searchbar>
+    </ion-toolbar>
+  </ion-header>
 </div>
