@@ -2,8 +2,9 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button item-start text="" defaultHref="home"></ion-back-button>
+      <ion-button> <ion-icon name="search"></ion-icon> </ion-button>
     </ion-buttons>
-    <ion-searchbar
+    <ion-input
       #searchbar
       name="input"
       placeholder="Votre adresse {{point}}"
@@ -14,7 +15,7 @@
       (ionClear)="onInputClear()"
       debounce="250"
     >
-    </ion-searchbar>
+    </ion-input>
   </ion-toolbar>
 </ion-header>
 <ion-content>
