@@ -1,6 +1,7 @@
 var geojson = require("../geojsons/icr-with-colors");
 const irc_2_color = require("./icr_2_color");
 const coordinatesMod = require("./coordinates");
+const binary_heap = require("./binary_heap");
 
 var fs = require("fs");
 let graph = null;
@@ -142,6 +143,14 @@ const coordinates_2_graph = (icr, coordinates) => {
 const calculate = coordinates => {
   let distances = new Map();
   let etiqProv = new Set();
+
+  /*binary_heap.init((a, b) => {
+    console.log("lalala");
+    if (distances[a] === distances[b]) return a - b;
+    if (distances[a] - distances[b] < 0) return true;
+    return false;
+  });*/
+
   let etiqDef = new Set();
   let arbre = new Map();
 
@@ -161,12 +170,15 @@ const calculate = coordinates => {
         if (!etiqProv.has(currentDestination)) {
           distances[currentDestination] = currentDistance;
           etiqProv.add(currentDestination);
-          //heap.push(currentDestination);
+
+          //binary_heap.insert(currentDestination);
 
           arbre.set(currentDestination, current);
         } else if (distances[currentDestination] > currentDistance) {
           distances[currentDestination] = currentDistance;
           etiqProv.add(currentDestination);
+
+          //binary_heap.insert(currentDestination);
 
           arbre.set(currentDestination, current);
         }
@@ -188,6 +200,23 @@ const calculate = coordinates => {
       }
     }
     current = min;
+    /*console.log("checkst");
+    while (!binary_heap.isEmpty()) {
+      console.log("mah : " + distances[binary_heap.delMax()]);
+    }
+    console.log("checkend");*/
+
+    //let currBis = binary_heap.delMax();
+
+    /*while (etiqDef.has(currBis)) {
+      console.log("DELETE");
+      currBis = binary_heap.delMax();
+    }*/
+    //console.log("CURRENT : " + current);
+    //console.log("CURRENT DIS : " + distances[current]);
+    //console.log("CURRBISS : " + currBis);
+
+    //console.log("CURRBISS DIS : " + distances[currBis]);
     //current = sorted[0];
     etiqProv.delete(current);
     etiqDef.add(current);

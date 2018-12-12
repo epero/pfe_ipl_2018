@@ -7,8 +7,8 @@ var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised).should();
 
 const graph = require("../my_modules/graph");
-const test1 = require("../geojsons/timmer_arnold_icr_test");
-const test2 = require("../geojsons/francois-chapelle-icr-test.json");
+const test1 = require("./geojsons/timmer_arnold_icr_test");
+const test2 = require("./geojsons/francois-chapelle-icr-test.json");
 
 beforeEach("Setting up the graph", function() {
   console.log("beforeEach");
