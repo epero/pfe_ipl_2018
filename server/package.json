@@ -8,6 +8,7 @@
     "clean": "rm -rf dist",
     "server": "nodemon bin/www",
     "geojson": "node scripts/create_working_geojson.js",
+    "init_test": "node scripts/fill_geojson_test_objects.js",
     "dev": "cross-env NODE_ENV=development npm run server"
   },
   "dependencies": {

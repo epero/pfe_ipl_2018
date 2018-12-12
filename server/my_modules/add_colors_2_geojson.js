@@ -1,6 +1,9 @@
-var fs = require("fs");
-var irc_2_color = require("./icr_2_color");
+const fs = require("fs");
+const irc_2_color = require("./icr_2_color");
 
+/**
+ * Add an appropriate color proprety to each feature in the geojson
+ */
 const parse = source_file => {
   let pathname = `../geojsons/${source_file}`;
   let file = require(pathname);

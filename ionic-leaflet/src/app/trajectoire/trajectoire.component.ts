@@ -31,6 +31,16 @@ export class TrajectoireComponent implements OnInit {
 
   ngOnInit() {
     this.mapRouteService.routeSubject.subscribe(route => {
+      if (route === null) {
+        this.orsa = null;
+        this.orsb = null;
+        this.icrs = [];
+        this.depart = {};
+        this.arriver = {};
+        this.orsatoggle = false;
+        this.orsbtoggle = false;
+        return;
+      }
       const features = route['features'];
       this.icrs = [];
       this.orsa = null;
