@@ -9,7 +9,8 @@
     "server": "nodemon bin/www",
     "geojson": "node scripts/create_working_geojson.js",
     "init_test": "node scripts/fill_geojson_test_objects.js",
-    "dev": "cross-env NODE_ENV=development npm run server"
+    "dev": "cross-env NODE_ENV=development npm run server",
+    "test": "mocha tests/*"
   },
   "dependencies": {
     "bl72tolatlng": "^1.0.1",
