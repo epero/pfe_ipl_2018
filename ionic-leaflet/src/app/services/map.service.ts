@@ -18,12 +18,7 @@ export class MapService {
     this.TOKEN =
       "pk.eyJ1IjoieGRhcmthIiwiYSI6ImNqcGgxdXBobjByNHUza3BkbGtvMGY2eTUifQ.WuwZ_XI2zNxxObLi6moULg";
 
-    const n = new Date().getHours();
-    if (n >= 18 || n <= 6) {
-      this.couleur = "dark";
-    } else {
-      this.couleur = "light";
-    }
+    this.couleur = "light";
 
     this.resizeSubject = new Subject<any>();
     this.positionSubject = new Subject<Geoposition>();
