@@ -218,9 +218,8 @@ export class MapBoxComponent implements OnInit {
   createAndDisplayGeojsonLayer(geojson: GeoJsonObject, layerID) {
     if (geojson === null) return;
     if (geojson['features'][0].properties.icr === 'ors') {
-      geojson['features'][0].properties.color = 'rgba(255, 255, 255, 0)';
-      geojson['features'][geojson['features'].length - 1].properties.color =
-        'rgba(255, 255, 255, 0)';
+      geojson['features'][0].properties.color = 'black';
+      geojson['features'][geojson['features'].length - 1].properties.color = 'black';
     }
 
     this.map.addLayer({
