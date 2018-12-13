@@ -13,13 +13,9 @@ fs.readdirSync(folder).forEach(file => {
     }
   }
 });
-//newest = "icr-with-bl72-2016-01-01.json";
-//console.log(newest);
 let pathname = `../geojsons/${newest}`;
 let file = require(pathname);
 if (file.crs && file.crs.properties.name === "urn:ogc:def:crs:EPSG::31370") {
   newest = bl72_parseur.parse(newest);
 }
 add_colors_2_geojsons.parse(newest);
-
-//console.log(newest);

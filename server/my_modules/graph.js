@@ -5,13 +5,16 @@ const coordinatesMod = require("./coordinates");
 /**
  * Data Structures
  */
+//Tableau associatif qui garde pour chaque coordonnée du réseau les
+//arcs incidents pour atteindre ses coordonnées adjacents
 let graph = null;
 let sorted_longitudes = null;
 let sorted_latitudes = null;
+//Tableau qui retient pour chaque arc, sa distance et sa duration
 let routes = null;
 
 /**
- * Initialise the Data Structures with the geojson data
+ * Convert geojson data into data structures
  */
 const convert = geojson_file => {
   geojson = require(`../geojsons/${config.icr_search.geojson}`);
