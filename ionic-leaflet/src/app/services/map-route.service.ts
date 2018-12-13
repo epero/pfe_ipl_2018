@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Subject } from "rxjs";
 import { GeoJsonObject } from "geojson";
-import { AlertController } from "@ionic/angular";
 import { MapService } from "./map.service";
 import { DisplayAlertService } from "./display-alert.service";
 
@@ -15,7 +14,6 @@ export class MapRouteService {
 
   constructor(
     private httpClient: HttpClient,
-    private alertController: AlertController,
     private mapService: MapService,
     private displayAlertService: DisplayAlertService
   ) {
@@ -48,7 +46,7 @@ export class MapRouteService {
             this.displayAlertService.presentAlert("Erreur 404", "");
             break;
           default:
-            this.presentAlert(
+            this.displayAlertService.presentAlert(
               "Service indisponible !",
               "Le service est temporairement indisponible, réessayez plus tard."
             );
@@ -56,17 +54,7 @@ export class MapRouteService {
         return error;
       });
   }
-
-  async presentAlert(title, message) {
-    const alert = await this.alertController.create({
-      header: title,
-      message: message,
-      buttons: ["OK"]
-    });
-
-    await alert.present();
-    this.mapService.emitResize();
-  }
+  
   setRoute(route: GeoJsonObject) {
     this.route = route;
     this.emitRoute();
