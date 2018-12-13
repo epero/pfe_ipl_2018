@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Subject } from 'rxjs';
-import { GeoJsonObject } from 'geojson';
-import { AlertController } from '@ionic/angular';
-import { MapService } from './map.service';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Subject } from "rxjs";
+import { GeoJsonObject } from "geojson";
+import { AlertController } from "@ionic/angular";
+import { MapService } from "./map.service";
 import { DisplayAlertService } from "./display-alert.service";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class MapRouteService {
   routeSubject: Subject<GeoJsonObject>;
@@ -17,7 +17,7 @@ export class MapRouteService {
     private httpClient: HttpClient,
     private alertController: AlertController,
     private mapService: MapService,
-    private displayAlertService:DisplayAlertService
+    private displayAlertService: DisplayAlertService
   ) {
     this.routeSubject = new Subject<GeoJsonObject>();
   }
@@ -27,7 +27,7 @@ export class MapRouteService {
 
     return this.httpClient
       .post<GeoJsonObject>(
-        'http://test-dockerfull-env-2.xgpz6fryfk.eu-west-1.elasticbeanstalk.com/api/directions',
+        "http://test-dockerfull-env-2.xgpz6fryfk.eu-west-1.elasticbeanstalk.com/api/directions",
         //"http://localhost:8081/api/directions",
         json
       )
@@ -44,13 +44,13 @@ export class MapRouteService {
               "L'itinéraire introduit n'existe pas ou est en dehors des limites de la zone de recherche."
             );
             break;
-            case 404:
-              this.displayAlertService.presentAlert("Erreur 404","");
+          case 404:
+            this.displayAlertService.presentAlert("Erreur 404", "");
             break;
           default:
             this.presentAlert(
-              'Service indisponible !',
-              'Le service est temporairement indisponible, réessayez plus tard.'
+              "Service indisponible !",
+              "Le service est temporairement indisponible, réessayez plus tard."
             );
         }
         return error;
@@ -61,7 +61,7 @@ export class MapRouteService {
     const alert = await this.alertController.create({
       header: title,
       message: message,
-      buttons: ['OK']
+      buttons: ["OK"]
     });
 
     await alert.present();
