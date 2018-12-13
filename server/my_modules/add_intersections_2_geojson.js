@@ -28,16 +28,6 @@ const parse = source_file => {
           );
           if (result) {
             arrayCoordinates.splice(i2 + 1, 0, [result.x, result.y]);
-            console.log("INSERTED : " + result);
-            console.log(
-              "BEFORE : " + file.features[ii].geometry.coordinates[i2]
-            );
-            console.log(
-              "PUT :" + file.features[ii].geometry.coordinates[i2 + 1]
-            );
-            console.log(
-              "AFTER : " + file.features[ii].geometry.coordinates[i2 + 2]
-            );
             parse();
           }
         }
@@ -56,16 +46,6 @@ const parse = source_file => {
             );
             if (result) {
               coordinates.splice(i3 + 1, 0, [result.x, result.y]);
-              console.log("INSERTED : " + result);
-              console.log(
-                "BEFORE : " + file.features[ii].geometry.coordinates[i1][i3]
-              );
-              console.log(
-                "PUT :" + file.features[ii].geometry.coordinates[i1][i3 + 1]
-              );
-              console.log(
-                "AFTER : " + file.features[ii].geometry.coordinates[i1][i3 + 2]
-              );
               parse();
             }
           }
@@ -104,21 +84,7 @@ const compare_line_2_lines = (lineStartX, lineStartY, lineEndX, lineEndY) => {
             arrayCoordinates[ii2 + 1][1]
           );
           if (result.onLine1 && result.onLine2) {
-            console.log("abab : " + result);
-            console.log();
-            console.log("TEST BEF: " + lineStartX + ", " + lineStartY);
-            console.log("TEST REP: " + lineEndX + ", " + lineEndY);
-            console.log();
             arrayCoordinates.splice(ii2 + 1, 0, [result.x, result.y]);
-            console.log(
-              "BEFORE : " + file.features[iii].geometry.coordinates[ii2]
-            );
-            console.log(
-              "PUT :" + file.features[iii].geometry.coordinates[ii2 + 1]
-            );
-            console.log(
-              "AFTER : " + file.features[iii].geometry.coordinates[ii2 + 2]
-            );
             return result;
           }
         }
@@ -129,15 +95,6 @@ const compare_line_2_lines = (lineStartX, lineStartY, lineEndX, lineEndY) => {
         for (let ii3 = 0; ii3 < coordinates.length; ii3++) {
           let coordinate = coordinates[ii3];
           if (coordinates[ii3 + 1]) {
-            /*console.log(
-              coordinate[0] +
-                "- " +
-                coordinate[1] +
-                " - " +
-                coordinates[ii3 + 1][0] +
-                " - " +
-                coordinates[ii3 + 1][1]
-            );*/
             let result = coordinatesMod.checkSegmentIntersection(
               lineStartX,
               lineStartY,
@@ -149,22 +106,7 @@ const compare_line_2_lines = (lineStartX, lineStartY, lineEndX, lineEndY) => {
               coordinates[ii3 + 1][1]
             );
             if (result.onLine1 && result.onLine2) {
-              console.log("abab : " + result);
-              console.log();
-              console.log("TEST BEF: " + lineStartX + ", " + lineStartY);
-              console.log("TEST REP: " + lineEndX + ", " + lineEndY);
-              console.log();
               coordinates.splice(ii3 + 1, 0, [result.x, result.y]);
-              console.log(
-                "BEFORE : " + file.features[iii].geometry.coordinates[ii1][ii3]
-              );
-              console.log(
-                "PUT :" + file.features[iii].geometry.coordinates[ii1][ii3 + 1]
-              );
-              console.log(
-                "AFTER : " +
-                  file.features[iii].geometry.coordinates[ii1][ii3 + 2]
-              );
               return result;
             }
           }

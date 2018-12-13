@@ -1,6 +1,9 @@
 const graphMod = require("./graph");
 const config = require("../config.json");
 
+/**
+ *  Dijkstra algorithm
+ */
 const calculate = coordinates => {
   if (!graphMod.graph) {
     throw new Error(config.error._501);

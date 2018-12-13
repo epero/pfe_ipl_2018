@@ -82,32 +82,6 @@ const closestEntryToNetwork = (coordinate, range, precision) => {
   };
 };
 
-const closestEntryToNetworkSlow = coordinate => {
-  let src_long = coordinate[0];
-  let src_lat = coordinate[1];
-  let minDistance;
-  let minIndex;
-  for (let index = 0; index < sorted_latitudes.length; index++) {
-    let currDistance = Math.sqrt(
-      (src_long - sorted_latitudes[index].longitude) *
-        (src_long - sorted_latitudes[index].longitude) +
-        (src_lat - sorted_latitudes[index].latitude) *
-          (src_lat - sorted_latitudes[index].latitude)
-    );
-    if (!minDistance || currDistance < minDistance) {
-      minDistance = currDistance;
-      minIndex = index;
-    }
-  }
-  return {
-    coordinates: [
-      sorted_latitudes[minIndex].longitude,
-      sorted_latitudes[minIndex].latitude
-    ],
-    distance: minDistance
-  };
-};
-
 const binary_search = (arr, source, regex, coord_type, range) => {
   let pointer_ind = Math.floor(arr.length / 2);
   let pointer_ind_min = 0;
@@ -137,4 +111,31 @@ const binary_search = (arr, source, regex, coord_type, range) => {
   return { min: pointer_ind_min, max: pointer_ind_max };
 };
 
+const closestEntryToNetworkSlow = coordinate => {
+  let src_long = coordinate[0];
+  let src_lat = coordinate[1];
+  let minDistance;
+  let minIndex;
+  for (let index = 0; index < sorted_latitudes.length; index++) {
+    let currDistance = Math.sqrt(
+      (src_long - sorted_latitudes[index].longitude) *
+        (src_long - sorted_latitudes[index].longitude) +
+        (src_lat - sorted_latitudes[index].latitude) *
+          (src_lat - sorted_latitudes[index].latitude)
+    );
+    if (!minDistance || currDistance < minDistance) {
+      minDistance = currDistance;
+      minIndex = index;
+    }
+  }
+  return {
+    coordinates: [
+      sorted_latitudes[minIndex].longitude,
+      sorted_latitudes[minIndex].latitude
+    ],
+    distance: minDistance
+  };
+};
+
 exports.closestEntryToNetwork = closestEntryToNetwork;
+exports.closestEntryToNetworkSlow = closestEntryToNetworkSlow;

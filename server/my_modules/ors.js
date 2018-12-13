@@ -1,4 +1,7 @@
 /**
+ * Module qui encapsule les requêtes à l’API open route service.
+ */
+/**
  * Imports
  */
 const OrsDirections = require("openrouteservice-js/src/OrsDirections");
@@ -29,6 +32,7 @@ let calculate = coordinates => {
       continue_straight: config.ors.continue_straight
     })
       .then(json => {
+        //formatter les geojson renvoyés par ORS pour qu’il aient la structure défini par notre API
         json.features[0].properties.icr = "ors";
         json.features[0].properties.color = irc_2_color.get("ors");
         resolve(json);

@@ -14,6 +14,14 @@ const convert = path => {
     features: [[]]
   };
 
+  /**
+   * Algorithme s’assure que lorsque plusieurs icr se partagent plusieurs segments consécutifs,
+   * un nombre minimisé d’icr sont attribués à l’ensemble du morceau de chemin.
+   * Par exemple, la rue de la loi est traversé par l’icr 2, 3 et 4.
+   * Afin de proposer à l’utilisateur le chemin le plus simple et homogène,
+   * plutôt que lui proposer l’icr 2 suivi par le 4 suivi par le 2,
+   * on lui dit d’employer l’icr 2 pendant tout ce morceau de chemin.
+   */
   let possIcr = new Array(path.length - 1);
 
   for (let i = 0; i < path.length - 1; i++) {
@@ -51,6 +59,9 @@ const convert = path => {
     }
   }
 
+  /**
+   * Construction du geojson + Attribution de l'icr, duration et distance à chaque morceau du chemin
+   */
   geoJsonOutput.features.push({
     type: "Feature",
     geometry: {
@@ -143,7 +154,6 @@ const convert = path => {
             nextCoor[1]
         ].duration;
     }
-    //console.log("DISTANCE : " + currDistanceMeters);
     previousCoor = nextCoor;
   }
   currentFeature.properties["distance"] = currDistanceMeters;
