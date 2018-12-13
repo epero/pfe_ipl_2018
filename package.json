@@ -5,5 +5,8 @@
   "scripts": {
     "heroku-prebuild": "cd server && npm i",
     "start": "cd server && npm i && npm start"
+  },
+  "dependencies": {
+    "pm2": "^3.2.3"
   }
 }
