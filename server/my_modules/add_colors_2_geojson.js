@@ -23,4 +23,6 @@ const parse = source_file => {
   );
 };
 
+return "icr-with-colors";
+
 exports.parse = parse;

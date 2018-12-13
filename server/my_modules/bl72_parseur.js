@@ -15,7 +15,6 @@ const parse = source_file => {
         let latlong = bl72ToLatLng(coordinate[0], coordinate[1]);
         coordinate[1] = latlong.latitude;
         coordinate[0] = latlong.longitude;
-        console.log(coordinate[1]);
       });
     });
   });
