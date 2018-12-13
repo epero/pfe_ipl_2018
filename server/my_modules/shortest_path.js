@@ -63,7 +63,7 @@ const calculate = coordinates => {
   }
   throw new Error(config.error._412);
 };
-t;
+
 const build_path_from_tree = (tree, source, destination) => {
   let path = [];
 

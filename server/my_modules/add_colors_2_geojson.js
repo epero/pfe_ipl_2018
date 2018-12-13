@@ -21,8 +21,7 @@ const parse = source_file => {
       if (err) throw err;
     }
   );
+  return "icr-with-colors";
 };
-
-return "icr-with-colors";
 
 exports.parse = parse;
