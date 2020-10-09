@@ -27,7 +27,7 @@ export class MapRouteService {
       .post<GeoJsonObject>(
         "https://itnr.herokuapp.com/api/directions",
         //"http://test-dockerfull-env-2.xgpz6fryfk.eu-west-1.elasticbeanstalk.com/api/directions",
-        //"http://localhost:8081/api/directions",
+        // "http://localhost:8081/api/directions",
         json
       )
       .toPromise()
