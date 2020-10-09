@@ -8,7 +8,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 export class IcrIconComponent implements OnInit {
   @Input() icrName: string;
   @Input() color: string;
-  @ViewChild('icon') icon: ElementRef;
+  @ViewChild('icon', { static: true }) icon: ElementRef;
 
   private regex: RegExp;
 

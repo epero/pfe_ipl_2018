@@ -19,7 +19,7 @@ export class SearchInputPage implements OnInit {
   position: any;
   communes: Map<any, any>;
 
-  @ViewChild("searchbar") searchbar: Searchbar;
+  @ViewChild("searchbar", { static: true }) searchbar: Searchbar;
 
   constructor(
     private addressesService: AddressesService,
