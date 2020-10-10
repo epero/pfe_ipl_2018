@@ -32,7 +32,7 @@ app.use(express.static(path.join(__dirname, "../../dist")));
 
 app.use(function(req, res, next) {
   // Website you wish to allow to connect
-  let allowedOrigins = ["http://localhost:4200", "http://localhost:8100"];
+  let allowedOrigins = ["https://itnr-pfe.web.app", "http://localhost:4200", "http://localhost:8100"];
   let origin = req.headers.origin;
   if (allowedOrigins.indexOf(origin) > -1) {
     res.setHeader("Access-Control-Allow-Origin", origin);

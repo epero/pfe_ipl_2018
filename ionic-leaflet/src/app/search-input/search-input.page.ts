@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { NavController, Searchbar } from "@ionic/angular";
+import { NavController, IonSearchbar } from "@ionic/angular";
 import { ActivatedRoute } from "@angular/router";
 import { AddressesService } from "../services/addresses.service";
 import { MapService } from "../services/map.service";
@@ -19,7 +19,7 @@ export class SearchInputPage implements OnInit {
   position: any;
   communes: Map<any, any>;
 
-  @ViewChild("searchbar", { static: true }) searchbar: Searchbar;
+  @ViewChild("searchbar", { static: true }) searchbar: IonSearchbar;
 
   constructor(
     private addressesService: AddressesService,
@@ -96,7 +96,7 @@ export class SearchInputPage implements OnInit {
   }
 
   navigateBack() {
-    this.navController.navigateBack("/home", false);
+    this.navController.navigateBack("/home");
   }
 
   parseAddress(addr) {
