@@ -4,7 +4,9 @@
 /**
  * Imports
  */
-const OrsDirections = require("openrouteservice-js/src/OrsDirections");
+const openrouteservice = require("openrouteservice-js");
+
+
 const irc_2_color = require("./icr_2_color");
 const config = require("../config");
 
@@ -12,8 +14,8 @@ const config = require("../config");
  * Variables
  */
 // add api_key here
-const Directions = new OrsDirections({
-  api_key: "5b3ce3597851110001cf62489e0ad257d6a243258d97b69f557db726" //TODO process.env.ORS_KEY
+const Directions = new openrouteservice.Directions({
+  api_key: "5b3ce3597851110001cf62482ba45921c47a46f2aa4ba55f4d8294c4"
 });
 
 /**
