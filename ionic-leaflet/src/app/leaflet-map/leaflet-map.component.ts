@@ -113,7 +113,7 @@ export class LeafletMapComponent implements OnInit {
     //Colorization of ICR routes
     console.log(this.geojson);
     var layer = L.geoJSON(this.geojson, {
-      
+
       style: function(feature) {
         if (feature.properties.icr) {
           // A changer en feature.properties.name quand le dijkstra sera utilisé
@@ -185,8 +185,14 @@ export class LeafletMapComponent implements OnInit {
   watchLocation() {
     let watch = this.geoloc.watchPosition();
     watch.subscribe(data => {
-      this.lat = data.coords.latitude;
-      this.lng = data.coords.longitude;
+      if ("coords" in data) {
+        // proceed as before
+        this.lat = data.coords.latitude;
+        this.lng = data.coords.longitude;
+      } else {
+        // ruh roh we have a PositionError
+      }
+
       const latlng = L.latLng(this.lat, this.lng);
       this.map["_onResize"]();
       if (this.initialLoad || this.autozoom) {

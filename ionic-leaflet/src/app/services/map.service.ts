@@ -42,7 +42,14 @@ export class MapService {
 
   watch() {
     this.geolocation.watchPosition().subscribe(pos => {
-      this.position = pos;
+
+      if ("coords" in pos) {
+        // proceed as before
+        this.position = pos;
+      } else {
+        // ruh roh we have a PositionError
+      }
+
       this.emitPosition();
     });
   }

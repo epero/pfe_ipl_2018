@@ -50,11 +50,11 @@ export class DirectionFormComponent implements OnInit {
   }
 
   onStartInputClick() {
-    this.navController.navigateForward("/search/start", false);
+    this.navController.navigateForward("/search/start"); // TOCHECK this.navController.navigateForward("/search/start", false);
   }
 
   onEndInputClick() {
-    this.navController.navigateForward("/search/end", false);
+    this.navController.navigateForward("/search/end"); // TOCHECK false
   }
 
   searchRoute() {

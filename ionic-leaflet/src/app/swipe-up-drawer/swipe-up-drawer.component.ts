@@ -8,8 +8,8 @@ import { DrawerService } from '../services/drawer.service';
   styleUrls: ['./swipe-up-drawer.component.scss']
 })
 export class SwipeUpDrawerComponent implements OnInit {
-  @ViewChild('drawer') el: ElementRef;
-  @ViewChild('content') content: ElementRef;
+  @ViewChild('drawer', { static: true }) el: ElementRef;
+  @ViewChild('content', { static: true }) content: ElementRef;
   event: any;
   windowHeight: number;
   test: any;
